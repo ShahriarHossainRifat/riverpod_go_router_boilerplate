@@ -14,7 +14,9 @@ permissions:
   contents: read
 
 env:
-  FLUTTER_VERSION: "3.38.6"
+  FLUTTER_VERSION: "3.47.5"
+  JAVA_VERSION: "21"
+  PUB_CACHE: ${{ github.workspace }}/.pub-cache
 
 jobs:
   # ─────────────────────────────────────────────────────────────────────────────
@@ -29,11 +31,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Flutter
+      - name: Setup Java ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Setup Flutter ${{ env.FLUTTER_VERSION }}
         uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
           cache: true
+
+      # Cache pub dependencies keyed on pubspec.lock for instant restores
+      - name: Cache pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.PUB_CACHE }}
+          key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            pub-${{ runner.os }}-
 
       - name: Install dependencies
         run: flutter pub get
@@ -42,7 +60,7 @@ jobs:
         run: git diff --exit-code pubspec.lock
 
       - name: Run code generation
-        run: dart run build_runner build --delete-conflicting-outputs
+        run: dart run build_runner build
 
       - name: Verify generated files are committed
         run: |
@@ -52,19 +70,20 @@ jobs:
           )
 
       - name: Check formatting
-        run: dart format --set-exit-if-changed .
+        run: dart format --set-exit-if-changed lib test
 
       - name: Run analyzer (strict)
         run: flutter analyze --fatal-infos --fatal-warnings
 
       - name: Run tests with coverage
-        run: flutter test --coverage
+        run: flutter test --coverage --reporter=github
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
         with:
           name: coverage
           path: coverage/lcov.info
+          retention-days: 7
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
@@ -111,13 +130,28 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Java ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
           cache: true
 
+      - name: Cache pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.PUB_CACHE }}
+          key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            pub-${{ runner.os }}-
+
       - run: flutter pub get
-      - run: dart run build_runner build --delete-conflicting-outputs
+      - run: dart run build_runner build
 
       - name: Extract project metadata
         id: meta
@@ -138,8 +172,25 @@ jobs:
           fi
           echo "✅ Version validation passed: $VERSION"
 
+      - name: Validate CHANGELOG.md entry
+        run: |
+          VERSION="${{ steps.meta.outputs.version }}"
+          if ! grep -q "## \[$VERSION\]" CHANGELOG.md; then
+            echo "::error::❌ No CHANGELOG.md entry found for version $VERSION"
+            echo "::error::Add a '## [$VERSION]' section to CHANGELOG.md before releasing"
+            exit 1
+          fi
+          echo "✅ CHANGELOG.md entry found for $VERSION"
+
       - name: Build Release APKs (split per ABI)
-        run: flutter build apk --release --split-per-abi
+        run: flutter build apk --release --split-per-abi --obfuscate --split-debug-info=build/debug-info
+
+      - name: Upload debug symbols artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-symbols
+          path: build/debug-info/
+          retention-days: 90
 
       - name: Rename APKs
         run: |
@@ -155,6 +206,7 @@ jobs:
         with:
           name: release-apks
           path: build/app/outputs/flutter-apk/${{ steps.meta.outputs.name }}-*.apk
+          retention-days: 30
 
       - name: Read changelog entry
         id: changelog
@@ -162,11 +214,12 @@ jobs:
           VERSION="${{ steps.meta.outputs.version }}"
           # Extract changelog section for this version
           CHANGELOG=$(sed -n "/## \[${VERSION}\]/,/## \[/p" CHANGELOG.md | sed '$d')
-          # Handle multiline output
-          CHANGELOG="${CHANGELOG//'%'/'%25'}"
-          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
-          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
-          echo "content=$CHANGELOG" >> $GITHUB_OUTPUT
+          # Handle multiline output using EOF delimiter
+          {
+            echo "content<<EOF"
+            echo "$CHANGELOG"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -220,13 +273,28 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Java ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
           cache: true
 
+      - name: Cache pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.PUB_CACHE }}
+          key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            pub-${{ runner.os }}-
+
       - run: flutter pub get
-      - run: dart run build_runner build --delete-conflicting-outputs
+      - run: dart run build_runner build
 
       - name: Extract project metadata
         id: meta
@@ -260,6 +328,7 @@ jobs:
         with:
           name: debug-apks
           path: build/app/outputs/flutter-apk/${{ steps.meta.outputs.name }}-*.apk
+          retention-days: 14
 
       - name: Create GitHub Pre-release
         uses: softprops/action-gh-release@v2

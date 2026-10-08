@@ -8,13 +8,13 @@ import 'package:riverpod_go_router_boilerplate/core/core.dart';
 /// and provides navigation back to the home screen.
 class ErrorPage extends StatelessWidget {
   /// Creates an [ErrorPage] widget.
-  const ErrorPage({required this.path, super.key});
+  const new({required this.path, super.key});
 
   /// The path that was not found.
   final String path;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -39,7 +39,7 @@ class ErrorPage extends StatelessWidget {
   }
 
   /// Builds the error icon/animation container.
-  Widget _buildErrorIcon(final BuildContext context) {
+  Widget _buildErrorIcon(BuildContext context) {
     final colorScheme = context.colorScheme;
     return LottieAnimationWidget(
       assetPath: Assets.errorAnimation,
@@ -59,20 +59,18 @@ class ErrorPage extends StatelessWidget {
   }
 
   /// Builds the title text.
-  Widget _buildTitle(final BuildContext context) {
+  Widget _buildTitle(BuildContext context) {
     final textTheme = context.textTheme;
 
     return Text(
       'Page Not Found',
-      style: textTheme.headlineSmall?.copyWith(
-        fontWeight: FontWeight.bold,
-      ),
+      style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
       textAlign: TextAlign.center,
     );
   }
 
   /// Builds the path display text.
-  Widget _buildPathText(final BuildContext context) {
+  Widget _buildPathText(BuildContext context) {
     final colorScheme = context.colorScheme;
     final textTheme = context.textTheme;
 
@@ -97,9 +95,8 @@ class ErrorPage extends StatelessWidget {
   }
 
   /// Builds the home navigation button.
-  Widget _buildHomeButton(final BuildContext context) {
+  Widget _buildHomeButton(BuildContext context) {
     return AppButton(
-      variant: .primary,
       onPressed: () => context.goRoute(.home),
       icon: Icons.home,
       label: 'Go Home',

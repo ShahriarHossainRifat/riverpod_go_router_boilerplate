@@ -4,7 +4,7 @@ import 'package:riverpod_go_router_boilerplate/core/extensions/context_extension
 /// A status indicator dot.
 class StatusDot extends StatelessWidget {
   /// Creates a [StatusDot].
-  const StatusDot({
+  const new({
     super.key,
     this.status = StatusType.info,
     this.size = 8,
@@ -12,19 +12,19 @@ class StatusDot extends StatelessWidget {
   });
 
   /// Creates an online status dot.
-  const StatusDot.online({super.key, this.size = 8, this.animated = false})
+  const new online({super.key, this.size = 8, this.animated = false})
     : status = StatusType.success;
 
   /// Creates an offline status dot.
-  const StatusDot.offline({super.key, this.size = 8, this.animated = false})
+  const new offline({super.key, this.size = 8, this.animated = false})
     : status = StatusType.neutral;
 
   /// Creates a busy status dot.
-  const StatusDot.busy({super.key, this.size = 8, this.animated = false})
+  const new busy({super.key, this.size = 8, this.animated = false})
     : status = StatusType.error;
 
   /// Creates an away status dot.
-  const StatusDot.away({super.key, this.size = 8, this.animated = false})
+  const new away({super.key, this.size = 8, this.animated = false})
     : status = StatusType.warning;
 
   /// Status type determining color.
@@ -37,7 +37,7 @@ class StatusDot extends StatelessWidget {
   final bool animated;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final colorScheme = context.theme.colorScheme;
     final color = switch (status) {
       StatusType.success => colorScheme.primary,
@@ -50,10 +50,7 @@ class StatusDot extends StatelessWidget {
     final dot = Container(
       width: size,
       height: size,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-      ),
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
     );
 
     if (!animated) return dot;
@@ -81,7 +78,7 @@ enum StatusType {
 }
 
 class _PulsingDot extends StatefulWidget {
-  const _PulsingDot({required this.color, required this.size});
+  const new({required this.color, required this.size});
 
   final Color color;
   final double size;
@@ -103,9 +100,10 @@ class _PulsingDotState extends State<_PulsingDot>
       vsync: this,
     )..repeat(reverse: true);
 
-    _animation = Tween<double>(begin: 0.4, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _animation = Tween<double>(
+      begin: 0.4,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -115,10 +113,10 @@ class _PulsingDotState extends State<_PulsingDot>
   }
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _animation,
-      builder: (final context, final child) {
+      builder: (context, child) {
         return Container(
           width: widget.size,
           height: widget.size,

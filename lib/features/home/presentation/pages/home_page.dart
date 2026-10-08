@@ -11,10 +11,10 @@ import 'package:riverpod_go_router_boilerplate/l10n/generated/app_localizations.
 /// Home page shown after successful authentication.
 class HomePage extends HookConsumerWidget {
   /// Creates a [HomePage] instance.
-  const HomePage({super.key});
+  const new({super.key});
 
   @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authProvider);
     final theme = context.theme;
     final l10n = AppLocalizations.of(context);
@@ -37,7 +37,7 @@ class HomePage extends HookConsumerWidget {
       ),
       body: AsyncValueWidget<User?>(
         value: authState,
-        data: (final user) {
+        data: (user) {
           if (user == null) {
             return Center(child: Text(l10n.noData));
           }
@@ -49,13 +49,13 @@ class HomePage extends HookConsumerWidget {
 }
 
 class _HomeContent extends ConsumerWidget {
-  const _HomeContent({required this.user, required this.theme});
+  const new({required this.user, required this.theme});
 
   final User user;
   final ThemeData theme;
 
   @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ResponsivePadding(
       child: SingleChildScrollView(
         child: Column(
@@ -99,7 +99,6 @@ class _HomeContent extends ConsumerWidget {
             AppButton(
               variant: AppButtonVariant.secondary,
               size: AppButtonSize.large,
-              isExpanded: true,
               onPressed: () => _handleLogout(context, ref),
               icon: Icons.logout,
               label: AppLocalizations.of(context).logout,
@@ -111,10 +110,7 @@ class _HomeContent extends ConsumerWidget {
     );
   }
 
-  Future<void> _handleLogout(
-    final BuildContext context,
-    final WidgetRef ref,
-  ) async {
+  Future<void> _handleLogout(BuildContext context, WidgetRef ref) async {
     final l10n = AppLocalizations.of(context);
     final confirmed = await AppDialogs.confirm(
       context,
@@ -131,11 +127,7 @@ class _HomeContent extends ConsumerWidget {
         // Router will automatically redirect to login when authState becomes null
       } catch (e) {
         if (context.mounted) {
-          ref
-              .read(feedbackServiceProvider)
-              .showError(
-                l10n.logoutFailed,
-              );
+          ref.read(feedbackServiceProvider).showError(l10n.logoutFailed);
         }
       }
     }

@@ -44,7 +44,7 @@ part 'cache_service.g.dart';
 /// final user = await cache.get('user_123', boxName: 'users');
 /// ```
 @Riverpod(keepAlive: true)
-CacheService cacheService(final Ref ref) {
+CacheService cacheService(Ref ref) {
   return CacheService(
     database: ref.watch(cacheDatabaseProvider),
     logger: ref.read(loggerProvider),
@@ -63,10 +63,7 @@ const String imageCacheBoxName = 'image_cache';
 /// Drift-based caching service for offline-first support.
 class CacheService {
   /// Creates a [CacheService] instance.
-  CacheService({
-    required this.database,
-    required this.logger,
-  });
+  new({required this.database, required this.logger});
 
   /// Drift database instance.
   final CacheDatabase database;
@@ -82,11 +79,11 @@ class CacheService {
   /// [etag] - Optional ETag for conditional HTTP requests.
   /// [boxName] - The box to store in (defaults to 'app_cache').
   Future<void> put(
-    final String key,
-    final String data, {
-    final Duration duration = AppConstants.cacheExpiry,
-    final String? etag,
-    final String boxName = defaultCacheBoxName,
+    String key,
+    String data, {
+    Duration duration = AppConstants.cacheExpiry,
+    String? etag,
+    String boxName = defaultCacheBoxName,
   }) async {
     try {
       final now = DateTime.now();
@@ -113,8 +110,8 @@ class CacheService {
   /// Returns null if the entry doesn't exist.
   /// Returns the entry even if expired (check [CacheEntry.isValid]).
   Future<CacheEntry?> get(
-    final String key, {
-    final String boxName = defaultCacheBoxName,
+    String key, {
+    String boxName = defaultCacheBoxName,
   }) async {
     try {
       final data = await database.getEntry(key, boxName: boxName);
@@ -130,8 +127,8 @@ class CacheService {
   ///
   /// Returns null if entry doesn't exist or has expired.
   Future<String?> getIfValid(
-    final String key, {
-    final String boxName = defaultCacheBoxName,
+    String key, {
+    String boxName = defaultCacheBoxName,
   }) async {
     try {
       final data = await database.getValidEntry(key, boxName: boxName);
@@ -146,8 +143,8 @@ class CacheService {
   ///
   /// Useful for conditional requests (If-None-Match header).
   Future<String?> getEtag(
-    final String key, {
-    final String boxName = defaultCacheBoxName,
+    String key, {
+    String boxName = defaultCacheBoxName,
   }) async {
     final entry = await get(key, boxName: boxName);
     return entry?.etag;
@@ -155,8 +152,8 @@ class CacheService {
 
   /// Check if a cache entry exists and is valid.
   Future<bool> hasValid(
-    final String key, {
-    final String boxName = defaultCacheBoxName,
+    String key, {
+    String boxName = defaultCacheBoxName,
   }) async {
     final data = await database.getValidEntry(key, boxName: boxName);
     return data != null;
@@ -164,8 +161,8 @@ class CacheService {
 
   /// Delete a cache entry.
   Future<void> delete(
-    final String key, {
-    final String boxName = defaultCacheBoxName,
+    String key, {
+    String boxName = defaultCacheBoxName,
   }) async {
     try {
       await database.deleteEntry(key, boxName: boxName);
@@ -176,7 +173,7 @@ class CacheService {
   }
 
   /// Clear all entries in a box.
-  Future<void> clearBox(final String boxName) async {
+  Future<void> clearBox(String boxName) async {
     try {
       await database.clearBox(boxName);
       logger.d('Cache box cleared: $boxName');
@@ -198,7 +195,7 @@ class CacheService {
   /// Remove all expired entries.
   ///
   /// Call periodically to free up storage.
-  Future<int> cleanExpired({final String? boxName}) async {
+  Future<int> cleanExpired({String? boxName}) async {
     try {
       final deleted = await database.deleteExpired(boxName: boxName);
       logger.d(
@@ -212,7 +209,7 @@ class CacheService {
   }
 
   /// Get cache statistics.
-  Future<CacheStats> getStats({final String? boxName}) async {
+  Future<CacheStats> getStats({String? boxName}) async {
     try {
       final total = await database.countEntries(boxName: boxName);
       final valid = await database.countValidEntries(boxName: boxName);
@@ -232,14 +229,12 @@ class CacheService {
   }
 
   /// Get all keys in a box.
-  Future<List<String>> getKeys({
-    final String boxName = defaultCacheBoxName,
-  }) async {
+  Future<List<String>> getKeys({String boxName = defaultCacheBoxName}) async {
     return database.getKeys(boxName: boxName);
   }
 
   /// Create CacheEntry from database row.
-  CacheEntry _fromData(final CacheEntryData data) {
+  CacheEntry _fromData(CacheEntryData data) {
     return CacheEntry(
       data: data.data,
       timestamp: data.timestamp,

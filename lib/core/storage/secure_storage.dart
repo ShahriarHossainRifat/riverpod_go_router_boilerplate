@@ -28,12 +28,8 @@ part 'secure_storage.g.dart';
 /// final token = await storage.read(key: StorageKeys.accessToken);
 /// ```
 @Riverpod(keepAlive: true)
-FlutterSecureStorage secureStorage(final Ref ref) {
+FlutterSecureStorage secureStorage(Ref ref) {
   return const FlutterSecureStorage(
-    aOptions: AndroidOptions(
-      // encryptedSharedPreferences: true, // deprecated, isn't needed with latest versions
-      // resetOnError: true, // Uncomment to reset storage on decryption errors
-    ),
     iOptions: IOSOptions(
       accessibility: KeychainAccessibility.first_unlock_this_device,
     ),

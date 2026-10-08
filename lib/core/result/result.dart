@@ -41,7 +41,7 @@ import 'package:flutter/foundation.dart' show immutable;
 /// ```
 @immutable
 sealed class Result<T> {
-  const Result();
+  const new();
 
   /// Returns true if this is a [Success].
   bool get isSuccess => this is Success<T>;
@@ -71,8 +71,8 @@ sealed class Result<T> {
   /// );
   /// ```
   R fold<R>({
-    required final R Function(T data) onSuccess,
-    required final R Function(AppException error) onFailure,
+    required R Function(T data) onSuccess,
+    required R Function(AppException error) onFailure,
   }) {
     return switch (this) {
       Success(:final data) => onSuccess(data),
@@ -81,7 +81,7 @@ sealed class Result<T> {
   }
 
   /// Transform the success value.
-  Result<R> map<R>(final R Function(T data) transform) {
+  Result<R> map<R>(R Function(T data) transform) {
     return switch (this) {
       Success(:final data) => Success(transform(data)),
       Failure(:final error) => Failure(error),
@@ -90,7 +90,7 @@ sealed class Result<T> {
 
   /// Chain another Result-returning operation.
   Future<Result<R>> flatMap<R>(
-    final Future<Result<R>> Function(T data) transform,
+    Future<Result<R>> Function(T data) transform,
   ) async {
     return switch (this) {
       Success(:final data) => transform(data),
@@ -130,7 +130,7 @@ sealed class Result<T> {
   }
 
   /// Returns the data or a default value.
-  T getOrElse(final T defaultValue) {
+  T getOrElse(T defaultValue) {
     return switch (this) {
       Success(:final data) => data,
       Failure() => defaultValue,
@@ -142,13 +142,13 @@ sealed class Result<T> {
 @immutable
 final class Success<T> extends Result<T> {
   /// Creates a [Success] instance with the given data.
-  const Success(this.data);
+  const new(this.data);
 
   /// The successful data value.
   final T data;
 
   @override
-  bool operator ==(final Object other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       other is Success<T> &&
           runtimeType == other.runtimeType &&
@@ -165,13 +165,13 @@ final class Success<T> extends Result<T> {
 @immutable
 final class Failure<T> extends Result<T> {
   /// Creates a [Failure] instance with the given error.
-  const Failure(this.error);
+  const new(this.error);
 
   /// The error that caused the failure.
   final AppException error;
 
   @override
-  bool operator ==(final Object other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       other is Failure<T> &&
           runtimeType == other.runtimeType &&
@@ -187,7 +187,7 @@ final class Failure<T> extends Result<T> {
 /// Base exception class for all app exceptions.
 /// Extend this for specific error types.
 sealed class AppException implements Exception {
-  const AppException({required this.message, this.code, this.stackTrace});
+  const new({required this.message, this.code, this.stackTrace});
 
   /// Human-readable error message.
   final String message;
@@ -206,7 +206,7 @@ sealed class AppException implements Exception {
 /// Network-related exceptions.
 final class NetworkException extends AppException {
   /// Creates a [NetworkException] instance.
-  const NetworkException({
+  const new({
     required super.message,
     super.code,
     super.stackTrace,
@@ -214,25 +214,24 @@ final class NetworkException extends AppException {
   });
 
   /// Common factory constructors for typical network errors.
-  factory NetworkException.noConnection() => const NetworkException(
+  factory noConnection() => const NetworkException(
     message: 'No internet connection',
     code: 'NO_CONNECTION',
   );
 
   /// Timeout error
-  factory NetworkException.timeout() =>
+  factory timeout() =>
       const NetworkException(message: 'Request timed out', code: 'TIMEOUT');
 
   /// Server error (5xx)
-  factory NetworkException.serverError([final int? statusCode]) =>
-      NetworkException(
-        message: 'Server error occurred',
-        code: 'SERVER_ERROR',
-        statusCode: statusCode,
-      );
+  factory serverError([int? statusCode]) => NetworkException(
+    message: 'Server error occurred',
+    code: 'SERVER_ERROR',
+    statusCode: statusCode,
+  );
 
   /// Unauthorized (401)
-  factory NetworkException.unauthorized() => const NetworkException(
+  factory unauthorized() => const NetworkException(
     message: 'Unauthorized access',
     code: 'UNAUTHORIZED',
     statusCode: 401,
@@ -245,34 +244,29 @@ final class NetworkException extends AppException {
 /// Authentication-related exceptions.
 final class AuthException extends AppException {
   /// Creates an [AuthException] instance.
-  const AuthException({required super.message, super.code, super.stackTrace});
+  const new({required super.message, super.code, super.stackTrace});
 
   /// Common factory constructors for typical auth errors.
-  factory AuthException.invalidCredentials() => const AuthException(
+  factory invalidCredentials() => const AuthException(
     message: 'Invalid email or password',
     code: 'INVALID_CREDENTIALS',
   );
 
   /// Session expired
-  factory AuthException.sessionExpired() => const AuthException(
+  factory sessionExpired() => const AuthException(
     message: 'Session expired. Please login again',
     code: 'SESSION_EXPIRED',
   );
 
   /// No active session
-  factory AuthException.noSession() =>
+  factory noSession() =>
       const AuthException(message: 'No active session', code: 'NO_SESSION');
 }
 
 /// Validation-related exceptions.
 final class ValidationException extends AppException {
   /// Creates a [ValidationException] instance.
-  const ValidationException({
-    required super.message,
-    super.code,
-    super.stackTrace,
-    this.field,
-  });
+  const new({required super.message, super.code, super.stackTrace, this.field});
 
   /// The field that failed validation, if applicable.
   final String? field;
@@ -281,13 +275,13 @@ final class ValidationException extends AppException {
 /// Cache/Storage-related exceptions.
 final class CacheException extends AppException {
   /// Creates a [CacheException] instance.
-  const CacheException({required super.message, super.code, super.stackTrace});
+  const new({required super.message, super.code, super.stackTrace});
 }
 
 /// Generic unexpected exception.
 final class UnexpectedException extends AppException {
   /// Creates an [UnexpectedException] instance.
-  const UnexpectedException({
+  const new({
     required super.message,
     super.code,
     super.stackTrace,

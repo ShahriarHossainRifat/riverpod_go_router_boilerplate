@@ -52,7 +52,7 @@ final class ErrorConverterProvider
   }
 }
 
-String _$errorConverterHash() => r'fa5201227a50cb0a794917bb4aff7af5f8483bd7';
+String _$errorConverterHash() => r'2c0467c2201d612815cf84a8fc4afbcde529f635';
 
 /// Provider for the API client.
 
@@ -98,4 +98,4 @@ final class ApiClientProvider
   }
 }
 
-String _$apiClientHash() => r'a571a9d978c2903dc08c19069e66e4585f945b31';
+String _$apiClientHash() => r'dfd2c33e9d04443e755c1f585e0d18cd0a5eb28f';

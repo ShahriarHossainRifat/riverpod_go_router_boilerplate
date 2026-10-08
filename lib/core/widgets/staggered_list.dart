@@ -5,7 +5,7 @@ import 'package:riverpod_go_router_boilerplate/core/widgets/entry_animations.dar
 /// A widget that animates a list of items with staggered timing.
 class StaggeredList extends StatelessWidget {
   /// Creates a [StaggeredList].
-  const StaggeredList({
+  const new({
     required this.children,
     super.key,
     this.itemDuration = AppConstants.animationFast,
@@ -30,9 +30,9 @@ class StaggeredList extends StatelessWidget {
   final SlideDirection direction;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return Column(
-      children: children.asMap().entries.map((final entry) {
+      children: children.asMap().entries.map((entry) {
         return FadeIn(
           duration: itemDuration,
           delay: staggerDelay * entry.key,
@@ -42,7 +42,6 @@ class StaggeredList extends StatelessWidget {
             delay: staggerDelay * entry.key,
             curve: curve,
             direction: direction,
-            offset: AppConstants.slideOffsetDefault,
             child: entry.value,
           ),
         );

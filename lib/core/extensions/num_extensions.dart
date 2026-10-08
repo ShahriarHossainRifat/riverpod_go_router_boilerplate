@@ -30,7 +30,7 @@ extension NumExtensions on num {
   String get formatted {
     return toString().replaceAllMapped(
       RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-      (final match) => '${match[1]},',
+      (match) => '${match[1]},',
     );
   }
 
@@ -48,12 +48,12 @@ extension NumExtensions on num {
   }
 
   /// Formats as currency with symbol.
-  String currency({final String symbol = '\$', final int decimals = 2}) {
+  String currency({String symbol = r'$', int decimals = 2}) {
     return '$symbol${toDouble().toStringAsFixed(decimals)}';
   }
 
   /// Formats as percentage.
-  String percent({final int decimals = 0}) {
+  String percent({int decimals = 0}) {
     return '${(this * 100).toStringAsFixed(decimals)}%';
   }
 
@@ -77,14 +77,14 @@ extension NumExtensions on num {
   // ─────────────────────────────────────────────────────────────────────────────
 
   /// Clamps value between min and max.
-  num clamp(final num min, final num max) {
+  num clamp(num min, num max) {
     if (this < min) return min;
     if (this > max) return max;
     return this;
   }
 
   /// Returns true if value is between min and max (inclusive).
-  bool isBetween(final num min, final num max) => this >= min && this <= max;
+  bool isBetween(num min, num max) => this >= min && this <= max;
 
   /// Converts to radians.
   double get toRadians => this * 3.14159265359 / 180;
@@ -119,10 +119,10 @@ extension NumExtensions on num {
 /// Integer-specific extensions.
 extension IntExtensions on int {
   /// Generates a list of integers from 0 to this value (exclusive).
-  List<int> get range => List.generate(this, (final i) => i);
+  List<int> get range => List.generate(this, (i) => i);
 
   /// Pads number with leading zeros.
-  String padLeft(final int width) => toString().padLeft(width, '0');
+  String padLeft(int width) => toString().padLeft(width, '0');
 
   /// Returns ordinal suffix (1st, 2nd, 3rd, etc.).
   String get ordinal {
@@ -154,18 +154,18 @@ extension IntExtensions on int {
 /// Double-specific extensions.
 extension DoubleExtensions on double {
   /// Rounds to specified decimal places.
-  double roundTo(final int places) {
+  double roundTo(int places) {
     final mod = 10.0 * places;
     return (this * mod).round() / mod;
   }
 
   /// Returns a normalized value between 0 and 1.
-  double normalize(final double min, final double max) {
+  double normalize(double min, double max) {
     return (this - min) / (max - min);
   }
 
   /// Linear interpolation to another value.
-  double lerp(final double end, final double t) {
+  double lerp(double end, double t) {
     return this + (end - this) * t;
   }
 }

@@ -2,6 +2,12 @@ import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:riverpod_go_router_boilerplate/config/env_config.dart';
+import 'package:riverpod_go_router_boilerplate/core/core.dart'
+    show PerformanceHttpInterceptor;
+import 'package:riverpod_go_router_boilerplate/core/performance/performance.dart'
+    show PerformanceHttpInterceptor;
+import 'package:riverpod_go_router_boilerplate/core/performance/performance_http_interceptor.dart'
+    show PerformanceHttpInterceptor;
 import 'package:riverpod_go_router_boilerplate/core/utils/logger.dart';
 
 part 'performance_service.g.dart';
@@ -46,14 +52,14 @@ part 'performance_service.g.dart';
 /// - Keep trace duration reasonable (< 5 minutes)
 /// - Don't create too many concurrent traces (< 500)
 @Riverpod(keepAlive: true)
-PerformanceService performanceService(final Ref ref) {
+PerformanceService performanceService(Ref ref) {
   return PerformanceService(ref);
 }
 
 /// Firebase Performance wrapper service.
 class PerformanceService {
   /// Creates a [PerformanceService] instance.
-  PerformanceService(this._ref);
+  new(this._ref);
 
   final Ref _ref;
   FirebasePerformance? _performance;
@@ -68,7 +74,7 @@ class PerformanceService {
   /// Initialize Firebase Performance.
   ///
   /// Call this after Firebase.initializeApp().
-  Future<void> initialize({final bool enableInDebug = false}) async {
+  Future<void> initialize({bool enableInDebug = false}) async {
     try {
       _performance = FirebasePerformance.instance;
 
@@ -90,7 +96,7 @@ class PerformanceService {
   ///
   /// Returns null if performance monitoring is disabled.
   /// Remember to call [Trace.stop] when done.
-  Future<Trace?> startTrace(final String name) async {
+  Future<Trace?> startTrace(String name) async {
     if (!isEnabled) {
       _logger.d('Performance disabled, skipping trace: $name');
       return null;
@@ -111,10 +117,10 @@ class PerformanceService {
   /// Automatically starts and stops a trace around the operation.
   /// Returns the result of the operation.
   Future<T> traceAsync<T>(
-    final String traceName,
-    final Future<T> Function() operation, {
-    final Map<String, String>? attributes,
-    final Map<String, int>? metrics,
+    String traceName,
+    Future<T> Function() operation, {
+    Map<String, String>? attributes,
+    Map<String, int>? metrics,
   }) async {
     final trace = await startTrace(traceName);
 
@@ -147,15 +153,14 @@ class PerformanceService {
 
   /// Execute a synchronous operation with automatic tracing.
   T traceSync<T>(
-    final String traceName,
-    final T Function() operation, {
-    final Map<String, String>? attributes,
+    String traceName,
+    T Function() operation, {
+    Map<String, String>? attributes,
   }) {
     // For sync operations, we can't await, so we fire and forget the trace
     if (!isEnabled) return operation();
 
     final trace = _performance?.newTrace(traceName);
-    // ignore: discarded_futures
     trace?.start();
 
     if (attributes != null) {
@@ -172,7 +177,6 @@ class PerformanceService {
       trace?.putAttribute('success', 'false');
       rethrow;
     } finally {
-      // ignore: discarded_futures
       trace?.stop();
     }
   }
@@ -180,7 +184,7 @@ class PerformanceService {
   /// Create an HTTP metric for tracking network requests.
   ///
   /// This is typically called by [PerformanceHttpInterceptor] automatically.
-  HttpMetric? newHttpMetric(final String url, final HttpMethod method) {
+  HttpMetric? newHttpMetric(String url, HttpMethod method) {
     if (!isEnabled) return null;
 
     try {
@@ -192,7 +196,7 @@ class PerformanceService {
   }
 
   /// Set whether performance collection is enabled.
-  Future<void> setEnabled(final bool enabled) async {
+  Future<void> setEnabled(bool enabled) async {
     if (_performance == null) return;
 
     try {

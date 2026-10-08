@@ -13,16 +13,15 @@ part 'user.g.dart';
 @freezed
 abstract class User with _$User {
   /// Creates a [User] instance.
-  const factory User({
-    required final String id,
-    required final String email,
-    final String? name,
-    @JsonKey(name: 'avatar_url') final String? avatarUrl,
-    @Default(false) final bool isEmailVerified,
-    final DateTime? createdAt,
+  const factory({
+    required String id,
+    required String email,
+    String? name,
+    @JsonKey(name: 'avatar_url') String? avatarUrl,
+    @Default(false) bool isEmailVerified,
+    DateTime? createdAt,
   }) = _User;
 
   /// Creates a [User] instance from JSON.
-  factory User.fromJson(final Map<String, dynamic> json) =>
-      _$UserFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }

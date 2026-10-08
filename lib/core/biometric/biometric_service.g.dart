@@ -57,7 +57,7 @@ final class BiometricServiceProvider
   }
 }
 
-String _$biometricServiceHash() => r'edc1f982bb228f561a4f4cfe11f91bcc8aad8cbe';
+String _$biometricServiceHash() => r'214f466d5dee060ee4b6343b512050b7540e1a1d';
 
 /// Provider for checking available biometric types.
 
@@ -104,7 +104,7 @@ final class AvailableBiometricsProvider
 }
 
 String _$availableBiometricsHash() =>
-    r'878fd95f8024c11ff8345acc34d121a2cf147ce6';
+    r'b0036f5514212f135aa5074f6dc709bc30f5c59c';
 
 /// Provider for checking if biometric auth is available and enrolled.
 
@@ -142,7 +142,7 @@ final class CanUseBiometricsProvider
   }
 }
 
-String _$canUseBiometricsHash() => r'27277c6a39873214b5151246733d1aadaeeed3df';
+String _$canUseBiometricsHash() => r'3c152e6cf1375de6239f98ef9f2cd3d2ac79c2d7';
 
 /// Provider for checking if user has enabled biometric auth in settings.
 
@@ -180,4 +180,4 @@ final class BiometricEnabledProvider
   }
 }
 
-String _$biometricEnabledHash() => r'cf942e48be6b1f6aefd57a5f1c69832cd3971993';
+String _$biometricEnabledHash() => r'1aa8e5843768c0f7a22c40b5bd20aed121a2ecde';

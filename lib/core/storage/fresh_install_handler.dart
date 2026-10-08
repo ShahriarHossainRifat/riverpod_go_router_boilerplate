@@ -27,7 +27,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// );
 /// ```
 class FreshInstallHandler {
-  FreshInstallHandler._();
+  new _();
 
   /// Key used to detect if the app has been run before.
   /// This is stored in SharedPreferences which gets cleared on uninstall.
@@ -38,8 +38,8 @@ class FreshInstallHandler {
   /// Returns `true` if this was detected as a fresh install and cleanup
   /// was performed.
   static Future<bool> handleFreshInstall({
-    required final SharedPreferences prefs,
-    required final FlutterSecureStorage secureStorage,
+    required SharedPreferences prefs,
+    required FlutterSecureStorage secureStorage,
   }) async {
     final hasRunBefore = prefs.getBool(_hasRunBeforeKey) ?? false;
 

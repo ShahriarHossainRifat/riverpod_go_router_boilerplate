@@ -17,7 +17,7 @@ export 'package:flutter_hooks/flutter_hooks.dart';
 ///   ref.read(analyticsServiceProvider).logScreenView(screenName: 'home');
 /// });
 /// ```
-void useOnMount(final VoidCallback callback) {
+void useOnMount(VoidCallback callback) {
   useEffect(() {
     callback();
     return null;
@@ -30,7 +30,7 @@ void useOnMount(final VoidCallback callback) {
 /// after the specified delay has passed without new input.
 ///
 /// Useful for search fields to avoid making API calls on every keystroke.
-String useDebouncedValue(final String value, final Duration delay) {
+String useDebouncedValue(String value, Duration delay) {
   final debouncedValue = useState(value);
 
   useEffect(() {
@@ -47,7 +47,7 @@ String useDebouncedValue(final String value, final Duration delay) {
 /// Generic debounced value hook for any type.
 ///
 /// Similar to [useDebouncedValue] but works with any type, not just strings.
-T useDebounced<T>(final T value, final Duration delay) {
+T useDebounced<T>(T value, Duration delay) {
   final debouncedValue = useState(value);
 
   useEffect(() {
@@ -67,13 +67,13 @@ T useDebounced<T>(final T value, final Duration delay) {
 /// ```dart
 /// final (isVisible, toggle) = useToggle(false);
 /// ```
-(bool, VoidCallback) useToggle([final bool initialValue = false]) {
+(bool, VoidCallback) useToggle([bool initialValue = false]) {
   final state = useState(initialValue);
   return (state.value, () => state.value = !state.value);
 }
 
 /// Custom hook for text editing controller with auto-dispose.
-TextEditingController useTextController({final String? text}) {
+TextEditingController useTextController({String? text}) {
   return useTextEditingController(text: text);
 }
 
@@ -92,7 +92,7 @@ ScrollController useScrollController() {
 }
 
 /// Custom hook for page controller with auto-dispose.
-PageController usePageController({final int initialPage = 0}) {
+PageController usePageController({int initialPage = 0}) {
   final controller = useMemoized(
     () => PageController(initialPage: initialPage),
   );
@@ -106,7 +106,7 @@ PageController usePageController({final int initialPage = 0}) {
 /// ```dart
 /// final prevCount = usePrevious(count);
 /// ```
-T? usePrevious<T>(final T value) {
+T? usePrevious<T>(T value) {
   final ref = useRef<T?>(null);
   useEffect(() {
     ref.value = value;

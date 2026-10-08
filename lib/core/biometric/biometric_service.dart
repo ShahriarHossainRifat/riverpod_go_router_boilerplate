@@ -9,30 +9,30 @@ part 'biometric_service.g.dart';
 
 /// Provider for BiometricService.
 @Riverpod(keepAlive: true)
-BiometricService biometricService(final Ref ref) => BiometricService(ref);
+BiometricService biometricService(Ref ref) => BiometricService(ref);
 
 /// Provider for checking available biometric types.
 @riverpod
-Future<List<BiometricType>> availableBiometrics(final Ref ref) async {
+Future<List<BiometricType>> availableBiometrics(Ref ref) async {
   return ref.watch(biometricServiceProvider).getAvailableBiometrics();
 }
 
 /// Provider for checking if biometric auth is available and enrolled.
 @riverpod
-Future<bool> canUseBiometrics(final Ref ref) async {
+Future<bool> canUseBiometrics(Ref ref) async {
   return ref.watch(biometricServiceProvider).isAvailable();
 }
 
 /// Provider for checking if user has enabled biometric auth in settings.
 @riverpod
-Future<bool> biometricEnabled(final Ref ref) async {
+Future<bool> biometricEnabled(Ref ref) async {
   return ref.watch(biometricServiceProvider).isBiometricEnabled();
 }
 
 /// Biometric authentication service using local_auth.
 class BiometricService {
   /// Creates a [BiometricService] instance.
-  BiometricService(this._ref);
+  new(this._ref);
 
   final Ref _ref;
   final LocalAuthentication _auth = LocalAuthentication();
@@ -78,7 +78,7 @@ class BiometricService {
   }
 
   /// Authenticate the user using biometrics.
-  Future<BiometricResult> authenticate({required final String reason}) async {
+  Future<BiometricResult> authenticate({required String reason}) async {
     try {
       if (!await isAvailable()) return BiometricResult.notAvailable;
 
@@ -109,7 +109,7 @@ class BiometricService {
   }
 
   /// Enable or disable biometric authentication preference.
-  Future<void> setBiometricEnabled(final bool enabled) async {
+  Future<void> setBiometricEnabled(bool enabled) async {
     final storage = _ref.read(secureStorageProvider);
     await storage.write(key: biometricEnabledKey, value: enabled.toString());
     _logger.d('Biometric preference set to: $enabled');
@@ -117,13 +117,13 @@ class BiometricService {
 
   /// Authenticate if biometric is enabled, otherwise return success.
   Future<BiometricResult> authenticateIfEnabled({
-    required final String reason,
+    required String reason,
   }) async {
     if (!await isBiometricEnabled()) return BiometricResult.success;
     return authenticate(reason: reason);
   }
 
-  BiometricResult _handlePlatformException(final PlatformException e) =>
+  BiometricResult _handlePlatformException(PlatformException e) =>
       switch (e.code) {
         'NotAvailable' => BiometricResult.notAvailable,
         'NotEnrolled' => BiometricResult.notEnrolled,

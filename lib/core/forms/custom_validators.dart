@@ -14,7 +14,7 @@ import 'package:reactive_forms/reactive_forms.dart';
 /// ```
 class MustMatch extends Validator<dynamic> {
   /// Creates a must match validator.
-  MustMatch(this.controlName, this.matchingControlName);
+  new(this.controlName, this.matchingControlName);
 
   /// The name of the control to compare.
   final String controlName;
@@ -23,7 +23,7 @@ class MustMatch extends Validator<dynamic> {
   final String matchingControlName;
 
   @override
-  Map<String, dynamic>? validate(final AbstractControl<dynamic> control) {
+  Map<String, dynamic>? validate(AbstractControl<dynamic> control) {
     final form = control as FormGroup;
     final formControl = form.control(controlName);
     final matchingControl = form.control(matchingControlName);
@@ -54,7 +54,7 @@ class MustMatch extends Validator<dynamic> {
 /// ```
 class UniqueValidator extends AsyncValidator<dynamic> {
   /// Creates a unique validator.
-  UniqueValidator({required this.checkFn, this.errorKey = 'notUnique'});
+  new({required this.checkFn, this.errorKey = 'notUnique'});
 
   /// Function to check uniqueness (returns true if valid/unique).
   final Future<bool> Function(String value) checkFn;
@@ -64,7 +64,7 @@ class UniqueValidator extends AsyncValidator<dynamic> {
 
   @override
   Future<Map<String, dynamic>?> validate(
-    final AbstractControl<dynamic> control,
+    AbstractControl<dynamic> control,
   ) async {
     final value = control.value as String?;
     if (value == null || value.isEmpty) return null;

@@ -7,18 +7,18 @@ import 'package:riverpod_go_router_boilerplate/features/auth/auth.dart';
 ///
 /// Use this when you need to watch session state changes.
 /// This is the single source of truth for session state.
-final sessionStateProvider = Provider<SessionState>((final ref) {
+final sessionStateProvider = Provider<SessionState>((ref) {
   final authState = ref.watch(authProvider);
 
   return authState.when(
-    data: (final user) {
+    data: (user) {
       if (user == null) {
         return const SessionInactive();
       }
       return SessionActive(userId: user.id);
     },
     loading: () => const SessionLoading(),
-    error: (final error, _) {
+    error: (error, _) {
       if (error is AuthException) {
         return SessionExpired(reason: error.message);
       }
@@ -30,7 +30,7 @@ final sessionStateProvider = Provider<SessionState>((final ref) {
 /// Provider that indicates whether user is authenticated.
 ///
 /// Simple boolean for convenience in guards and conditionals.
-final isAuthenticatedProvider = Provider<bool>((final ref) {
+final isAuthenticatedProvider = Provider<bool>((ref) {
   return ref.watch(sessionStateProvider).isAuthenticated;
 });
 
@@ -46,31 +46,48 @@ typedef InvalidateProvidersCallback = void Function(Ref ref);
 ///
 /// ## Provider Invalidation on Logout
 ///
-/// Register a callback to invalidate user-specific providers:
+/// Register callbacks to invalidate user-specific providers on logout:
 /// ```dart
 /// final sessionService = ref.read(sessionServiceProvider);
-/// sessionService.onLogoutInvalidate = (ref) {
+/// sessionService.addLogoutCallback((ref) {
 ///   ref.invalidate(userProfileProvider);
 ///   ref.invalidate(userSettingsProvider);
-/// };
+/// });
 /// ```
 class SessionService {
   /// Creates a [SessionService].
-  SessionService(this._ref);
+  new(this._ref);
 
   final Ref _ref;
 
-  /// Callback to invalidate user-specific providers on logout.
+  /// Registered callbacks to invalidate user-specific providers on logout.
   ///
-  /// Set this to clear any cached user data when the session ends.
+  /// Use [addLogoutCallback] to register a callback.
+  /// All callbacks are called in registration order when [endSession] is called.
+  final List<InvalidateProvidersCallback> _logoutCallbacks = [];
+
+  /// Register a callback to invalidate user-specific providers on logout.
+  ///
+  /// Multiple callbacks can be registered. All are called in order on logout.
+  /// This is preferred over a single mutable callback as it:
+  /// - Supports multiple feature modules registering independent cleanup
+  /// - Cannot accidentally be unset
+  ///
   /// Example:
   /// ```dart
-  /// sessionService.onLogoutInvalidate = (ref) {
+  /// sessionService.addLogoutCallback((ref) {
   ///   ref.invalidate(userProfileProvider);
   ///   ref.invalidate(notificationsProvider);
-  /// };
+  /// });
   /// ```
-  InvalidateProvidersCallback? onLogoutInvalidate;
+  void addLogoutCallback(InvalidateProvidersCallback callback) {
+    _logoutCallbacks.add(callback);
+  }
+
+  /// Remove a previously registered logout callback.
+  void removeLogoutCallback(InvalidateProvidersCallback callback) {
+    _logoutCallbacks.remove(callback);
+  }
 
   /// Get the current session state (non-reactive).
   SessionState get currentState => _ref.read(sessionStateProvider);
@@ -87,13 +104,15 @@ class SessionService {
   /// End the current session (logout).
   ///
   /// This will:
-  /// 1. Call the [onLogoutInvalidate] callback to clear cached user data
+  /// 1. Call all registered [addLogoutCallback] callbacks to clear cached user data
   /// 2. Call the auth notifier to perform logout
   ///
   /// Any cached user data will be cleared to ensure a clean state.
   Future<void> endSession() async {
-    // First, invalidate all user-specific cached data via callback
-    onLogoutInvalidate?.call(_ref);
+    // Invalidate all user-specific cached data via registered callbacks
+    for (final callback in _logoutCallbacks) {
+      callback(_ref);
+    }
 
     // Then perform the actual logout
     final notifier = _ref.read(authProvider.notifier);
@@ -102,6 +121,6 @@ class SessionService {
 }
 
 /// Provider for the SessionService.
-final sessionServiceProvider = Provider<SessionService>((final ref) {
+final sessionServiceProvider = Provider<SessionService>((ref) {
   return SessionService(ref);
 });

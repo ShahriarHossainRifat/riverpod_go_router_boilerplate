@@ -21,7 +21,7 @@ extension DateTimeExtensions on DateTime {
   String get formatDayMonth => DateFormat.MMMMEEEEd().format(this);
 
   /// Format with custom pattern
-  String format(final String pattern) => DateFormat(pattern).format(this);
+  String format(String pattern) => DateFormat(pattern).format(this);
 
   /// Check if date is today
   bool get isToday {
@@ -74,12 +74,12 @@ extension DateTimeExtensions on DateTime {
   DateTime get endOfDay => DateTime(year, month, day, 23, 59, 59, 999);
 
   /// Check if date is in the same day as another date
-  bool isSameDay(final DateTime other) {
+  bool isSameDay(DateTime other) {
     return year == other.year && month == other.month && day == other.day;
   }
 
   /// Add business days (excluding weekends)
-  DateTime addBusinessDays(final int days) {
+  DateTime addBusinessDays(int days) {
     var result = this;
     var remaining = days;
     while (remaining > 0) {
@@ -96,10 +96,7 @@ extension DateTimeExtensions on DateTime {
 /// Nullable DateTime extensions
 extension NullableDateTimeExtensions on DateTime? {
   /// Format or return default string if null
-  String formatOrDefault(
-    final String pattern, {
-    final String defaultValue = '-',
-  }) {
+  String formatOrDefault(String pattern, {String defaultValue = '-'}) {
     if (this == null) return defaultValue;
     return DateFormat(pattern).format(this!);
   }

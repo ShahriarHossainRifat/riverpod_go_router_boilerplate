@@ -8,7 +8,7 @@ import 'package:riverpod_go_router_boilerplate/core/widgets/spacing.dart';
 
 void main() {
   group('AsyncValueWidget', () {
-    testWidgets('shows loading widget when loading', (final tester) async {
+    testWidgets('shows loading widget when loading', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -24,7 +24,7 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('shows data when loaded', (final tester) async {
+    testWidgets('shows data when loaded', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -39,9 +39,9 @@ void main() {
       expect(find.text('Hello'), findsOneWidget);
     });
 
-    testWidgets('shows error widget when error', (final tester) async {
+    testWidgets('shows error widget when error', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: AsyncValueWidget<String>(
               value: AsyncValue.error('Test error', StackTrace.empty),
@@ -54,9 +54,7 @@ void main() {
       expect(find.text('Something went wrong'), findsOneWidget);
     });
 
-    testWidgets('uses custom loading widget when provided', (
-      final tester,
-    ) async {
+    testWidgets('uses custom loading widget when provided', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -74,7 +72,7 @@ void main() {
   });
 
   group('LoadingWidget', () {
-    testWidgets('shows Lottie animation by default', (final tester) async {
+    testWidgets('shows Lottie animation by default', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(home: Scaffold(body: LoadingWidget())),
       );
@@ -83,7 +81,7 @@ void main() {
     });
 
     testWidgets('shows circular progress indicator when useLottie is false', (
-      final tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         const MaterialApp(
@@ -94,7 +92,7 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('shows message when provided', (final tester) async {
+    testWidgets('shows message when provided', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(body: LoadingWidget(message: 'Please wait...')),
@@ -104,7 +102,7 @@ void main() {
       expect(find.text('Please wait...'), findsOneWidget);
     });
 
-    testWidgets('respects custom size', (final tester) async {
+    testWidgets('respects custom size', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(body: LoadingWidget(size: 100, useLottie: false)),
@@ -126,7 +124,7 @@ void main() {
   });
 
   group('AppErrorWidget', () {
-    testWidgets('shows error message', (final tester) async {
+    testWidgets('shows error message', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(body: AppErrorWidget(message: 'Test error message')),
@@ -137,9 +135,7 @@ void main() {
       expect(find.text('Something went wrong'), findsOneWidget);
     });
 
-    testWidgets('shows retry button when onRetry provided', (
-      final tester,
-    ) async {
+    testWidgets('shows retry button when onRetry provided', (tester) async {
       var retryPressed = false;
 
       await tester.pumpWidget(
@@ -159,9 +155,7 @@ void main() {
       expect(retryPressed, isTrue);
     });
 
-    testWidgets('hides retry button when onRetry is null', (
-      final tester,
-    ) async {
+    testWidgets('hides retry button when onRetry is null', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(body: AppErrorWidget(message: 'Error')),
@@ -172,7 +166,7 @@ void main() {
     });
 
     testWidgets('fromError factory creates widget from error object', (
-      final tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         MaterialApp(
@@ -187,7 +181,7 @@ void main() {
   });
 
   group('EmptyWidget', () {
-    testWidgets('shows message', (final tester) async {
+    testWidgets('shows message', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(body: EmptyWidget(message: 'No items found')),
@@ -198,7 +192,7 @@ void main() {
     });
 
     testWidgets('shows action button when action and label provided', (
-      final tester,
+      tester,
     ) async {
       var actionPressed = false;
 
@@ -223,16 +217,13 @@ void main() {
   });
 
   group('AppButton', () {
-    testWidgets('calls onPressed when tapped', (final tester) async {
+    testWidgets('calls onPressed when tapped', (tester) async {
       var pressed = false;
 
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: AppButton(
-              onPressed: () => pressed = true,
-              label: 'Press Me',
-            ),
+            body: AppButton(onPressed: () => pressed = true, label: 'Press Me'),
           ),
         ),
       );
@@ -242,7 +233,7 @@ void main() {
     });
 
     testWidgets('shows loading indicator when isLoading is true', (
-      final tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         const MaterialApp(
@@ -255,7 +246,7 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('shows icon when provided', (final tester) async {
+    testWidgets('shows icon when provided', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -271,7 +262,7 @@ void main() {
       expect(find.byIcon(Icons.add), findsOneWidget);
     });
 
-    testWidgets('is disabled when onPressed is null', (final tester) async {
+    testWidgets('is disabled when onPressed is null', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(body: AppButton(onPressed: null, label: 'Disabled')),
@@ -284,7 +275,7 @@ void main() {
   });
 
   group('Spacing Widgets', () {
-    testWidgets('VerticalSpace.xs creates 4px space', (final tester) async {
+    testWidgets('VerticalSpace.xs creates 4px space', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -297,13 +288,11 @@ void main() {
       expect(sizedBox.height, AppSpacing.xs);
     });
 
-    testWidgets('HorizontalSpace.md creates 16px space', (final tester) async {
+    testWidgets('HorizontalSpace.md creates 16px space', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: Row(
-              children: [Text('A'), HorizontalSpace.md(), Text('B')],
-            ),
+            body: Row(children: [Text('A'), HorizontalSpace.md(), Text('B')]),
           ),
         ),
       );

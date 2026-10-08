@@ -16,13 +16,13 @@ import 'package:riverpod_go_router_boilerplate/core/widgets/spacing.dart';
 /// ```
 class PlaceholderPage extends StatelessWidget {
   /// Creates a [PlaceholderPage] widget.
-  const PlaceholderPage({required this.title, super.key});
+  const new({required this.title, super.key});
 
   /// The title displayed in the app bar and body.
   final String title;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
       body: SafeArea(
@@ -45,7 +45,7 @@ class PlaceholderPage extends StatelessWidget {
   }
 
   /// Builds the construction icon container.
-  Widget _buildConstructionIcon(final BuildContext context) {
+  Widget _buildConstructionIcon(BuildContext context) {
     final colorScheme = context.colorScheme;
 
     return Container(
@@ -63,28 +63,24 @@ class PlaceholderPage extends StatelessWidget {
   }
 
   /// Builds the title text.
-  Widget _buildTitle(final BuildContext context) {
+  Widget _buildTitle(BuildContext context) {
     final textTheme = context.textTheme;
 
     return Text(
       title,
-      style: textTheme.headlineMedium?.copyWith(
-        fontWeight: .bold,
-      ),
+      style: textTheme.headlineMedium?.copyWith(fontWeight: .bold),
       textAlign: .center,
     );
   }
 
   /// Builds the description text.
-  Widget _buildDescription(final BuildContext context) {
+  Widget _buildDescription(BuildContext context) {
     final colorScheme = context.colorScheme;
     final textTheme = context.textTheme;
 
     return Text(
       'This page is under construction',
-      style: textTheme.bodyLarge?.copyWith(
-        color: colorScheme.onSurfaceVariant,
-      ),
+      style: textTheme.bodyLarge?.copyWith(color: colorScheme.onSurfaceVariant),
       textAlign: .center,
     );
   }

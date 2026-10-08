@@ -98,7 +98,7 @@ abstract class Assets {
 
 /// Onboarding-specific assets.
 class _OnboardingAssets {
-  const _OnboardingAssets();
+  const new();
 
   /// First onboarding page illustration.
   String get page1 => '${Assets.imagesPath}/onboarding_1.png';

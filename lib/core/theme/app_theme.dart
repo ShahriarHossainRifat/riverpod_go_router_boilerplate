@@ -56,9 +56,7 @@ abstract class AppTheme {
   static final FilledButtonThemeData _filledButtonTheme = FilledButtonThemeData(
     style: FilledButton.styleFrom(
       minimumSize: _buttonMinSize,
-      shape: RoundedRectangleBorder(
-        borderRadius: .circular(_buttonRadius),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: .circular(_buttonRadius)),
     ),
   );
 
@@ -67,9 +65,7 @@ abstract class AppTheme {
       OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           minimumSize: _buttonMinSize,
-          shape: RoundedRectangleBorder(
-            borderRadius: .circular(_buttonRadius),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: .circular(_buttonRadius)),
         ),
       );
 
@@ -77,9 +73,7 @@ abstract class AppTheme {
   static final TextButtonThemeData _textButtonTheme = TextButtonThemeData(
     style: TextButton.styleFrom(
       minimumSize: _buttonMinSize,
-      shape: RoundedRectangleBorder(
-        borderRadius: .circular(_buttonRadius),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: .circular(_buttonRadius)),
     ),
   );
 
@@ -87,26 +81,20 @@ abstract class AppTheme {
   static final InputDecorationTheme _inputDecorationTheme =
       InputDecorationTheme(
         filled: true,
-        border: OutlineInputBorder(
-          borderRadius: .circular(_inputRadius),
-        ),
+        border: OutlineInputBorder(borderRadius: .circular(_inputRadius)),
         contentPadding: _inputPadding,
       );
 
   /// Common card theme.
   static final CardThemeData _cardTheme = CardThemeData(
     elevation: 0,
-    shape: RoundedRectangleBorder(
-      borderRadius: .circular(_cardRadius),
-    ),
+    shape: RoundedRectangleBorder(borderRadius: .circular(_cardRadius)),
   );
 
   /// Common snackbar theme.
   static final SnackBarThemeData _snackBarTheme = SnackBarThemeData(
     behavior: .floating,
-    shape: RoundedRectangleBorder(
-      borderRadius: .circular(_snackBarRadius),
-    ),
+    shape: RoundedRectangleBorder(borderRadius: .circular(_snackBarRadius)),
   );
 
   // ─────────────────────────────────────────────────────────────────────────────

@@ -11,21 +11,21 @@ l10n:
 
 # 🔨 Run code generation (build_runner + l10n)
 gen: l10n
-	dart run build_runner build --delete-conflicting-outputs
+	dart run build_runner build
 
 # 👀 Run code generation in watch mode (updates as you save)
 watch:
-	dart run build_runner watch --delete-conflicting-outputs
+	dart run build_runner watch
 
 # 🎨 Format and fix lint issues
 format:
-	dart format .
+	dart format lib test
 	dart fix --apply
 
 # 🔍 Analyze code for errors and lint warnings
 lint:
 	flutter analyze
-	dart format --output=none --set-exit-if-changed .
+	dart format --output=none --set-exit-if-changed lib test
 
 # 🧪 Run all tests (unit and widget)
 test:

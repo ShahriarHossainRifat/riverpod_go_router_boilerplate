@@ -15,7 +15,7 @@ import 'package:riverpod_go_router_boilerplate/core/constants/app_constants.dart
 /// ```
 class AnimatedProgress extends StatefulWidget {
   /// Creates an [AnimatedProgress] widget.
-  const AnimatedProgress({
+  const new({
     required this.value,
     super.key,
     this.duration = AppConstants.animationNormal,
@@ -89,7 +89,7 @@ class _AnimatedProgressState extends State<AnimatedProgress>
   }
 
   @override
-  void didUpdateWidget(final AnimatedProgress oldWidget) {
+  void didUpdateWidget(AnimatedProgress oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.value != widget.value) {
       _previousValue = oldWidget.value;
@@ -107,7 +107,7 @@ class _AnimatedProgressState extends State<AnimatedProgress>
   }
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final radius =
         widget.borderRadius ??
@@ -126,13 +126,10 @@ class _AnimatedProgressState extends State<AnimatedProgress>
         ],
         AnimatedBuilder(
           animation: _animation,
-          builder: (final context, final child) {
+          builder: (context, child) {
             return Container(
               height: widget.height,
-              decoration: BoxDecoration(
-                color: bgColor,
-                borderRadius: radius,
-              ),
+              decoration: BoxDecoration(color: bgColor, borderRadius: radius),
               child: FractionallySizedBox(
                 alignment: Alignment.centerLeft,
                 widthFactor: _animation.value,
@@ -155,7 +152,7 @@ class _AnimatedProgressState extends State<AnimatedProgress>
 /// A circular progress indicator with animated value changes.
 class AnimatedCircularProgress extends StatefulWidget {
   /// Creates an [AnimatedCircularProgress] widget.
-  const AnimatedCircularProgress({
+  const new({
     required this.value,
     super.key,
     this.duration = AppConstants.animationNormal,
@@ -218,7 +215,7 @@ class _AnimatedCircularProgressState extends State<AnimatedCircularProgress>
   }
 
   @override
-  void didUpdateWidget(final AnimatedCircularProgress oldWidget) {
+  void didUpdateWidget(AnimatedCircularProgress oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.value != widget.value) {
       _previousValue = oldWidget.value;
@@ -236,7 +233,7 @@ class _AnimatedCircularProgressState extends State<AnimatedCircularProgress>
   }
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final bgColor =
         widget.backgroundColor ?? theme.colorScheme.surfaceContainerHighest;
@@ -247,12 +244,12 @@ class _AnimatedCircularProgressState extends State<AnimatedCircularProgress>
       height: widget.size,
       child: AnimatedBuilder(
         animation: _animation,
-        builder: (final context, final child) {
+        builder: (context, child) {
           return Stack(
             fit: StackFit.expand,
             children: [
               CircularProgressIndicator(
-                value: 1.0,
+                value: 1,
                 strokeWidth: widget.strokeWidth,
                 valueColor: AlwaysStoppedAnimation(bgColor),
               ),

@@ -10,14 +10,14 @@ import 'package:riverpod_go_router_boilerplate/features/auth/domain/repositories
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Mock for [FlutterSecureStorage].
-class MockFlutterSecureStorage extends Mock implements FlutterSecureStorage {}
+class MockFlutterSecureStorage extends Mock implements FlutterSecureStorage;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // NETWORK MOCKS
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Mock for [ApiClient].
-class MockApiClient extends Mock implements ApiClient {}
+class MockApiClient extends Mock implements ApiClient;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SERVICE MOCKS
@@ -25,14 +25,14 @@ class MockApiClient extends Mock implements ApiClient {}
 
 /// Mock for [LocalNotificationService].
 class MockLocalNotificationService extends Mock
-    implements LocalNotificationService {}
+    implements LocalNotificationService;
 
 /// Mock for [CacheService].
-class MockCacheService extends Mock implements CacheService {}
+class MockCacheService extends Mock implements CacheService;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // REPOSITORY MOCKS
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Mock for [AuthRepository].
-class MockAuthRepository extends Mock implements AuthRepository {}
+class MockAuthRepository extends Mock implements AuthRepository;

@@ -173,4 +173,4 @@ final class PerformanceServiceProvider
 }
 
 String _$performanceServiceHash() =>
-    r'2a928bc893375cfd53c73c36f3c75f71c84b6d9b';
+    r'b2d99af9299da147a33f642275cdb06efcd4976a';

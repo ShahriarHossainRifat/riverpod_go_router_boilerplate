@@ -4,7 +4,7 @@ import 'package:riverpod_go_router_boilerplate/core/constants/app_constants.dart
 /// A styled chip widget for tags, filters, etc.
 class AppChip extends StatelessWidget {
   /// Creates an [AppChip].
-  const AppChip({
+  const new({
     required this.label,
     super.key,
     this.icon,
@@ -37,7 +37,7 @@ class AppChip extends StatelessWidget {
   final AppChipVariant variant;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     if (onDeleted != null) {
       return InputChip(
         label: Text(label),

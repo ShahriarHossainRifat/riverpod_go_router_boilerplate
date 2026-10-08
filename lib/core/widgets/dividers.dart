@@ -5,7 +5,7 @@ import 'package:riverpod_go_router_boilerplate/core/widgets/spacing.dart';
 /// A divider with optional label text.
 class AppDivider extends StatelessWidget {
   /// Creates an [AppDivider].
-  const AppDivider({
+  const new({
     super.key,
     this.label,
     this.thickness = 1,
@@ -30,7 +30,7 @@ class AppDivider extends StatelessWidget {
   final Color? color;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final theme = context.theme;
     final dividerColor = color ?? theme.dividerColor;
 

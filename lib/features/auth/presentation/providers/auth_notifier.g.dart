@@ -93,7 +93,7 @@ final class AuthNotifierProvider
   AuthNotifier create() => AuthNotifier();
 }
 
-String _$authNotifierHash() => r'6e9bc9ad803106a397156db220486bb12c8f2f05';
+String _$authNotifierHash() => r'8c700fb4c3df844037d7a95d5f88416129261528';
 
 /// Manages authentication state.
 ///
@@ -120,7 +120,7 @@ abstract class _$AuthNotifier extends $AsyncNotifier<User?> {
   FutureOr<User?> build();
   @$mustCallSuper
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<User?>, User?>;
     final element =
         ref.element
@@ -130,40 +130,49 @@ abstract class _$AuthNotifier extends $AsyncNotifier<User?> {
               Object?,
               Object?
             >;
-    element.handleCreate(ref, build);
+    return element.handleCreate(ref, build);
   }
 }
 
-/// Convenience provider for checking if user is authenticated.
+/// Convenience provider for checking authentication status from auth state.
 ///
-/// Usage: `ref.watch(isAuthenticatedProvider)`
-
-@ProviderFor(isAuthenticated)
-final isAuthenticatedProvider = IsAuthenticatedProvider._();
-
-/// Convenience provider for checking if user is authenticated.
+/// Prefer [isAuthenticatedProvider] from session_service.dart for most uses.
+/// This provider reads directly from the auth AsyncValue.
 ///
-/// Usage: `ref.watch(isAuthenticatedProvider)`
+/// Usage: `ref.watch(authIsAuthenticatedProvider)`
 
-final class IsAuthenticatedProvider
+@ProviderFor(authIsAuthenticated)
+final authIsAuthenticatedProvider = AuthIsAuthenticatedProvider._();
+
+/// Convenience provider for checking authentication status from auth state.
+///
+/// Prefer [isAuthenticatedProvider] from session_service.dart for most uses.
+/// This provider reads directly from the auth AsyncValue.
+///
+/// Usage: `ref.watch(authIsAuthenticatedProvider)`
+
+final class AuthIsAuthenticatedProvider
     extends $FunctionalProvider<bool, bool, bool>
     with $Provider<bool> {
-  /// Convenience provider for checking if user is authenticated.
+  /// Convenience provider for checking authentication status from auth state.
   ///
-  /// Usage: `ref.watch(isAuthenticatedProvider)`
-  IsAuthenticatedProvider._()
+  /// Prefer [isAuthenticatedProvider] from session_service.dart for most uses.
+  /// This provider reads directly from the auth AsyncValue.
+  ///
+  /// Usage: `ref.watch(authIsAuthenticatedProvider)`
+  AuthIsAuthenticatedProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'isAuthenticatedProvider',
+        name: r'authIsAuthenticatedProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$isAuthenticatedHash();
+  String debugGetCreateSourceHash() => _$authIsAuthenticatedHash();
 
   @$internal
   @override
@@ -172,7 +181,7 @@ final class IsAuthenticatedProvider
 
   @override
   bool create(Ref ref) {
-    return isAuthenticated(ref);
+    return authIsAuthenticated(ref);
   }
 
   /// {@macro riverpod.override_with_value}
@@ -184,40 +193,42 @@ final class IsAuthenticatedProvider
   }
 }
 
-String _$isAuthenticatedHash() => r'2f79849868c9490023e95e53a9fa4ea33690f61a';
+String _$authIsAuthenticatedHash() =>
+    r'50d23b87d66d8f0d4763cdc897672834f375b39e';
 
-/// Convenience provider for getting the current user.
+/// Convenience provider for getting the current authenticated user.
 ///
 /// Returns null if not authenticated or loading.
-/// Usage: `ref.watch(currentUserProvider)`
+/// Usage: `ref.watch(currentAuthUserProvider)`
 
-@ProviderFor(currentUser)
-final currentUserProvider = CurrentUserProvider._();
+@ProviderFor(currentAuthUser)
+final currentAuthUserProvider = CurrentAuthUserProvider._();
 
-/// Convenience provider for getting the current user.
+/// Convenience provider for getting the current authenticated user.
 ///
 /// Returns null if not authenticated or loading.
-/// Usage: `ref.watch(currentUserProvider)`
+/// Usage: `ref.watch(currentAuthUserProvider)`
 
-final class CurrentUserProvider extends $FunctionalProvider<User?, User?, User?>
+final class CurrentAuthUserProvider
+    extends $FunctionalProvider<User?, User?, User?>
     with $Provider<User?> {
-  /// Convenience provider for getting the current user.
+  /// Convenience provider for getting the current authenticated user.
   ///
   /// Returns null if not authenticated or loading.
-  /// Usage: `ref.watch(currentUserProvider)`
-  CurrentUserProvider._()
+  /// Usage: `ref.watch(currentAuthUserProvider)`
+  CurrentAuthUserProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'currentUserProvider',
+        name: r'currentAuthUserProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$currentUserHash();
+  String debugGetCreateSourceHash() => _$currentAuthUserHash();
 
   @$internal
   @override
@@ -226,7 +237,7 @@ final class CurrentUserProvider extends $FunctionalProvider<User?, User?, User?>
 
   @override
   User? create(Ref ref) {
-    return currentUser(ref);
+    return currentAuthUser(ref);
   }
 
   /// {@macro riverpod.override_with_value}
@@ -238,4 +249,4 @@ final class CurrentUserProvider extends $FunctionalProvider<User?, User?, User?>
   }
 }
 
-String _$currentUserHash() => r'36cbdf15f2eb87c2f99c368fa205f40a7b392b65';
+String _$currentAuthUserHash() => r'1be215db5ca1afd1cde7b4b7c46fa9b6ee210eb5';

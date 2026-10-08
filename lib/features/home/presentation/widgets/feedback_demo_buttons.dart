@@ -9,13 +9,13 @@ import 'package:riverpod_go_router_boilerplate/l10n/generated/app_localizations.
 /// of snackbar messages (success, error, info).
 class FeedbackDemoButtons extends StatelessWidget {
   /// Creates a [FeedbackDemoButtons] instance.
-  const FeedbackDemoButtons({required this.ref, super.key});
+  const new({required this.ref, super.key});
 
   /// The Riverpod reference for accessing providers.
   final WidgetRef ref;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
     return Row(

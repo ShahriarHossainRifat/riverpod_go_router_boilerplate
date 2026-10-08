@@ -29,10 +29,7 @@ import 'package:riverpod_go_router_boilerplate/features/auth/domain/repositories
 /// ```
 class AuthRepositoryRemote implements AuthRepository {
   /// Creates a [AuthRepositoryRemote] instance.
-  AuthRepositoryRemote({
-    required final ApiClient apiClient,
-    required this.secureStorage,
-  }) : _apiClient = apiClient;
+  new({required this._apiClient, required this.secureStorage});
 
   final ApiClient _apiClient;
 
@@ -40,44 +37,46 @@ class AuthRepositoryRemote implements AuthRepository {
   final FlutterSecureStorage secureStorage;
 
   @override
-  Future<Result<User>> login(final String email, final String password) async {
+  Future<Result<User>> login(String email, String password) async {
     final result = await _apiClient.post<Map<String, dynamic>>(
       '/auth/login',
       data: {'email': email, 'password': password},
-      fromJson: (final json) => json as Map<String, dynamic>,
+      fromJson: (json) => json as Map<String, dynamic>,
     );
 
-    return result.fold(
-      onSuccess: (final data) async {
-        // Store tokens
-        final token = data['token'] as String?;
-        final refreshToken = data['refresh_token'] as String?;
+    return switch (result) {
+      Failure(:final error) => Failure(error),
+      Success(:final data) => await _parseLoginResponse(data),
+    };
+  }
 
-        if (token != null) {
-          await secureStorage.write(key: StorageKeys.accessToken, value: token);
-        }
-        if (refreshToken != null) {
-          await secureStorage.write(
-            key: StorageKeys.refreshToken,
-            value: refreshToken,
-          );
-        }
+  Future<Result<User>> _parseLoginResponse(Map<String, dynamic> data) async {
+    // Store tokens
+    final token = data['token'] as String?;
+    final refreshToken = data['refresh_token'] as String?;
 
-        // Parse user
-        final userData = data['user'] as Map<String, dynamic>?;
-        if (userData == null) {
-          return const Failure(
-            AuthException(message: 'Invalid response: missing user data'),
-          );
-        }
+    if (token != null) {
+      await secureStorage.write(key: StorageKeys.accessToken, value: token);
+    }
+    if (refreshToken != null) {
+      await secureStorage.write(
+        key: StorageKeys.refreshToken,
+        value: refreshToken,
+      );
+    }
 
-        final user = User.fromJson(userData);
-        await secureStorage.write(key: StorageKeys.userId, value: user.id);
+    // Parse user
+    final userData = data['user'] as Map<String, dynamic>?;
+    if (userData == null) {
+      return const Failure(
+        AuthException(message: 'Invalid response: missing user data'),
+      );
+    }
 
-        return Success(user);
-      },
-      onFailure: Failure.new,
-    );
+    final user = User.fromJson(userData);
+    await secureStorage.write(key: StorageKeys.userId, value: user.id);
+
+    return Success(user);
   }
 
   @override
@@ -91,22 +90,19 @@ class AuthRepositoryRemote implements AuthRepository {
     // Validate token by fetching current user
     final result = await _apiClient.get<Map<String, dynamic>>(
       '/auth/me',
-      fromJson: (final json) => json as Map<String, dynamic>,
+      fromJson: (json) => json as Map<String, dynamic>,
     );
 
-    return result.fold(
-      onSuccess: (final data) {
+    switch (result) {
+      case Success(:final data):
         final userData = data['user'] as Map<String, dynamic>? ?? data;
         return Success(User.fromJson(userData));
-      },
-      onFailure: (final error) async {
-        // Token is invalid, clear stored tokens
+      case Failure(:final error):
         if (error is NetworkException && error.statusCode == 401) {
           await _clearTokens();
         }
         return Failure(error);
-      },
-    );
+    }
   }
 
   @override

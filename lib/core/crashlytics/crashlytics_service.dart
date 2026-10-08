@@ -4,6 +4,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:riverpod_go_router_boilerplate/app/app_exports.dart'
+    show AppBootstrap;
+import 'package:riverpod_go_router_boilerplate/app/bootstrap.dart'
+    show AppBootstrap;
 import 'package:riverpod_go_router_boilerplate/config/env_config.dart';
 import 'package:riverpod_go_router_boilerplate/core/utils/logger.dart';
 
@@ -48,14 +52,14 @@ part 'crashlytics_service.g.dart';
 /// - Custom key-value pairs for debugging
 /// - Respects user privacy (can be disabled)
 @Riverpod(keepAlive: true)
-CrashlyticsService crashlyticsService(final Ref ref) {
+CrashlyticsService crashlyticsService(Ref ref) {
   return CrashlyticsService(ref);
 }
 
 /// Firebase Crashlytics wrapper service.
 class CrashlyticsService {
   /// Creates a [CrashlyticsService] instance.
-  CrashlyticsService(this._ref);
+  new(this._ref);
 
   final Ref _ref;
   FirebaseCrashlytics? _crashlytics;
@@ -89,8 +93,8 @@ class CrashlyticsService {
   /// );
   /// ```
   static Future<void> initialize({
-    final bool enableInDebug = false,
-    required final Environment environment,
+    required Environment environment,
+    bool enableInDebug = false,
   }) async {
     try {
       // Initialize Firebase with platform-specific options
@@ -123,7 +127,7 @@ class CrashlyticsService {
 
       if (shouldEnable) {
         // Pass Flutter errors to Crashlytics
-        FlutterError.onError = (final details) {
+        FlutterError.onError = (details) {
           // Still present the error in debug mode
           FlutterError.presentError(details);
           // Record to Crashlytics
@@ -131,15 +135,13 @@ class CrashlyticsService {
         };
 
         // Pass async errors to Crashlytics
-        PlatformDispatcher.instance.onError = (final error, final stack) {
+        PlatformDispatcher.instance.onError = (error, stack) {
           crashlytics.recordError(error, stack, fatal: true);
           return true;
         };
       }
 
-      AppLogger.instance.i(
-        'Crashlytics initialized (enabled: $shouldEnable)',
-      );
+      AppLogger.instance.i('Crashlytics initialized (enabled: $shouldEnable)');
     } catch (e, stack) {
       // Don't crash the app if Crashlytics fails to initialize
       AppLogger.instance.e(
@@ -154,11 +156,11 @@ class CrashlyticsService {
   ///
   /// Use this for errors that don't crash the app but should be tracked.
   Future<void> recordError(
-    final dynamic exception,
-    final StackTrace? stackTrace, {
-    final String? reason,
-    final bool fatal = false,
-    final Iterable<Object>? information,
+    dynamic exception,
+    StackTrace? stackTrace, {
+    String? reason,
+    bool fatal = false,
+    Iterable<Object>? information,
   }) async {
     if (!isEnabled) {
       _logger.d('Crashlytics disabled, logging error locally: $exception');
@@ -180,8 +182,8 @@ class CrashlyticsService {
 
   /// Record a Flutter error.
   Future<void> recordFlutterError(
-    final FlutterErrorDetails details, {
-    final bool fatal = false,
+    FlutterErrorDetails details, {
+    bool fatal = false,
   }) async {
     if (!isEnabled) {
       _logger.d('Crashlytics disabled, logging Flutter error locally');
@@ -202,7 +204,7 @@ class CrashlyticsService {
   /// Log a message that will appear in crash reports as breadcrumbs.
   ///
   /// Use this to track user actions leading up to a crash.
-  Future<void> log(final String message) async {
+  Future<void> log(String message) async {
     if (!isEnabled) return;
 
     try {
@@ -216,7 +218,7 @@ class CrashlyticsService {
   ///
   /// This helps identify crashes from specific users.
   /// Use a hashed/anonymized identifier if possible.
-  Future<void> setUserId(final String identifier) async {
+  Future<void> setUserId(String identifier) async {
     if (!isEnabled) return;
 
     try {
@@ -240,10 +242,7 @@ class CrashlyticsService {
   /// Set a custom key-value pair for debugging.
   ///
   /// These appear in crash reports and help identify the app state.
-  Future<void> setCustomKey(
-    final String key,
-    final Object value,
-  ) async {
+  Future<void> setCustomKey(String key, Object value) async {
     if (!isEnabled) return;
 
     try {

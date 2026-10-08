@@ -5,7 +5,7 @@ import 'package:riverpod_go_router_boilerplate/core/widgets/spacing.dart';
 /// A configurable button with consistent app styling.
 class AppButton extends StatelessWidget {
   /// Creates an [AppButton].
-  const AppButton({
+  const new({
     required this.onPressed,
     required this.label,
     super.key,
@@ -38,7 +38,7 @@ class AppButton extends StatelessWidget {
   final AppButtonSize size;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final colorScheme = context.theme.colorScheme;
 
     final Widget child = isLoading
@@ -93,7 +93,7 @@ class AppButton extends StatelessWidget {
     .large => 24,
   };
 
-  ButtonStyle _buttonStyle(final BuildContext context) {
+  ButtonStyle _buttonStyle(BuildContext context) {
     return ButtonStyle(
       minimumSize: WidgetStatePropertyAll(_minSize),
       padding: WidgetStatePropertyAll(_padding),
@@ -149,7 +149,7 @@ enum AppButtonSize {
 /// An icon-only button with consistent styling.
 class AppIconButton extends StatelessWidget {
   /// Creates an [AppIconButton].
-  const AppIconButton({
+  const new({
     required this.icon,
     required this.onPressed,
     super.key,
@@ -178,7 +178,7 @@ class AppIconButton extends StatelessWidget {
   final bool isLoading;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return switch (variant) {
       .standard => IconButton(
         onPressed: isLoading ? null : onPressed,
@@ -207,7 +207,7 @@ class AppIconButton extends StatelessWidget {
     };
   }
 
-  Widget _buildIcon(final BuildContext context) {
+  Widget _buildIcon(BuildContext context) {
     if (isLoading) {
       return SizedBox(
         width: size * 0.8,

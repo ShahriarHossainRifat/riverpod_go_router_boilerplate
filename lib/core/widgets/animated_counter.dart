@@ -16,7 +16,7 @@ import 'package:riverpod_go_router_boilerplate/core/constants/app_constants.dart
 /// ```
 class AnimatedCounter extends StatefulWidget {
   /// Creates an [AnimatedCounter] widget.
-  const AnimatedCounter({
+  const new({
     required this.value,
     super.key,
     this.duration = AppConstants.counterAnimation,
@@ -78,7 +78,7 @@ class _AnimatedCounterState extends State<AnimatedCounter>
   }
 
   @override
-  void didUpdateWidget(final AnimatedCounter oldWidget) {
+  void didUpdateWidget(AnimatedCounter oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.value != widget.value) {
       _previousValue = oldWidget.value.toDouble();
@@ -95,23 +95,23 @@ class _AnimatedCounterState extends State<AnimatedCounter>
     super.dispose();
   }
 
-  String _formatNumber(final double value) {
+  String _formatNumber(double value) {
     final fixedValue = value.toStringAsFixed(widget.decimalPlaces);
     if (widget.separator.isEmpty) return fixedValue;
 
     final parts = fixedValue.split('.');
     final intPart = parts[0].replaceAllMapped(
       RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-      (final match) => '${match[1]}${widget.separator}',
+      (match) => '${match[1]}${widget.separator}',
     );
     return parts.length > 1 ? '$intPart.${parts[1]}' : intPart;
   }
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _animation,
-      builder: (final context, final child) {
+      builder: (context, child) {
         return Text(
           '${widget.prefix}${_formatNumber(_animation.value)}${widget.suffix}',
           style: widget.style,

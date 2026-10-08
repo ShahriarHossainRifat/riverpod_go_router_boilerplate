@@ -9,4 +9,11 @@
 /// from `lib/core/remote_config/`.
 library;
 
+import 'package:riverpod_go_router_boilerplate/core/config/config.dart'
+    show RemoteConfigService;
+import 'package:riverpod_go_router_boilerplate/core/config/remote_config_service.dart'
+    show RemoteConfigService;
+import 'package:riverpod_go_router_boilerplate/core/core.dart'
+    show RemoteConfigService;
+
 export 'remote_config_service.dart';

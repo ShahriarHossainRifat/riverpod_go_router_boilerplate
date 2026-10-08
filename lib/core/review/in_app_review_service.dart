@@ -23,7 +23,7 @@ abstract class ReviewStorageKeys {
 /// Configuration for when to request reviews.
 class ReviewConfig {
   /// Creates a [ReviewConfig] instance.
-  const ReviewConfig({
+  const new({
     this.minPositiveActions = 5,
     this.minLaunches = 3,
     this.daysBetweenRequests = 30,
@@ -64,10 +64,7 @@ class ReviewConfig {
 /// ```
 class InAppReviewService {
   /// Creates an [InAppReviewService] instance.
-  InAppReviewService(
-    this._ref, {
-    this.config = const ReviewConfig(),
-  });
+  new(this._ref, {this.config = const ReviewConfig()});
 
   final Ref _ref;
 
@@ -179,8 +176,8 @@ class InAppReviewService {
   ///
   /// Use this as a fallback or for "Rate Us" buttons in settings.
   Future<void> openStoreListing({
-    final String? appStoreId,
-    final String? microsoftStoreId,
+    String? appStoreId,
+    String? microsoftStoreId,
   }) async {
     final inAppReview = InAppReview.instance;
     await inAppReview.openStoreListing(
@@ -222,6 +219,6 @@ class InAppReviewService {
 
 /// Provider for [InAppReviewService].
 @Riverpod(keepAlive: true)
-InAppReviewService inAppReviewService(final Ref ref) {
+InAppReviewService inAppReviewService(Ref ref) {
   return InAppReviewService(ref);
 }

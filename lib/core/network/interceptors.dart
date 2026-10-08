@@ -11,12 +11,10 @@ import 'package:riverpod_go_router_boilerplate/core/utils/logger.dart';
 /// Callback type for token refresh logic.
 /// Returns true if refresh was successful, false otherwise.
 /// Implement this to call your backend's refresh token endpoint.
-typedef TokenRefreshCallback =
-    Future<bool> Function(
-      String? refreshToken,
-      Future<void> Function(String accessToken, String? refreshToken)
-      saveTokens,
-    );
+typedef TokenRefreshCallback = Future<bool> Function(
+  String? refreshToken,
+  Future<void> Function(String accessToken, String? refreshToken) saveTokens,
+);
 
 /// Callback type for handling authentication failures.
 /// Called when token refresh fails and the user needs to re-authenticate.
@@ -50,7 +48,7 @@ typedef OnAuthFailureCallback = void Function();
 /// ```
 class AuthInterceptor extends QueuedInterceptor {
   /// Creates an [AuthInterceptor] instance.
-  AuthInterceptor(
+  new(
     this._ref, {
     required this.parentDio,
     this.onRefreshToken,
@@ -75,8 +73,8 @@ class AuthInterceptor extends QueuedInterceptor {
 
   @override
   Future<void> onRequest(
-    final RequestOptions options,
-    final RequestInterceptorHandler handler,
+    RequestOptions options,
+    RequestInterceptorHandler handler,
   ) async {
     final storage = _ref.read(secureStorageProvider);
     final token = await storage.read(key: StorageKeys.accessToken);
@@ -90,8 +88,8 @@ class AuthInterceptor extends QueuedInterceptor {
 
   @override
   Future<void> onError(
-    final DioException err,
-    final ErrorInterceptorHandler handler,
+    DioException err,
+    ErrorInterceptorHandler handler,
   ) async {
     if (err.response?.statusCode != 401) {
       return handler.next(err);
@@ -124,6 +122,8 @@ class AuthInterceptor extends QueuedInterceptor {
       if (refreshed) {
         final response = await _retryRequest(err.requestOptions);
         return handler.resolve(response);
+      } else {
+        await _handleAuthFailure();
       }
     } catch (e) {
       _refreshCompleter?.complete(false);
@@ -139,30 +139,28 @@ class AuthInterceptor extends QueuedInterceptor {
     final refreshToken = await storage.read(key: StorageKeys.refreshToken);
 
     if (refreshToken == null || onRefreshToken == null) {
-      // No refresh token or no refresh callback, treat as auth failure
-      await _handleAuthFailure();
       return false;
     }
 
     try {
-      return await onRefreshToken!(
-        refreshToken,
-        (final accessToken, final newRefreshToken) async {
-          await storage.write(key: StorageKeys.accessToken, value: accessToken);
-          if (newRefreshToken != null) {
-            await storage.write(
-              key: StorageKeys.refreshToken,
-              value: newRefreshToken,
-            );
-          }
-        },
-      );
+      return await onRefreshToken!(refreshToken, (
+        accessToken,
+        newRefreshToken,
+      ) async {
+        await storage.write(key: StorageKeys.accessToken, value: accessToken);
+        if (newRefreshToken != null) {
+          await storage.write(
+            key: StorageKeys.refreshToken,
+            value: newRefreshToken,
+          );
+        }
+      });
     } catch (e) {
       return false;
     }
   }
 
-  Future<Response<dynamic>> _retryRequest(final RequestOptions options) async {
+  Future<Response<dynamic>> _retryRequest(RequestOptions options) async {
     final storage = _ref.read(secureStorageProvider);
     final token = await storage.read(key: StorageKeys.accessToken);
     options.headers['Authorization'] = 'Bearer $token';
@@ -190,7 +188,7 @@ class AuthInterceptor extends QueuedInterceptor {
 /// Interceptor for retrying failed requests with exponential backoff.
 class RetryInterceptor extends Interceptor {
   /// Creates a [RetryInterceptor] instance.
-  RetryInterceptor(
+  new(
     this._dio, {
     this.maxRetries = AppConstants.maxRetryAttempts,
     this.retryDelays,
@@ -210,8 +208,8 @@ class RetryInterceptor extends Interceptor {
 
   @override
   Future<void> onError(
-    final DioException err,
-    final ErrorInterceptorHandler handler,
+    DioException err,
+    ErrorInterceptorHandler handler,
   ) async {
     if (!_shouldRetry(err)) {
       return handler.next(err);
@@ -234,7 +232,7 @@ class RetryInterceptor extends Interceptor {
     }
   }
 
-  bool _shouldRetry(final DioException err) {
+  bool _shouldRetry(DioException err) {
     return err.type == DioExceptionType.connectionTimeout ||
         err.type == DioExceptionType.sendTimeout ||
         err.type == DioExceptionType.receiveTimeout ||
@@ -246,16 +244,13 @@ class RetryInterceptor extends Interceptor {
 /// Interceptor for logging requests and responses in debug mode.
 class LoggingInterceptor extends Interceptor {
   /// Creates a [LoggingInterceptor] instance.
-  LoggingInterceptor(this._ref);
+  new(this._ref);
   final Ref _ref;
 
   AppLogger get _logger => _ref.read(loggerProvider);
 
   @override
-  void onRequest(
-    final RequestOptions options,
-    final RequestInterceptorHandler handler,
-  ) {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     if (kDebugMode) {
       _logger.d('→ ${options.method} ${options.uri}');
       if (options.data != null) {
@@ -267,8 +262,8 @@ class LoggingInterceptor extends Interceptor {
 
   @override
   void onResponse(
-    final Response<dynamic> response,
-    final ResponseInterceptorHandler handler,
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
   ) {
     if (kDebugMode) {
       _logger.d('← ${response.statusCode} ${response.requestOptions.uri}');
@@ -277,7 +272,7 @@ class LoggingInterceptor extends Interceptor {
   }
 
   @override
-  void onError(final DioException err, final ErrorInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) {
     if (kDebugMode) {
       _logger.e(
         '✖ ${err.response?.statusCode ?? 'NETWORK'} ${err.requestOptions.uri}',

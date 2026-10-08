@@ -1,6 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:riverpod_go_router_boilerplate/core/constants/storage_keys.dart';
 import 'package:riverpod_go_router_boilerplate/core/network/api_client.dart';
 import 'package:riverpod_go_router_boilerplate/core/result/result.dart';
 import 'package:riverpod_go_router_boilerplate/features/auth/data/repositories/auth_repository_mock.dart';
@@ -8,9 +9,9 @@ import 'package:riverpod_go_router_boilerplate/features/auth/data/repositories/a
 import 'package:riverpod_go_router_boilerplate/features/auth/domain/entities/user.dart';
 
 // Mocks
-class MockFlutterSecureStorage extends Mock implements FlutterSecureStorage {}
+class MockFlutterSecureStorage extends Mock implements FlutterSecureStorage;
 
-class MockApiClient extends Mock implements ApiClient {}
+class MockApiClient extends Mock implements ApiClient;
 
 void main() {
   group('AuthRepositoryMock', () {
@@ -98,7 +99,7 @@ void main() {
         // Assert
         verify(
           () => mockStorage.write(
-            key: 'access_token',
+            key: StorageKeys.accessToken,
             value: any(named: 'value'),
             iOptions: any(named: 'iOptions'),
             aOptions: any(named: 'aOptions'),
@@ -120,7 +121,7 @@ void main() {
         expect(result.isSuccess, true);
         verify(
           () => mockStorage.delete(
-            key: 'access_token',
+            key: StorageKeys.accessToken,
             iOptions: any(named: 'iOptions'),
             aOptions: any(named: 'aOptions'),
             lOptions: any(named: 'lOptions'),
@@ -137,7 +138,7 @@ void main() {
         // Arrange
         when(
           () => mockStorage.read(
-            key: 'access_token',
+            key: StorageKeys.accessToken,
             iOptions: any(named: 'iOptions'),
             aOptions: any(named: 'aOptions'),
             lOptions: any(named: 'lOptions'),
@@ -149,7 +150,7 @@ void main() {
 
         when(
           () => mockStorage.read(
-            key: 'user_id',
+            key: StorageKeys.userId,
             iOptions: any(named: 'iOptions'),
             aOptions: any(named: 'aOptions'),
             lOptions: any(named: 'lOptions'),
@@ -195,7 +196,7 @@ void main() {
         // Arrange
         when(
           () => mockStorage.read(
-            key: 'access_token',
+            key: StorageKeys.accessToken,
             iOptions: any(named: 'iOptions'),
             aOptions: any(named: 'aOptions'),
             lOptions: any(named: 'lOptions'),
@@ -216,7 +217,7 @@ void main() {
         // Arrange
         when(
           () => mockStorage.read(
-            key: 'access_token',
+            key: StorageKeys.accessToken,
             iOptions: any(named: 'iOptions'),
             aOptions: any(named: 'aOptions'),
             lOptions: any(named: 'lOptions'),
@@ -360,7 +361,7 @@ void main() {
         // Assert
         verify(
           () => mockStorage.write(
-            key: 'access_token',
+            key: StorageKeys.accessToken,
             value: 'token_abc',
             iOptions: any(named: 'iOptions'),
             aOptions: any(named: 'aOptions'),
@@ -372,7 +373,7 @@ void main() {
         ).called(1);
         verify(
           () => mockStorage.write(
-            key: 'refresh_token',
+            key: StorageKeys.refreshToken,
             value: 'refresh_xyz',
             iOptions: any(named: 'iOptions'),
             aOptions: any(named: 'aOptions'),
@@ -404,7 +405,7 @@ void main() {
         expect(result.isSuccess, true);
         verify(
           () => mockStorage.delete(
-            key: 'access_token',
+            key: StorageKeys.accessToken,
             iOptions: any(named: 'iOptions'),
             aOptions: any(named: 'aOptions'),
             lOptions: any(named: 'lOptions'),

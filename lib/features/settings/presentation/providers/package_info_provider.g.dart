@@ -50,4 +50,4 @@ final class PackageInfoProvider
   }
 }
 
-String _$packageInfoHash() => r'9e20467379d666cee20eab28dfe3dfd716d5e15b';
+String _$packageInfoHash() => r'41f10b7668cfc9d09df704d18b851ed9440397d6';

@@ -8,15 +8,15 @@ import 'package:riverpod_go_router_boilerplate/core/widgets/spacing.dart';
 abstract class AppBottomSheets {
   /// Shows a modal bottom sheet.
   static Future<T?> show<T>(
-    final BuildContext context, {
-    required final Widget child,
-    final bool isDismissible = true,
-    final bool enableDrag = true,
-    final bool isScrollControlled = false,
-    final bool useSafeArea = true,
-    final Color? backgroundColor,
-    final double? elevation,
-    final ShapeBorder? shape,
+    BuildContext context, {
+    required Widget child,
+    bool isDismissible = true,
+    bool enableDrag = true,
+    bool isScrollControlled = false,
+    bool useSafeArea = true,
+    Color? backgroundColor,
+    double? elevation,
+    ShapeBorder? shape,
   }) {
     return showModalBottomSheet<T>(
       context: context,
@@ -33,18 +33,18 @@ abstract class AppBottomSheets {
               top: Radius.circular(AppConstants.borderRadiusXLarge),
             ),
           ),
-      builder: (final context) => child,
+      builder: (context) => child,
     );
   }
 
   /// Shows a confirmation bottom sheet.
   static Future<bool?> confirm(
-    final BuildContext context, {
-    required final String title,
-    final String? message,
-    final String confirmText = 'Confirm',
-    final String cancelText = 'Cancel',
-    final bool isDangerous = false,
+    BuildContext context, {
+    required String title,
+    String? message,
+    String confirmText = 'Confirm',
+    String cancelText = 'Cancel',
+    bool isDangerous = false,
   }) {
     final theme = context.theme;
 
@@ -89,7 +89,6 @@ abstract class AppBottomSheets {
               ],
               const VerticalSpace.xl(),
               AppButton(
-                variant: AppButtonVariant.primary,
                 onPressed: () => Navigator.of(context).pop(true),
                 label: confirmText,
               ),
@@ -108,11 +107,11 @@ abstract class AppBottomSheets {
 
   /// Shows an action sheet with multiple options.
   static Future<T?> actions<T>(
-    final BuildContext context, {
-    final String? title,
-    required final List<BottomSheetAction<T>> actions,
-    final bool showCancel = true,
-    final String cancelText = 'Cancel',
+    BuildContext context, {
+    required List<BottomSheetAction<T>> actions,
+    String? title,
+    bool showCancel = true,
+    String cancelText = 'Cancel',
   }) {
     final theme = context.theme;
 
@@ -146,7 +145,7 @@ abstract class AppBottomSheets {
             ],
             const VerticalSpace.sm(),
             ...actions.map(
-              (final action) => ListTile(
+              (action) => ListTile(
                 leading: action.icon != null
                     ? Icon(
                         action.icon,
@@ -189,7 +188,7 @@ abstract class AppBottomSheets {
 /// An action for action sheets.
 class BottomSheetAction<T> {
   /// Creates a [BottomSheetAction].
-  const BottomSheetAction({
+  const new({
     required this.value,
     required this.label,
     this.icon,

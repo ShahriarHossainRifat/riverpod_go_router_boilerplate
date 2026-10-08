@@ -9,7 +9,7 @@ import 'package:shimmer/shimmer.dart';
 /// widget when the image fails to load.
 class AppCachedImage extends StatelessWidget {
   /// Creates an [AppCachedImage].
-  const AppCachedImage({
+  const new({
     required this.imageUrl,
     super.key,
     this.width,
@@ -42,15 +42,15 @@ class AppCachedImage extends StatelessWidget {
   final Widget? errorWidget;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final image = CachedNetworkImage(
       imageUrl: imageUrl,
       width: width,
       height: height,
       fit: fit,
-      placeholder: (final context, final url) =>
+      placeholder: (context, url) =>
           placeholder ?? _ShimmerPlaceholder(width: width, height: height),
-      errorWidget: (final context, final url, final error) =>
+      errorWidget: (context, url, error) =>
           errorWidget ?? _ErrorPlaceholder(width: width, height: height),
     );
 
@@ -63,13 +63,13 @@ class AppCachedImage extends StatelessWidget {
 }
 
 class _ShimmerPlaceholder extends StatelessWidget {
-  const _ShimmerPlaceholder({this.width, this.height});
+  const new({this.width, this.height});
 
   final double? width;
   final double? height;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Shimmer.fromColors(
@@ -81,13 +81,13 @@ class _ShimmerPlaceholder extends StatelessWidget {
 }
 
 class _ErrorPlaceholder extends StatelessWidget {
-  const _ErrorPlaceholder({this.width, this.height});
+  const new({this.width, this.height});
 
   final double? width;
   final double? height;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
@@ -109,7 +109,7 @@ class _ErrorPlaceholder extends StatelessWidget {
 /// empty, or fails to load.
 class AppCachedAvatar extends StatelessWidget {
   /// Creates an [AppCachedAvatar].
-  const AppCachedAvatar({
+  const new({
     required this.imageUrl,
     super.key,
     this.radius = 24,
@@ -128,7 +128,7 @@ class AppCachedAvatar extends StatelessWidget {
   final Widget? placeholder;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     if (imageUrl == null || imageUrl!.isEmpty) {
       return CircleAvatar(
         radius: radius,
@@ -145,9 +145,9 @@ class AppCachedAvatar extends StatelessWidget {
 
     return CachedNetworkImage(
       imageUrl: imageUrl!,
-      imageBuilder: (final context, final imageProvider) =>
+      imageBuilder: (context, imageProvider) =>
           CircleAvatar(radius: radius, backgroundImage: imageProvider),
-      placeholder: (final context, final url) {
+      placeholder: (context, url) {
         final isDark = Theme.of(context).brightness == Brightness.dark;
         return CircleAvatar(
           radius: radius,
@@ -163,7 +163,7 @@ class AppCachedAvatar extends StatelessWidget {
           ),
         );
       },
-      errorWidget: (final context, final url, final error) => CircleAvatar(
+      errorWidget: (context, url, error) => CircleAvatar(
         radius: radius,
         backgroundColor: context.theme.colorScheme.primaryContainer,
         child:

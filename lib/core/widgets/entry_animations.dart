@@ -4,7 +4,7 @@ import 'package:riverpod_go_router_boilerplate/core/constants/app_constants.dart
 /// A widget that fades in when first built.
 class FadeIn extends StatefulWidget {
   /// Creates a [FadeIn] widget.
-  const FadeIn({
+  const new({
     required this.child,
     super.key,
     this.duration = AppConstants.animationNormal,
@@ -23,13 +23,13 @@ class FadeIn extends StatefulWidget {
   ///   ),
   /// )
   /// ```
-  factory FadeIn.staggered({
-    required final Widget child,
-    required final int index,
-    final Key? key,
-    final Duration duration = AppConstants.animationNormal,
-    final Duration baseDelay = AppConstants.staggerDelay,
-    final Curve curve = Curves.easeOut,
+  factory staggered({
+    required Widget child,
+    required int index,
+    Key? key,
+    Duration duration = AppConstants.animationNormal,
+    Duration baseDelay = AppConstants.staggerDelay,
+    Curve curve = Curves.easeOut,
   }) {
     return FadeIn(
       key: key,
@@ -82,7 +82,7 @@ class _FadeInState extends State<FadeIn> with SingleTickerProviderStateMixin {
   }
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return FadeTransition(opacity: _animation, child: widget.child);
   }
 }
@@ -90,7 +90,7 @@ class _FadeInState extends State<FadeIn> with SingleTickerProviderStateMixin {
 /// A widget that slides in when first built.
 class SlideIn extends StatefulWidget {
   /// Creates a [SlideIn] widget.
-  const SlideIn({
+  const new({
     required this.child,
     super.key,
     this.duration = AppConstants.animationNormal,
@@ -111,15 +111,15 @@ class SlideIn extends StatefulWidget {
   ///   ),
   /// )
   /// ```
-  factory SlideIn.staggered({
-    required final Widget child,
-    required final int index,
-    final Key? key,
-    final Duration duration = AppConstants.animationNormal,
-    final Duration baseDelay = AppConstants.staggerDelay,
-    final Curve curve = Curves.easeOut,
-    final SlideDirection direction = SlideDirection.fromLeft,
-    final double offset = AppConstants.slideOffsetDefault,
+  factory staggered({
+    required Widget child,
+    required int index,
+    Key? key,
+    Duration duration = AppConstants.animationNormal,
+    Duration baseDelay = AppConstants.staggerDelay,
+    Curve curve = Curves.easeOut,
+    SlideDirection direction = SlideDirection.fromLeft,
+    double offset = AppConstants.slideOffsetDefault,
   }) {
     return SlideIn(
       key: key,
@@ -170,9 +170,10 @@ class _SlideInState extends State<SlideIn> with SingleTickerProviderStateMixin {
       SlideDirection.fromBottom => Offset(0, widget.offset),
     };
 
-    _animation = Tween(begin: begin, end: Offset.zero).animate(
-      CurvedAnimation(parent: _controller, curve: widget.curve),
-    );
+    _animation = Tween(
+      begin: begin,
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: widget.curve));
 
     if (widget.delay == Duration.zero) {
       _controller.forward();
@@ -190,7 +191,7 @@ class _SlideInState extends State<SlideIn> with SingleTickerProviderStateMixin {
   }
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return SlideTransition(position: _animation, child: widget.child);
   }
 }
@@ -213,7 +214,7 @@ enum SlideDirection {
 /// A widget that scales in when first built.
 class ScaleIn extends StatefulWidget {
   /// Creates a [ScaleIn] widget.
-  const ScaleIn({
+  const new({
     required this.child,
     super.key,
     this.duration = AppConstants.animationNormal,
@@ -224,15 +225,15 @@ class ScaleIn extends StatefulWidget {
   });
 
   /// Creates a [ScaleIn] with staggered delay based on index.
-  factory ScaleIn.staggered({
-    required final Widget child,
-    required final int index,
-    final Key? key,
-    final Duration duration = AppConstants.animationNormal,
-    final Duration baseDelay = AppConstants.staggerDelay,
-    final Curve curve = Curves.easeOut,
-    final double begin = AppConstants.scaleInStart,
-    final Alignment alignment = Alignment.center,
+  factory staggered({
+    required Widget child,
+    required int index,
+    Key? key,
+    Duration duration = AppConstants.animationNormal,
+    Duration baseDelay = AppConstants.staggerDelay,
+    Curve curve = Curves.easeOut,
+    double begin = AppConstants.scaleInStart,
+    Alignment alignment = Alignment.center,
   }) {
     return ScaleIn(
       key: key,
@@ -275,9 +276,10 @@ class _ScaleInState extends State<ScaleIn> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _controller = AnimationController(duration: widget.duration, vsync: this);
-    _animation = Tween(begin: widget.begin, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: widget.curve),
-    );
+    _animation = Tween<double>(
+      begin: widget.begin,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: widget.curve));
 
     if (widget.delay == Duration.zero) {
       _controller.forward();
@@ -295,7 +297,7 @@ class _ScaleInState extends State<ScaleIn> with SingleTickerProviderStateMixin {
   }
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return ScaleTransition(
       scale: _animation,
       alignment: widget.alignment,

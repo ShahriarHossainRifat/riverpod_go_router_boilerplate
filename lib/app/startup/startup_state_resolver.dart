@@ -21,10 +21,10 @@ import 'package:riverpod_go_router_boilerplate/app/startup/startup_state_machine
 /// context.go(route);
 /// ```
 class StartupStateResolver {
-  const StartupStateResolver._();
+  const new _();
 
   /// Resolve the startup state from the given signals.
-  static StartupState resolve(final StartupSignals signals) {
+  static StartupState resolve(StartupSignals signals) {
     // 1️⃣ Maintenance ALWAYS wins
     if (signals.isInMaintenance) {
       return MaintenanceState(message: signals.maintenanceMessage);

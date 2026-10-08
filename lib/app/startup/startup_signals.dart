@@ -1,4 +1,6 @@
 import 'package:flutter/foundation.dart';
+import 'package:riverpod_go_router_boilerplate/app/app_exports.dart'
+    show AppConfig, StartupState, StartupStateResolver;
 
 /// Runtime signals that influence startup behavior.
 ///
@@ -19,16 +21,16 @@ import 'package:flutter/foundation.dart';
 @immutable
 class StartupSignals {
   /// Creates a [StartupSignals] instance.
-  const StartupSignals({
+  const new({
     required this.isAuthenticated,
     required this.hasCompletedOnboarding,
     required this.isInMaintenance,
+    required this.isOnboardingEnabled,
+    required this.isAuthEnabled,
     this.maintenanceMessage,
     this.requiresForceUpdate = false,
     this.currentVersion,
     this.minimumVersion,
-    required this.isOnboardingEnabled,
-    required this.isAuthEnabled,
   });
 
   /// Whether the user is currently authenticated.
@@ -65,7 +67,7 @@ class StartupSignals {
   final bool isAuthEnabled;
 
   @override
-  bool operator ==(final Object other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       other is StartupSignals &&
           runtimeType == other.runtimeType &&

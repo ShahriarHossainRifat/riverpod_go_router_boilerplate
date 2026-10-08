@@ -4,7 +4,7 @@ import 'package:riverpod_go_router_boilerplate/core/constants/app_constants.dart
 /// A widget that shakes when triggered.
 class ShakeWidget extends StatefulWidget {
   /// Creates a [ShakeWidget].
-  const ShakeWidget({
+  const new({
     required this.child,
     required this.controller,
     super.key,
@@ -53,7 +53,7 @@ class _ShakeWidgetState extends State<ShakeWidget>
           weight: 2,
         ),
         TweenSequenceItem(
-          tween: Tween(begin: -widget.shakeOffset, end: 0.0),
+          tween: Tween(begin: -widget.shakeOffset, end: 0),
           weight: 1,
         ),
       ],
@@ -73,10 +73,10 @@ class _ShakeWidgetState extends State<ShakeWidget>
   }
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _animation,
-      builder: (final context, final child) {
+      builder: (context, child) {
         return Transform.translate(
           offset: Offset(_animation.value, 0),
           child: widget.child,
@@ -90,7 +90,7 @@ class _ShakeWidgetState extends State<ShakeWidget>
 class ShakeController {
   _ShakeWidgetState? _state;
 
-  void _attach(final _ShakeWidgetState state) {
+  void _attach(_ShakeWidgetState state) {
     _state = state;
   }
 
@@ -103,7 +103,7 @@ class ShakeController {
 /// A pulsing animation widget.
 class Pulse extends StatefulWidget {
   /// Creates a [Pulse] widget.
-  const Pulse({
+  const new({
     required this.child,
     super.key,
     this.duration = AppConstants.pulseAnimation,
@@ -139,9 +139,10 @@ class _PulseState extends State<Pulse> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _controller = AnimationController(duration: widget.duration, vsync: this);
-    _animation = Tween(begin: widget.minScale, end: widget.maxScale).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _animation = Tween(
+      begin: widget.minScale,
+      end: widget.maxScale,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     if (widget.enabled) {
       _controller.repeat(reverse: true);
@@ -149,7 +150,7 @@ class _PulseState extends State<Pulse> with SingleTickerProviderStateMixin {
   }
 
   @override
-  void didUpdateWidget(final Pulse oldWidget) {
+  void didUpdateWidget(Pulse oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.enabled && !_controller.isAnimating) {
       _controller.repeat(reverse: true);
@@ -166,7 +167,7 @@ class _PulseState extends State<Pulse> with SingleTickerProviderStateMixin {
   }
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     if (!widget.enabled) return widget.child;
 
     return ScaleTransition(scale: _animation, child: widget.child);

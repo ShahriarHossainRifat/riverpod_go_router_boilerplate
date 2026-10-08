@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 /// Responsive layout breakpoints used throughout the app.
 abstract class Breakpoints {
   /// Private constructor to prevent instantiation.
-  const Breakpoints._();
+  const new _();
 
   /// Maximum width for mobile layouts.
   static const double mobile = 600;
@@ -18,12 +18,7 @@ abstract class Breakpoints {
 /// A widget that builds different layouts based on screen width.
 class ResponsiveBuilder extends StatelessWidget {
   /// Creates a [ResponsiveBuilder].
-  const ResponsiveBuilder({
-    required this.mobile,
-    super.key,
-    this.tablet,
-    this.desktop,
-  });
+  const new({required this.mobile, super.key, this.tablet, this.desktop});
 
   /// Builder for mobile layouts.
   final Widget Function(BuildContext context) mobile;
@@ -35,9 +30,9 @@ class ResponsiveBuilder extends StatelessWidget {
   final Widget Function(BuildContext context)? desktop;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (final context, final constraints) {
+      builder: (context, constraints) {
         if (constraints.maxWidth >= Breakpoints.desktop) {
           return desktop?.call(context) ??
               tablet?.call(context) ??
@@ -55,15 +50,12 @@ class ResponsiveBuilder extends StatelessWidget {
 /// Resolves a value based on the current screen width.
 class ResponsiveValue<T> {
   /// Creates a [ResponsiveValue].
-  ResponsiveValue({
-    required final BuildContext context,
-    required final T mobile,
-    final T? tablet,
-    final T? desktop,
-  }) : _mobile = mobile,
-       _tablet = tablet,
-       _desktop = desktop,
-       _width = MediaQuery.of(context).size.width;
+  new({
+    required BuildContext context,
+    required this._mobile,
+    this._tablet,
+    this._desktop,
+  }) : _width = MediaQuery.of(context).size.width;
 
   final T _mobile;
   final T? _tablet;
@@ -85,11 +77,7 @@ class ResponsiveValue<T> {
 /// Extensions for responsive helpers on [BuildContext].
 extension ResponsiveContextExtension on BuildContext {
   /// Returns a responsive value based on screen width.
-  T responsiveValue<T>({
-    required final T mobile,
-    final T? tablet,
-    final T? desktop,
-  }) {
+  T responsiveValue<T>({required T mobile, T? tablet, T? desktop}) {
     return ResponsiveValue<T>(
       context: this,
       mobile: mobile,
@@ -114,7 +102,7 @@ extension ResponsiveContextExtension on BuildContext {
 /// A responsive grid that adapts column count to screen size.
 class ResponsiveGrid extends StatelessWidget {
   /// Creates a [ResponsiveGrid].
-  const ResponsiveGrid({
+  const new({
     required this.children,
     super.key,
     this.mobileColumns = 1,
@@ -147,9 +135,9 @@ class ResponsiveGrid extends StatelessWidget {
   final double childAspectRatio;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (final context, final constraints) {
+      builder: (context, constraints) {
         int columns;
         if (constraints.maxWidth >= Breakpoints.desktop) {
           columns = desktopColumns;
@@ -169,7 +157,7 @@ class ResponsiveGrid extends StatelessWidget {
             childAspectRatio: childAspectRatio,
           ),
           itemCount: children.length,
-          itemBuilder: (final context, final index) => children[index],
+          itemBuilder: (context, index) => children[index],
         );
       },
     );
@@ -179,7 +167,7 @@ class ResponsiveGrid extends StatelessWidget {
 /// A widget that conditionally shows content based on screen size.
 class ResponsiveVisibility extends StatelessWidget {
   /// Creates a [ResponsiveVisibility].
-  const ResponsiveVisibility({
+  const new({
     required this.child,
     super.key,
     this.visibleOnMobile = true,
@@ -204,9 +192,9 @@ class ResponsiveVisibility extends StatelessWidget {
   final Widget? replacement;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (final context, final constraints) {
+      builder: (context, constraints) {
         bool visible;
         if (constraints.maxWidth >= Breakpoints.desktop) {
           visible = visibleOnDesktop;

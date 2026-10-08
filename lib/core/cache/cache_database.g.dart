@@ -626,7 +626,16 @@ class $$CacheEntriesTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$CacheEntriesTable, CacheEntryData>(table),
+                  BaseReferences<
+                    _$CacheDatabase,
+                    $CacheEntriesTable,
+                    CacheEntryData
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -714,4 +723,4 @@ final class CacheDatabaseProvider
   }
 }
 
-String _$cacheDatabaseHash() => r'46209f523116589c9075d216aaf0386313d5e56a';
+String _$cacheDatabaseHash() => r'ac1691586b869171dbd6c7d7338d4059d52e747c';

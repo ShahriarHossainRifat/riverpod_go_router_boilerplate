@@ -1,7 +1,10 @@
 import 'dart:ui';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:riverpod_go_router_boilerplate/core/storage/shared_preferences_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+export 'package:riverpod_go_router_boilerplate/core/storage/shared_preferences_provider.dart';
 
 part 'locale_notifier.g.dart';
 
@@ -63,7 +66,7 @@ class LocaleNotifier extends _$LocaleNotifier {
   }
 
   /// Set the app's locale and persist the preference.
-  Future<void> setLocale(final Locale locale) async {
+  Future<void> setLocale(Locale locale) async {
     if (!supportedLocales.contains(locale)) {
       throw ArgumentError('Locale $locale is not supported');
     }
@@ -79,11 +82,11 @@ class LocaleNotifier extends _$LocaleNotifier {
   }
 
   /// Check if a locale is supported.
-  bool isSupported(final Locale locale) => supportedLocales.contains(locale);
+  bool isSupported(Locale locale) => supportedLocales.contains(locale);
 
   /// Get the display name for a locale.
   /// Override this method to provide localized language names.
-  String getLocaleName(final Locale locale) {
+  String getLocaleName(Locale locale) {
     return switch (locale.languageCode) {
       'en' => 'English',
       'bn' => 'বাংলা',
@@ -102,13 +105,3 @@ class LocaleNotifier extends _$LocaleNotifier {
 /// Alias for the locale notifier provider for backward compatibility.
 // ignore: non_constant_identifier_names
 LocaleNotifierProvider get localeNotifierProvider => localeProvider;
-
-/// Provider for SharedPreferences.
-/// This should be overridden in main.dart with the initialized instance.
-@Riverpod(keepAlive: true)
-SharedPreferences sharedPreferences(final Ref ref) {
-  throw UnimplementedError(
-    'sharedPreferencesProvider must be overridden in main.dart. '
-    'See bootstrap.dart for the correct initialization pattern.',
-  );
-}

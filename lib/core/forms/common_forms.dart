@@ -2,10 +2,10 @@ import 'package:reactive_forms/reactive_forms.dart';
 
 /// Profile form for updating user information.
 FormGroup profileForm({
-  final String? initialName,
-  final String? initialEmail,
-  final String? initialPhone,
-  final String? initialBio,
+  String? initialName,
+  String? initialEmail,
+  String? initialPhone,
+  String? initialBio,
 }) {
   return FormGroup({
     'name': FormControl<String>(
@@ -51,11 +51,11 @@ FormGroup contactForm() {
 
 /// Address form.
 FormGroup addressForm({
-  final String? initialStreet,
-  final String? initialCity,
-  final String? initialState,
-  final String? initialZip,
-  final String? initialCountry,
+  String? initialStreet,
+  String? initialCity,
+  String? initialState,
+  String? initialZip,
+  String? initialCountry,
 }) {
   return FormGroup({
     'street': FormControl<String>(

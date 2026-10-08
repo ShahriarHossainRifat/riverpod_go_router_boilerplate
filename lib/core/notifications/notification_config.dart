@@ -5,7 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 @immutable
 class LocalNotificationConfig {
   /// Creates a [LocalNotificationConfig] instance.
-  const LocalNotificationConfig({
+  const new({
     required this.id,
     required this.title,
     required this.body,
@@ -62,7 +62,4 @@ class LocalNotificationConfig {
 }
 
 /// Callback type for notification tap events.
-typedef NotificationTapCallback =
-    void Function(
-      NotificationResponse response,
-    );
+typedef NotificationTapCallback = void Function(NotificationResponse response);

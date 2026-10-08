@@ -8,7 +8,7 @@ import 'package:riverpod_go_router_boilerplate/core/core.dart';
 /// Simplifies handling common async UI patterns.
 class AsyncValueWidget<T> extends StatelessWidget {
   /// Creates an [AsyncValueWidget].
-  const AsyncValueWidget({
+  const new({
     required this.value,
     required this.data,
     super.key,
@@ -37,11 +37,11 @@ class AsyncValueWidget<T> extends StatelessWidget {
   final bool skipLoadingOnReload;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return value.when(
       data: data,
       loading: loading ?? () => const LoadingWidget(),
-      error: error ?? (final e, final st) => AppErrorWidget.fromError(error: e),
+      error: error ?? (e, st) => AppErrorWidget.fromError(error: e),
       skipLoadingOnRefresh: skipLoadingOnRefresh,
       skipLoadingOnReload: skipLoadingOnReload,
     );
@@ -54,7 +54,7 @@ class AsyncValueWidget<T> extends StatelessWidget {
 /// Set [useLottie] to false to use a simple CircularProgressIndicator.
 class LoadingWidget extends StatelessWidget {
   /// Creates a [LoadingWidget].
-  const LoadingWidget({
+  const new({
     super.key,
     this.size = AppConstants.lottieAnimationSize,
     this.strokeWidth = 3.0,
@@ -75,7 +75,7 @@ class LoadingWidget extends StatelessWidget {
   final bool useLottie;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Center(
@@ -102,9 +102,8 @@ class LoadingWidget extends StatelessWidget {
             const VerticalSpace.md(),
             Text(
               message!,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium
+                  ?.copyWith(color: colorScheme.onSurfaceVariant),
             ),
           ],
         ],
@@ -119,7 +118,7 @@ class LoadingWidget extends StatelessWidget {
 /// By default uses a Lottie animation for a polished look.
 class AppErrorWidget extends StatelessWidget {
   /// Creates an [AppErrorWidget].
-  const AppErrorWidget({
+  const new({
     required this.message,
     super.key,
     this.onRetry,
@@ -129,10 +128,10 @@ class AppErrorWidget extends StatelessWidget {
   });
 
   /// Builds an [AppErrorWidget] from an error object.
-  factory AppErrorWidget.fromError({
-    required final Object error,
-    final VoidCallback? onRetry,
-    final bool useLottie = true,
+  factory fromError({
+    required Object error,
+    VoidCallback? onRetry,
+    bool useLottie = true,
   }) {
     return AppErrorWidget(
       message: error.toString(),
@@ -157,7 +156,7 @@ class AppErrorWidget extends StatelessWidget {
   final double animationSize;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final theme = context.theme;
 
     return Center(
@@ -183,10 +182,7 @@ class AppErrorWidget extends StatelessWidget {
                 color: theme.colorScheme.error,
               ),
             const VerticalSpace.md(),
-            Text(
-              'Something went wrong',
-              style: theme.textTheme.titleMedium,
-            ),
+            Text('Something went wrong', style: theme.textTheme.titleMedium),
             const VerticalSpace.sm(),
             Text(
               message,
@@ -215,7 +211,7 @@ class AppErrorWidget extends StatelessWidget {
 /// By default uses a Lottie animation for a polished look.
 class EmptyWidget extends StatelessWidget {
   /// Creates an [EmptyWidget].
-  const EmptyWidget({
+  const new({
     required this.message,
     super.key,
     this.icon = Icons.inbox_outlined,
@@ -244,7 +240,7 @@ class EmptyWidget extends StatelessWidget {
   final double animationSize;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final theme = context.theme;
 
     return Center(
@@ -279,10 +275,7 @@ class EmptyWidget extends StatelessWidget {
             ),
             if (action != null && actionLabel != null) ...[
               const VerticalSpace.lg(),
-              AppButton(
-                onPressed: action,
-                label: actionLabel!,
-              ),
+              AppButton(onPressed: action, label: actionLabel!),
             ],
           ],
         ),

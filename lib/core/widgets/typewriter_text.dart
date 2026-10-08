@@ -16,7 +16,7 @@ import 'package:riverpod_go_router_boilerplate/core/constants/app_constants.dart
 /// ```
 class TypewriterText extends StatefulWidget {
   /// Creates a [TypewriterText] widget.
-  const TypewriterText({
+  const new({
     required this.text,
     super.key,
     this.style,
@@ -70,7 +70,7 @@ class _TypewriterTextState extends State<TypewriterText>
         AnimationController(
           duration: const Duration(milliseconds: 500),
           vsync: this,
-        )..addStatusListener((final status) {
+        )..addStatusListener((status) {
           if (status == AnimationStatus.completed) {
             setState(() => _showCursor = false);
             _cursorController.reverse();
@@ -126,7 +126,7 @@ class _TypewriterTextState extends State<TypewriterText>
   }
 
   @override
-  void didUpdateWidget(final TypewriterText oldWidget) {
+  void didUpdateWidget(TypewriterText oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.text != widget.text && widget.autoStart) {
       start();
@@ -140,7 +140,7 @@ class _TypewriterTextState extends State<TypewriterText>
   }
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final displayText = widget.text.substring(0, _charIndex);
     final cursorChar = widget.showCursor && _isTyping && _showCursor
         ? widget.cursor
@@ -154,7 +154,7 @@ class _TypewriterTextState extends State<TypewriterText>
 class TypewriterController {
   _TypewriterTextState? _state;
 
-  void _attach(final _TypewriterTextState state) {
+  void _attach(_TypewriterTextState state) {
     _state = state;
   }
 

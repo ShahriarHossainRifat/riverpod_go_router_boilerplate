@@ -98,7 +98,7 @@ part '${FEATURE_NAME}_repository_impl.g.dart';
 
 /// Provider for [${PASCAL_NAME}Repository].
 @Riverpod(keepAlive: true)
-${PASCAL_NAME}Repository ${CAMEL_NAME}Repository(final Ref ref) {
+${PASCAL_NAME}Repository ${CAMEL_NAME}Repository(Ref ref) {
   return ${PASCAL_NAME}RepositoryImpl();
 }
 
@@ -137,8 +137,8 @@ class ${PASCAL_NAME}Notifier extends _\$${PASCAL_NAME}Notifier {
     final result = await repository.getData();
 
     return result.fold(
-      onSuccess: (final data) => data,
-      onFailure: (final error) => throw error,
+      onSuccess: (data) => data,
+      onFailure: (error) => throw error,
     );
   }
 
@@ -150,7 +150,7 @@ class ${PASCAL_NAME}Notifier extends _\$${PASCAL_NAME}Notifier {
 
     state = result.fold(
       onSuccess: AsyncData.new,
-      onFailure: (final error) => AsyncError(error, StackTrace.current),
+      onFailure: (error) => AsyncError(error, StackTrace.current),
     );
   }
 }
@@ -173,7 +173,7 @@ class ${PASCAL_NAME}Page extends HookConsumerWidget {
   const ${PASCAL_NAME}Page({super.key});
 
   @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // Track screen view once on mount
     useOnMount(() {
       ref.read(analyticsServiceProvider).logScreenView(screenName: '${FEATURE_NAME}');
@@ -185,7 +185,7 @@ class ${PASCAL_NAME}Page extends HookConsumerWidget {
       appBar: AppBar(title: const Text('${PASCAL_NAME}')),
       body: AsyncValueWidget(
         value: state,
-        data: (final data) => Center(
+        data: (data) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

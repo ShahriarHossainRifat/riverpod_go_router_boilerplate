@@ -5,7 +5,7 @@ import 'package:riverpod_go_router_boilerplate/core/hooks/basic_hooks.dart';
 /// State for managing a form with multiple fields.
 class FormControllerState {
   /// Creates a [FormControllerState] instance.
-  const FormControllerState({
+  const new({
     required this.fields,
     required this.isSubmitting,
     required this.isValid,
@@ -69,8 +69,8 @@ class FormControllerState {
 /// TextField(onChanged: (v) => form.setValue('email', v));
 /// ```
 FormControllerState useFormController({
-  required final Map<String, String> fields,
-  final Map<String, String? Function(String?)>? validators,
+  required Map<String, String> fields,
+  Map<String, String? Function(String?)>? validators,
 }) {
   final context = useContext();
   final values = useState<Map<String, String>>(Map.from(fields));
@@ -78,9 +78,9 @@ FormControllerState useFormController({
   final touched = useState<Set<String>>({});
   final isSubmitting = useState(false);
 
-  String getValue(final String fieldName) => values.value[fieldName] ?? '';
+  String getValue(String fieldName) => values.value[fieldName] ?? '';
 
-  void setValue(final String fieldName, final String value) {
+  void setValue(String fieldName, String value) {
     values.value = {...values.value, fieldName: value};
     touched.value = {...touched.value, fieldName};
 
@@ -90,7 +90,7 @@ FormControllerState useFormController({
     }
   }
 
-  void setError(final String fieldName, final String? error) {
+  void setError(String fieldName, String? error) {
     errors.value = {...errors.value, fieldName: error};
   }
 
@@ -119,7 +119,7 @@ FormControllerState useFormController({
   }
 
   Future<void> submit(
-    final Future<void> Function(Map<String, String> values) onSubmit,
+    Future<void> Function(Map<String, String> values) onSubmit,
   ) async {
     if (!validateAll()) return;
 
@@ -133,7 +133,7 @@ FormControllerState useFormController({
     }
   }
 
-  final isValid = errors.value.values.every((final e) => e == null);
+  final isValid = errors.value.values.every((e) => e == null);
   final isDirty = touched.value.isNotEmpty;
 
   return FormControllerState(

@@ -4,7 +4,7 @@ import 'package:riverpod_go_router_boilerplate/core/core.dart';
 /// Data model for onboarding page content.
 class OnboardingPageData {
   /// Creates an [OnboardingPageData] instance.
-  const OnboardingPageData({
+  const new({
     required this.title,
     required this.description,
     required this.icon,
@@ -27,13 +27,13 @@ class OnboardingPageData {
 /// Displays content for a single onboarding page.
 class OnboardingPageContent extends StatelessWidget {
   /// Creates an [OnboardingPageContent] instance.
-  const OnboardingPageContent({required this.page, super.key});
+  const new({required this.page, super.key});
 
   /// The page data to display.
   final OnboardingPageData page;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final theme = context.theme;
 
     return ResponsivePadding(

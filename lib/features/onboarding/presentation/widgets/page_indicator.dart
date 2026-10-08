@@ -6,11 +6,7 @@ import 'package:riverpod_go_router_boilerplate/core/core.dart';
 /// Animates between active and inactive states with smooth transitions.
 class PageIndicator extends StatelessWidget {
   /// Creates a [PageIndicator] instance.
-  const PageIndicator({
-    required this.isActive,
-    required this.color,
-    super.key,
-  });
+  const new({required this.isActive, required this.color, super.key});
 
   /// Whether this indicator is active (current page).
   final bool isActive;
@@ -19,7 +15,7 @@ class PageIndicator extends StatelessWidget {
   final Color color;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: AppConstants.pageIndicatorAnimation,
       margin: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),

@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart' show immutable;
 @immutable
 class CacheEntry {
   /// Creates a [CacheEntry] instance.
-  CacheEntry({
+  const new({
     required this.data,
     required this.timestamp,
     required this.expiresAt,
@@ -34,7 +34,7 @@ class CacheEntry {
 @immutable
 class CacheStats {
   /// Creates a [CacheStats] instance.
-  const CacheStats({
+  const new({
     required this.totalEntries,
     required this.validEntries,
     required this.expiredEntries,

@@ -5,17 +5,17 @@ import 'package:riverpod_go_router_boilerplate/l10n/generated/app_localizations.
 
 /// Shows a dialog for selecting the app theme.
 void showThemeSelectionDialog(
-  final BuildContext context,
-  final WidgetRef ref,
-  final AppLocalizations l10n,
+  BuildContext context,
+  WidgetRef ref,
+  AppLocalizations l10n,
 ) {
   final currentMode = ref.read(themeNotifierProvider);
 
   showDialog<void>(
     context: context,
-    builder: (final dialogContext) => SimpleDialog(
+    builder: (dialogContext) => SimpleDialog(
       title: Text(l10n.chooseTheme),
-      children: ThemeMode.values.map((final mode) {
+      children: ThemeMode.values.map((mode) {
         final isSelected = mode == currentMode;
         return SimpleDialogOption(
           onPressed: () {
@@ -48,10 +48,7 @@ void showThemeSelectionDialog(
   );
 }
 
-String _themeModeLabel(
-  final ThemeMode mode,
-  final AppLocalizations l10n,
-) => switch (mode) {
+String _themeModeLabel(ThemeMode mode, AppLocalizations l10n) => switch (mode) {
   ThemeMode.light => l10n.lightMode,
   ThemeMode.dark => l10n.darkModeOption,
   ThemeMode.system => l10n.systemDefault,

@@ -18,7 +18,7 @@ enum ConnectivityStatus {
 /// for checking the current connection state.
 class ConnectivityService {
   /// Creates a [ConnectivityService] instance.
-  ConnectivityService() : _connectivity = Connectivity();
+  new() : _connectivity = Connectivity();
 
   final Connectivity _connectivity;
   StreamSubscription<List<ConnectivityResult>>? _subscription;
@@ -35,19 +35,17 @@ class ConnectivityService {
     _subscription = _connectivity.onConnectivityChanged.listen(_emitStatus);
   }
 
-  void _emitStatus(final List<ConnectivityResult> results) {
+  void _emitStatus(List<ConnectivityResult> results) {
     final hasConnection = results.any(
-      (final result) => result != ConnectivityResult.none,
+      (result) => result != ConnectivityResult.none,
     );
-    _statusController.add(
-      hasConnection ? .connected : .disconnected,
-    );
+    _statusController.add(hasConnection ? .connected : .disconnected);
   }
 
   /// Returns whether the device is currently connected to a network.
   Future<bool> isConnected() async {
     final results = await _connectivity.checkConnectivity();
-    return results.any((final result) => result != .none);
+    return results.any((result) => result != .none);
   }
 
   /// Disposes resources used by this service.
@@ -58,16 +56,14 @@ class ConnectivityService {
 }
 
 /// Provides a singleton [ConnectivityService] instance.
-final connectivityServiceProvider = Provider<ConnectivityService>((final ref) {
+final connectivityServiceProvider = Provider<ConnectivityService>((ref) {
   final service = ConnectivityService();
   ref.onDispose(service.dispose);
   return service;
 });
 
 /// Provides a stream of [ConnectivityStatus] updates.
-final connectivityStatusProvider = StreamProvider<ConnectivityStatus>((
-  final ref,
-) {
+final connectivityStatusProvider = StreamProvider<ConnectivityStatus>((ref) {
   final service = ref.watch(connectivityServiceProvider);
   return service.statusStream;
 });
@@ -76,10 +72,7 @@ final connectivityStatusProvider = StreamProvider<ConnectivityStatus>((
 ///
 /// Defaults to `true` while the connectivity state is loading
 /// or unavailable.
-final isOnlineProvider = Provider<bool>((final ref) {
+final isOnlineProvider = Provider<bool>((ref) {
   final status = ref.watch(connectivityStatusProvider);
-  return status.maybeWhen(
-    data: (final s) => s == .connected,
-    orElse: () => true,
-  );
+  return status.maybeWhen(data: (s) => s == .connected, orElse: () => true);
 });

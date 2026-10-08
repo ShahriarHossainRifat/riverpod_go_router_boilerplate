@@ -17,13 +17,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Handles initialization, error handling, and app startup.
 class AppBootstrap extends StatelessWidget {
   /// Creates the [AppBootstrap] widget.
-  const AppBootstrap({super.key});
+  const new({super.key});
 
   /// Initialize the app before running.
   /// Call this before runApp().
   static Future<void> initialize({
-    final Environment environment = Environment.dev,
-    final bool? useMocks,
+    Environment environment = Environment.dev,
+    bool? useMocks,
   }) async {
     // Ensure Flutter bindings are initialized
     WidgetsFlutterBinding.ensureInitialized();
@@ -82,7 +82,7 @@ class AppBootstrap extends StatelessWidget {
   /// Set up global error handling.
   static void _setupErrorHandling() {
     // Handle Flutter errors
-    FlutterError.onError = (final details) {
+    FlutterError.onError = (details) {
       FlutterError.presentError(details);
       AppLogger.instance.e(
         'Flutter error: ${details.exceptionAsString()}',
@@ -95,7 +95,7 @@ class AppBootstrap extends StatelessWidget {
     };
 
     // Handle async errors
-    PlatformDispatcher.instance.onError = (final error, final stack) {
+    PlatformDispatcher.instance.onError = (error, stack) {
       AppLogger.instance.e('Async error', error: error, stackTrace: stack);
       if (kReleaseMode) {
         _logToCrashReporting(error, stack);
@@ -109,8 +109,8 @@ class AppBootstrap extends StatelessWidget {
   /// Uses Firebase Crashlytics in production.
   /// Falls back to console logging if not initialized.
   static Future<void> _logToCrashReporting(
-    final Object error,
-    final StackTrace? stack,
+    Object error,
+    StackTrace? stack,
   ) async {
     try {
       await FirebaseCrashlytics.instance.recordError(
@@ -129,7 +129,7 @@ class AppBootstrap extends StatelessWidget {
   }
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return const App();
   }
 }
@@ -160,13 +160,13 @@ class AppBootstrap extends StatelessWidget {
 /// }
 /// ```
 Future<void> runGuardedApp({
-  required final Widget Function(
+  required Widget Function(
     SharedPreferences sharedPreferences,
     ConnectivityService connectivity,
   )
   appBuilder,
-  final Environment environment = Environment.dev,
-  final bool? useMocks,
+  Environment environment = Environment.dev,
+  bool? useMocks,
 }) async {
   await runZonedGuarded(
     () async {
@@ -184,7 +184,6 @@ Future<void> runGuardedApp({
       // Handle fresh install - clear stale Keychain data on iOS
       // This prevents the issue where auth tokens survive app reinstall
       const secureStorage = FlutterSecureStorage(
-        aOptions: AndroidOptions(),
         iOptions: IOSOptions(
           accessibility: KeychainAccessibility.first_unlock_this_device,
         ),
@@ -197,14 +196,14 @@ Future<void> runGuardedApp({
       // Run the app with initialized services
       runApp(appBuilder(sharedPreferences, connectivityService));
     },
-    (final error, final stack) {
+    (error, stack) {
       AppLogger.instance.f(
         'Uncaught zone error',
         error: error,
         stackTrace: stack,
       );
       if (kReleaseMode) {
-        AppBootstrap._logToCrashReporting(error, stack);
+        unawaited(AppBootstrap._logToCrashReporting(error, stack));
       }
     },
   );

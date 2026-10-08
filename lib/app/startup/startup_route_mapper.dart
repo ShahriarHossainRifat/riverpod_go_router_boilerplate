@@ -3,10 +3,10 @@ import 'package:riverpod_go_router_boilerplate/app/startup/startup_state_machine
 
 /// Maps startup states to their corresponding routes.
 class StartupRouteMapper {
-  const StartupRouteMapper._();
+  const new _();
 
   /// Get the route for a given startup state.
-  static String map(final StartupState state) {
+  static String map(StartupState state) {
     return switch (state) {
       MaintenanceState() => AppRoute.maintenance.path,
       ForceUpdateState() => AppRoute.forceUpdate.path,

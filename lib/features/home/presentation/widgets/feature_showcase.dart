@@ -18,17 +18,16 @@ import 'package:riverpod_go_router_boilerplate/l10n/generated/app_localizations.
 /// - Animation widgets (FadeIn, SlideIn, StaggeredList)
 class FeatureShowcase extends ConsumerWidget {
   /// Creates a [FeatureShowcase] instance.
-  const FeatureShowcase({super.key});
+  const new({super.key});
 
   @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = context.theme;
     final l10n = AppLocalizations.of(context);
 
     return FadeIn(
       child: Card(
         child: ResponsivePadding(
-          horizontal: AppSpacing.md,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -66,7 +65,6 @@ class FeatureShowcase extends ConsumerWidget {
 
               // Staggered showcase items
               StaggeredList(
-                staggerDelay: AppConstants.staggerDelay,
                 children: [
                   // Demo: Feedback Service
                   ShowcaseItem(
@@ -81,7 +79,6 @@ class FeatureShowcase extends ConsumerWidget {
                     description: l10n.dialogDemoDescription,
                     child: AppButton(
                       variant: .text,
-                      size: .medium,
                       onPressed: () => _showConfirmDialog(context, l10n),
                       icon: Icons.question_answer_outlined,
                       label: l10n.showDialog,
@@ -94,8 +91,6 @@ class FeatureShowcase extends ConsumerWidget {
                     description: l10n.notificationDemoDescription,
                     child: AppButton(
                       variant: .secondary,
-                      size: .medium,
-                      isExpanded: true,
                       onPressed: () => _sendBasicNotification(ref, l10n),
                       icon: Icons.notifications_outlined,
                       label: l10n.basicNotification,
@@ -107,8 +102,6 @@ class FeatureShowcase extends ConsumerWidget {
                     title: l10n.navigationDemo,
                     description: l10n.navigationDemoDescription,
                     child: AppButton(
-                      variant: .primary,
-                      size: .medium,
                       onPressed: () => context.pushRoute(AppRoute.settings),
                       icon: Icons.settings_outlined,
                       label: l10n.goToSettings,
@@ -133,8 +126,8 @@ class FeatureShowcase extends ConsumerWidget {
   }
 
   Future<void> _sendBasicNotification(
-    final WidgetRef ref,
-    final AppLocalizations l10n,
+    WidgetRef ref,
+    AppLocalizations l10n,
   ) async {
     final notificationService = ref.read(localNotificationServiceProvider);
     await notificationService.show(
@@ -148,8 +141,8 @@ class FeatureShowcase extends ConsumerWidget {
   }
 
   Future<void> _showConfirmDialog(
-    final BuildContext context,
-    final AppLocalizations l10n,
+    BuildContext context,
+    AppLocalizations l10n,
   ) async {
     final confirmed = await AppDialogs.confirm(
       context,

@@ -27,7 +27,7 @@ part 'dio_provider.g.dart';
 ///
 /// keepAlive: true ensures Dio instance is not disposed when no longer watched.
 @Riverpod(keepAlive: true)
-Dio dio(final Ref ref) {
+Dio dio(Ref ref) {
   final dio = Dio(
     BaseOptions(
       baseUrl: EnvConfig.baseUrl,

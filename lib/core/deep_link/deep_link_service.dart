@@ -89,18 +89,18 @@ class DeepLinkService extends _$DeepLinkService {
   /// Start listening for incoming links while app is running.
   void _startLinkListener() {
     _linkSubscription = _appLinks.uriLinkStream.listen(
-      (final uri) {
+      (uri) {
         _logger.i('Received deep link while running: $uri');
         _handleDeepLink(uri);
       },
-      onError: (final Object error) {
+      onError: (Object error) {
         _logger.e('Deep link stream error', error: error);
       },
     );
   }
 
   /// Handle an incoming deep link by routing to the appropriate screen.
-  void _handleDeepLink(final Uri uri) {
+  void _handleDeepLink(Uri uri) {
     // Convert the deep link to an app route
     final path = _convertToAppPath(uri);
 
@@ -119,7 +119,7 @@ class DeepLinkService extends _$DeepLinkService {
   /// Handles both custom schemes and HTTPS URLs:
   /// - `myapp://product/123` → `/product/123`
   /// - `https://example.com/product/123` → `/product/123`
-  String? _convertToAppPath(final Uri uri) {
+  String? _convertToAppPath(Uri uri) {
     // For custom schemes: myapp://product/123
     // The path is already what we need
     if (uri.scheme == 'myapp') {
@@ -153,7 +153,7 @@ class DeepLinkService extends _$DeepLinkService {
 
 /// Provider for checking if the app was launched from a deep link.
 @riverpod
-bool wasLaunchedFromDeepLink(final Ref ref) {
+bool wasLaunchedFromDeepLink(Ref ref) {
   final deepLinkState = ref.watch(deepLinkServiceProvider);
   return deepLinkState.value != null;
 }

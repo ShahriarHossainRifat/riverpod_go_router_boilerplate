@@ -17,14 +17,14 @@ import 'package:riverpod_go_router_boilerplate/core/core.dart';
 /// ```
 class LottieAnimationWidget extends StatelessWidget {
   /// Creates a [LottieAnimationWidget].
-  const LottieAnimationWidget({
+  const new({
     required this.assetPath,
+    required this.fallback,
     this.size = AppConstants.lottieAnimationSize,
     this.fit = BoxFit.contain,
     this.repeat = true,
     this.reverse = false,
     this.animate = true,
-    required this.fallback,
     super.key,
   });
 
@@ -50,7 +50,7 @@ class LottieAnimationWidget extends StatelessWidget {
   final Widget fallback;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return Lottie.asset(
       assetPath,
       width: size,
@@ -59,7 +59,7 @@ class LottieAnimationWidget extends StatelessWidget {
       repeat: repeat,
       reverse: reverse,
       animate: animate,
-      errorBuilder: (final context, final error, final stackTrace) => fallback,
+      errorBuilder: (context, error, stackTrace) => fallback,
     );
   }
 }

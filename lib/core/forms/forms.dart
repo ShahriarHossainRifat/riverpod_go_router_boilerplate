@@ -30,11 +30,9 @@ library;
 // Re-export reactive_forms (hide Validators to avoid conflict with utils)
 export 'package:reactive_forms/reactive_forms.dart' hide Validators;
 
-// Custom validators
-export 'custom_validators.dart';
-
 // Auth forms (login, registration, password)
 export 'auth_forms.dart';
-
 // Common forms (profile, contact, address)
 export 'common_forms.dart';
+// Custom validators
+export 'custom_validators.dart';

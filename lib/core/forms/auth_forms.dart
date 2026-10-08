@@ -38,9 +38,7 @@ FormGroup registrationForm() {
           ),
         ],
       ),
-      'confirmPassword': FormControl<String>(
-        validators: [Validators.required],
-      ),
+      'confirmPassword': FormControl<String>(validators: [Validators.required]),
       'acceptTerms': FormControl<bool>(
         value: false,
         validators: [Validators.requiredTrue],
@@ -63,9 +61,7 @@ FormGroup forgotPasswordForm() {
 FormGroup changePasswordForm() {
   return FormGroup(
     {
-      'currentPassword': FormControl<String>(
-        validators: [Validators.required],
-      ),
+      'currentPassword': FormControl<String>(validators: [Validators.required]),
       'newPassword': FormControl<String>(
         validators: [
           Validators.required,

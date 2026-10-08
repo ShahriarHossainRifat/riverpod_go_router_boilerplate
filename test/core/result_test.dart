@@ -5,7 +5,7 @@ void main() {
   group('Result', () {
     group('Success', () {
       test('creates a successful result with data', () {
-        final Result<int> result = Success(42);
+        const Result<int> result = Success(42);
 
         expect(result.isSuccess, isTrue);
         expect(result.isFailure, isFalse);
@@ -14,29 +14,29 @@ void main() {
       });
 
       test('getOrElse returns data for success', () {
-        final Result<int> result = Success(42);
+        const Result<int> result = Success(42);
 
         expect(result.getOrElse(0), equals(42));
       });
 
       test('getOrThrow returns data for success', () {
-        final Result<int> result = Success(42);
+        const Result<int> result = Success(42);
 
         expect(result.getOrThrow(), equals(42));
       });
 
       test('map transforms success data', () {
-        final Result<int> result = Success(42);
-        final mapped = result.map((final data) => data * 2);
+        const Result<int> result = Success(42);
+        final mapped = result.map((data) => data * 2);
 
         expect(mapped.dataOrNull, equals(84));
       });
 
       test('fold calls onSuccess for success', () {
-        final Result<int> result = Success(42);
+        const Result<int> result = Success(42);
         final foldResult = result.fold(
-          onSuccess: (final data) => 'success: $data',
-          onFailure: (final error) => 'failure: ${error.message}',
+          onSuccess: (data) => 'success: $data',
+          onFailure: (error) => 'failure: ${error.message}',
         );
 
         expect(foldResult, equals('success: 42'));
@@ -45,7 +45,7 @@ void main() {
 
     group('Failure', () {
       test('creates a failed result with error', () {
-        final Result<int> result = Failure(
+        const Result<int> result = Failure(
           NetworkException(message: 'error message'),
         );
 
@@ -56,28 +56,24 @@ void main() {
       });
 
       test('getOrElse returns fallback for failure', () {
-        final Result<int> result = Failure(
-          NetworkException(message: 'error'),
-        );
+        const Result<int> result = Failure(NetworkException(message: 'error'));
 
         expect(result.getOrElse(99), equals(99));
       });
 
       test('getOrThrow throws for failure', () {
-        final Result<int> result = Failure(
-          NetworkException(message: 'error'),
-        );
+        const Result<int> result = Failure(NetworkException(message: 'error'));
 
-        expect(() => result.getOrThrow(), throwsA(isA<NetworkException>()));
+        expect(result.getOrThrow, throwsA(isA<NetworkException>()));
       });
 
       test('fold calls onFailure for failure', () {
-        final Result<int> result = Failure(
+        const Result<int> result = Failure(
           NetworkException(message: 'test error'),
         );
         final foldResult = result.fold(
-          onSuccess: (final data) => 'success: $data',
-          onFailure: (final error) => 'failure: ${error.message}',
+          onSuccess: (data) => 'success: $data',
+          onFailure: (error) => 'failure: ${error.message}',
         );
 
         expect(foldResult, equals('failure: test error'));

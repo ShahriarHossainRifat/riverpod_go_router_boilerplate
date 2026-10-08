@@ -37,10 +37,10 @@ class CacheEntries extends Table {
 @DriftDatabase(tables: [CacheEntries])
 class CacheDatabase extends _$CacheDatabase {
   /// Default constructor that opens the database connection.
-  CacheDatabase() : super(_openConnection());
+  new() : super(_openConnection());
 
   /// Constructor for testing with a custom executor.
-  CacheDatabase.forTesting(super.e);
+  new forTesting(super.e);
 
   @override
   int get schemaVersion => 1;
@@ -48,10 +48,10 @@ class CacheDatabase extends _$CacheDatabase {
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
-      onCreate: (final m) async {
+      onCreate: (m) async {
         await m.createAll();
       },
-      onUpgrade: (final m, final from, final to) async {
+      onUpgrade: (m, from, to) async {
         // Handle future migrations here
       },
     );
@@ -62,29 +62,28 @@ class CacheDatabase extends _$CacheDatabase {
   // ─────────────────────────────────────────────────────────────────────────────
 
   /// Insert or update a cache entry.
-  Future<void> upsertEntry(final CacheEntriesCompanion entry) async {
+  Future<void> upsertEntry(CacheEntriesCompanion entry) async {
     await into(cacheEntries).insertOnConflictUpdate(entry);
   }
 
   /// Get a cache entry by key and box name.
   Future<CacheEntryData?> getEntry(
-    final String key, {
-    final String boxName = 'default',
+    String key, {
+    String boxName = 'default',
   }) async {
-    return (select(cacheEntries)..where(
-          (final t) => t.key.equals(key) & t.boxName.equals(boxName),
-        ))
+    return (select(cacheEntries)
+          ..where((t) => t.key.equals(key) & t.boxName.equals(boxName)))
         .getSingleOrNull();
   }
 
   /// Get a valid (non-expired) cache entry.
   Future<CacheEntryData?> getValidEntry(
-    final String key, {
-    final String boxName = 'default',
+    String key, {
+    String boxName = 'default',
   }) async {
     final now = DateTime.now();
     return (select(cacheEntries)..where(
-          (final t) =>
+          (t) =>
               t.key.equals(key) &
               t.boxName.equals(boxName) &
               t.expiresAt.isBiggerThanValue(now),
@@ -93,21 +92,15 @@ class CacheDatabase extends _$CacheDatabase {
   }
 
   /// Delete a cache entry.
-  Future<int> deleteEntry(
-    final String key, {
-    final String boxName = 'default',
-  }) async {
-    return (delete(cacheEntries)..where(
-          (final t) => t.key.equals(key) & t.boxName.equals(boxName),
-        ))
-        .go();
+  Future<int> deleteEntry(String key, {String boxName = 'default'}) async {
+    return (delete(
+      cacheEntries,
+    )..where((t) => t.key.equals(key) & t.boxName.equals(boxName))).go();
   }
 
   /// Delete all entries in a box.
-  Future<int> clearBox(final String boxName) async {
-    return (delete(
-      cacheEntries,
-    )..where((final t) => t.boxName.equals(boxName))).go();
+  Future<int> clearBox(String boxName) async {
+    return (delete(cacheEntries)..where((t) => t.boxName.equals(boxName))).go();
   }
 
   /// Delete all cache entries.
@@ -116,10 +109,10 @@ class CacheDatabase extends _$CacheDatabase {
   }
 
   /// Delete all expired entries.
-  Future<int> deleteExpired({final String? boxName}) async {
+  Future<int> deleteExpired({String? boxName}) async {
     final now = DateTime.now();
     final query = delete(cacheEntries)
-      ..where((final t) {
+      ..where((t) {
         if (boxName != null) {
           return t.expiresAt.isSmallerThanValue(now) &
               t.boxName.equals(boxName);
@@ -130,7 +123,7 @@ class CacheDatabase extends _$CacheDatabase {
   }
 
   /// Count entries in a box.
-  Future<int> countEntries({final String? boxName}) async {
+  Future<int> countEntries({String? boxName}) async {
     final query = selectOnly(cacheEntries)
       ..addColumns([cacheEntries.key.count()]);
     if (boxName != null) {
@@ -141,7 +134,7 @@ class CacheDatabase extends _$CacheDatabase {
   }
 
   /// Count valid (non-expired) entries in a box.
-  Future<int> countValidEntries({final String? boxName}) async {
+  Future<int> countValidEntries({String? boxName}) async {
     final now = DateTime.now();
     final query = selectOnly(cacheEntries)
       ..addColumns([cacheEntries.key.count()]);
@@ -158,12 +151,15 @@ class CacheDatabase extends _$CacheDatabase {
   }
 
   /// Get all keys in a box.
-  Future<List<String>> getKeys({final String boxName = 'default'}) async {
+  Future<List<String>> getKeys({String boxName = 'default'}) async {
     final query = selectOnly(cacheEntries)
       ..addColumns([cacheEntries.key])
       ..where(cacheEntries.boxName.equals(boxName));
     final results = await query.get();
-    return results.map((final row) => row.read(cacheEntries.key)!).toList();
+    return results
+        .map((row) => row.read(cacheEntries.key))
+        .whereType<String>()
+        .toList();
   }
 }
 
@@ -180,7 +176,7 @@ LazyDatabase _openConnection() {
 ///
 /// This should be initialized once at app startup.
 @Riverpod(keepAlive: true)
-CacheDatabase cacheDatabase(final Ref ref) {
+CacheDatabase cacheDatabase(Ref ref) {
   final db = CacheDatabase();
   ref.onDispose(db.close);
   return db;

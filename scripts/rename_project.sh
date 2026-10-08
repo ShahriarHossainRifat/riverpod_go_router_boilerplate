@@ -329,7 +329,7 @@ fi
 echo ""
 echo -e "${YELLOW}Next steps:${NC}"
 echo "  1. Run: flutter pub get"
-echo "  2. Run: dart run build_runner build --delete-conflicting-outputs"
+echo "  2. Run: dart run build_runner build"
 echo "  3. For iOS: cd ios && pod install && cd .."
 echo "  4. For macOS: cd macos && pod install && cd .."
 echo ""

@@ -22,7 +22,7 @@ import 'package:flutter/foundation.dart' show immutable;
 @immutable
 class PaginatedResponse<T> {
   /// Creates a paginated response.
-  const PaginatedResponse({
+  const new({
     required this.items,
     required this.currentPage,
     required this.totalPages,
@@ -31,7 +31,7 @@ class PaginatedResponse<T> {
   });
 
   /// Creates an empty response.
-  const PaginatedResponse.empty()
+  const new empty()
     : items = const [],
       currentPage = 1,
       totalPages = 0,
@@ -61,16 +61,16 @@ class PaginatedResponse<T> {
   ///   "total_items": 100
   /// }
   /// ```
-  factory PaginatedResponse.fromJson(
-    final Map<String, dynamic> json,
-    final T Function(Object? json) fromJsonT,
+  factory fromJson(
+    Map<String, dynamic> json,
+    T Function(Object? json) fromJsonT,
   ) {
     // Try to find the items array
     final itemsJson =
         json['data'] as List? ?? json['items'] as List? ?? json['results'];
 
     if (itemsJson == null) {
-      throw FormatException(
+      throw const FormatException(
         'Could not find items array in response. '
         'Expected "data", "items", or "results" key.',
       );
@@ -128,11 +128,11 @@ class PaginatedResponse<T> {
 
   /// Create a copy with different items.
   PaginatedResponse<T> copyWith({
-    final List<T>? items,
-    final int? currentPage,
-    final int? totalPages,
-    final int? totalItems,
-    final int? pageSize,
+    List<T>? items,
+    int? currentPage,
+    int? totalPages,
+    int? totalItems,
+    int? pageSize,
   }) {
     return PaginatedResponse<T>(
       items: items ?? this.items,
@@ -144,7 +144,7 @@ class PaginatedResponse<T> {
   }
 
   /// Map items to a different type.
-  PaginatedResponse<R> map<R>(final R Function(T item) transform) {
+  PaginatedResponse<R> map<R>(R Function(T item) transform) {
     return PaginatedResponse<R>(
       items: items.map(transform).toList(),
       currentPage: currentPage,
@@ -158,7 +158,7 @@ class PaginatedResponse<T> {
   ///
   /// Combines items from both pages and updates pagination metadata.
   /// Useful for building infinite scroll lists.
-  PaginatedResponse<T> merge(final PaginatedResponse<T> other) {
+  PaginatedResponse<T> merge(PaginatedResponse<T> other) {
     return PaginatedResponse<T>(
       items: [...items, ...other.items],
       currentPage: other.currentPage,
@@ -207,7 +207,7 @@ class PaginatedResponse<T> {
 @immutable
 class PaginationState<T> {
   /// Creates a pagination state.
-  const PaginationState({
+  const new({
     required this.items,
     required this.currentPage,
     required this.hasMore,
@@ -216,7 +216,7 @@ class PaginationState<T> {
   });
 
   /// Creates an initial empty state.
-  const PaginationState.initial()
+  const new initial()
     : items = const [],
       currentPage = 0,
       hasMore = true,
@@ -224,7 +224,7 @@ class PaginationState<T> {
       error = null;
 
   /// Creates a state from a paginated response.
-  factory PaginationState.fromResponse(final PaginatedResponse<T> response) {
+  factory fromResponse(PaginatedResponse<T> response) {
     return PaginationState<T>(
       items: response.items,
       currentPage: response.currentPage,
@@ -258,11 +258,11 @@ class PaginationState<T> {
 
   /// Create a copy with updated fields.
   PaginationState<T> copyWith({
-    final List<T>? items,
-    final int? currentPage,
-    final bool? hasMore,
-    final bool? isLoading,
-    final Object? error,
+    List<T>? items,
+    int? currentPage,
+    bool? hasMore,
+    bool? isLoading,
+    Object? error,
   }) {
     return PaginationState<T>(
       items: items ?? this.items,
@@ -274,13 +274,11 @@ class PaginationState<T> {
   }
 
   /// Merge with a new page response.
-  PaginationState<T> merge(final PaginatedResponse<T> response) {
+  PaginationState<T> merge(PaginatedResponse<T> response) {
     return PaginationState<T>(
       items: [...items, ...response.items],
       currentPage: response.currentPage,
       hasMore: response.hasMore,
-      isLoading: false,
-      error: null,
     );
   }
 
@@ -288,6 +286,6 @@ class PaginationState<T> {
   PaginationState<T> startLoading() => copyWith(isLoading: true, error: null);
 
   /// Set error state.
-  PaginationState<T> setError(final Object error) =>
+  PaginationState<T> setError(Object error) =>
       copyWith(isLoading: false, error: error);
 }

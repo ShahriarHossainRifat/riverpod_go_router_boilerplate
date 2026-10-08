@@ -15,10 +15,10 @@ import 'package:riverpod_go_router_boilerplate/core/widgets/spacing.dart';
 /// - A clear call-to-action to open the app store
 class ForceUpdatePage extends ConsumerWidget {
   /// Creates a [ForceUpdatePage] widget.
-  const ForceUpdatePage({super.key});
+  const new({super.key});
 
   @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final versionAsync = ref.watch(versionInfoProvider);
 
     return Scaffold(
@@ -48,7 +48,7 @@ class ForceUpdatePage extends ConsumerWidget {
   }
 
   /// Builds the update icon container.
-  Widget _buildUpdateIcon(final BuildContext context) {
+  Widget _buildUpdateIcon(BuildContext context) {
     final colorScheme = context.colorScheme;
 
     return Container(
@@ -57,60 +57,50 @@ class ForceUpdatePage extends ConsumerWidget {
         color: colorScheme.primaryContainer,
         shape: .circle,
       ),
-      child: Icon(
-        Icons.system_update,
-        size: 64,
-        color: colorScheme.primary,
-      ),
+      child: Icon(Icons.system_update, size: 64, color: colorScheme.primary),
     );
   }
 
   /// Builds the title text.
-  Widget _buildTitle(final BuildContext context) {
+  Widget _buildTitle(BuildContext context) {
     final textTheme = context.textTheme;
 
     return Text(
       'Update Required',
-      style: textTheme.headlineMedium?.copyWith(
-        fontWeight: .bold,
-      ),
+      style: textTheme.headlineMedium?.copyWith(fontWeight: .bold),
       textAlign: .center,
     );
   }
 
   /// Builds the description text.
-  Widget _buildDescription(final BuildContext context) {
+  Widget _buildDescription(BuildContext context) {
     final colorScheme = context.colorScheme;
     final textTheme = context.textTheme;
 
     return Text(
       'A new version of the app is available. '
       'Please update to continue using the app.',
-      style: textTheme.bodyLarge?.copyWith(
-        color: colorScheme.onSurfaceVariant,
-      ),
+      style: textTheme.bodyLarge?.copyWith(color: colorScheme.onSurfaceVariant),
       textAlign: .center,
     );
   }
 
   /// Builds the version info container.
   Widget _buildVersionInfo(
-    final BuildContext context,
-    final AsyncValue<VersionInfo> versionAsync,
+    BuildContext context,
+    AsyncValue<VersionInfo> versionAsync,
   ) {
     return versionAsync.when(
-      data: (final info) => _VersionInfoContainer(info: info),
+      data: (info) => _VersionInfoContainer(info: info),
       loading: () => const SizedBox.shrink(),
-      error: (_, final __) => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
     );
   }
 
   /// Builds the update button.
-  Widget _buildUpdateButton(final WidgetRef ref) {
+  Widget _buildUpdateButton(WidgetRef ref) {
     return AppButton(
-      variant: .primary,
       size: .large,
-      isExpanded: true,
       onPressed: () => _openStore(ref),
       icon: Icons.download,
       label: 'Update Now',
@@ -118,7 +108,7 @@ class ForceUpdatePage extends ConsumerWidget {
   }
 
   /// Opens the app store listing.
-  Future<void> _openStore(final WidgetRef ref) async {
+  Future<void> _openStore(WidgetRef ref) async {
     final reviewService = ref.read(inAppReviewServiceProvider);
     await reviewService.openStoreListing();
   }
@@ -126,12 +116,12 @@ class ForceUpdatePage extends ConsumerWidget {
 
 /// Container displaying current and minimum version information.
 class _VersionInfoContainer extends StatelessWidget {
-  const _VersionInfoContainer({required this.info});
+  const new({required this.info});
 
   final VersionInfo info;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
     final textTheme = context.textTheme;
 

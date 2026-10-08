@@ -4,7 +4,7 @@
 /// clean interface for components that need to know session status
 /// without coupling to auth implementation details.
 sealed class SessionState {
-  const SessionState();
+  const new();
 
   /// Whether the user has an active session
   bool get isAuthenticated => switch (this) {
@@ -22,7 +22,7 @@ sealed class SessionState {
 /// Session is being restored or validated
 final class SessionLoading extends SessionState {
   /// Creates a [SessionLoading] instance.
-  const SessionLoading();
+  const new();
 
   @override
   String toString() => 'SessionLoading()';
@@ -31,7 +31,7 @@ final class SessionLoading extends SessionState {
 /// User has an active, valid session
 final class SessionActive extends SessionState {
   /// Creates a [SessionActive] instance.
-  const SessionActive({required this.userId, this.expiresAt});
+  const new({required this.userId, this.expiresAt});
 
   /// The ID of the authenticated user.
   final String userId;
@@ -53,7 +53,7 @@ final class SessionActive extends SessionState {
 /// No active session (user logged out or never logged in)
 final class SessionInactive extends SessionState {
   /// Creates a [SessionInactive] instance.
-  const SessionInactive();
+  const new();
 
   @override
   String toString() => 'SessionInactive()';
@@ -62,7 +62,7 @@ final class SessionInactive extends SessionState {
 /// Session expired and needs re-authentication
 final class SessionExpired extends SessionState {
   /// Creates a [SessionExpired] instance.
-  const SessionExpired({this.reason});
+  const new({this.reason});
 
   /// The reason why the session expired, if available.
   final String? reason;

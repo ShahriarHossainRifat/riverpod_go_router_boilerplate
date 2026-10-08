@@ -10,22 +10,21 @@ final protectedRoutes = [
   GoRoute(
     path: AppRoute.home.path,
     name: AppRoute.home.name,
-    builder: (final context, final state) => const HomePage(),
+    builder: (context, state) => const HomePage(),
   ),
   GoRoute(
     path: AppRoute.profile.path,
     name: AppRoute.profile.name,
-    builder: (final context, final state) =>
-        const PlaceholderPage(title: 'Profile'),
+    builder: (context, state) => const PlaceholderPage(title: 'Profile'),
   ),
   GoRoute(
     path: AppRoute.settings.path,
     name: AppRoute.settings.name,
-    builder: (final context, final state) => const SettingsPage(),
+    builder: (context, state) => const SettingsPage(),
   ),
   GoRoute(
     path: AppRoute.onboarding.path,
     name: AppRoute.onboarding.name,
-    builder: (final context, final state) => const OnboardingPage(),
+    builder: (context, state) => const OnboardingPage(),
   ),
 ];

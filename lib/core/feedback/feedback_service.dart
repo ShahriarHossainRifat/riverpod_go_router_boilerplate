@@ -11,7 +11,7 @@ import 'package:riverpod_go_router_boilerplate/core/widgets/spacing.dart';
 /// Uses the global [rootNavigatorKey] from GoRouter to access the overlay.
 class FeedbackService {
   /// Creates a [FeedbackService] instance.
-  FeedbackService();
+  new();
 
   ScaffoldMessengerState? get _scaffoldMessenger {
     final context = rootNavigatorKey.currentContext;
@@ -22,7 +22,7 @@ class FeedbackService {
   NavigatorState? get _navigator => rootNavigatorKey.currentState;
 
   /// Show a snackbar with the given configuration.
-  void showSnackbar(final SnackbarConfig config) {
+  void showSnackbar(SnackbarConfig config) {
     final messenger = _scaffoldMessenger;
     if (messenger == null) return;
 
@@ -49,7 +49,7 @@ class FeedbackService {
   }
 
   /// Show a success snackbar.
-  void showSuccess(final String message, {final Duration? duration}) {
+  void showSuccess(String message, {Duration? duration}) {
     showSnackbar(
       SnackbarConfig(
         message: message,
@@ -60,7 +60,7 @@ class FeedbackService {
   }
 
   /// Show an error snackbar.
-  void showError(final String message, {final VoidCallback? onRetry}) {
+  void showError(String message, {VoidCallback? onRetry}) {
     showSnackbar(
       SnackbarConfig(
         message: message,
@@ -73,27 +73,27 @@ class FeedbackService {
   }
 
   /// Show a warning snackbar.
-  void showWarning(final String message) {
+  void showWarning(String message) {
     showSnackbar(SnackbarConfig(message: message, type: SnackbarType.warning));
   }
 
   /// Show an info snackbar.
-  void showInfo(final String message) {
-    showSnackbar(SnackbarConfig(message: message, type: SnackbarType.info));
+  void showInfo(String message) {
+    showSnackbar(SnackbarConfig(message: message));
   }
 
   /// Hide the current snackbar.
   void hideCurrentSnackbar() => _scaffoldMessenger?.hideCurrentSnackBar();
 
   /// Show a dialog with the given configuration.
-  Future<bool> showDialog(final DialogConfig config) async {
+  Future<bool> showDialog(DialogConfig config) async {
     final navigator = _navigator;
     if (navigator == null) return false;
 
     final result = await showAdaptiveDialog<bool>(
       context: navigator.context,
       barrierDismissible: config.barrierDismissible,
-      builder: (final context) => AlertDialog.adaptive(
+      builder: (context) => AlertDialog.adaptive(
         title: Text(config.title),
         content:
             config.content ??
@@ -126,11 +126,11 @@ class FeedbackService {
 
   /// Show a simple confirmation dialog.
   Future<bool> showConfirmDialog({
-    required final String title,
-    final String? message,
-    final String confirmLabel = 'Confirm',
-    final String cancelLabel = 'Cancel',
-    final bool isDestructive = false,
+    required String title,
+    String? message,
+    String confirmLabel = 'Confirm',
+    String cancelLabel = 'Cancel',
+    bool isDestructive = false,
   }) {
     return showDialog(
       DialogConfig(
@@ -145,9 +145,9 @@ class FeedbackService {
 
   /// Show an alert dialog (single OK button).
   Future<void> showAlert({
-    required final String title,
-    final String? message,
-    final String buttonLabel = 'OK',
+    required String title,
+    String? message,
+    String buttonLabel = 'OK',
   }) async {
     await showDialog(
       DialogConfig(title: title, message: message, confirmLabel: buttonLabel),
@@ -155,7 +155,7 @@ class FeedbackService {
   }
 
   /// Show a loading dialog. Returns a function to dismiss it.
-  VoidCallback showLoading({final String? message}) {
+  VoidCallback showLoading({String? message}) {
     final navigator = _navigator;
     if (navigator == null) return () {};
 
@@ -164,7 +164,7 @@ class FeedbackService {
     showAdaptiveDialog<void>(
       context: navigator.context,
       barrierDismissible: false,
-      builder: (final context) => PopScope(
+      builder: (context) => PopScope(
         canPop: false,
         child: AlertDialog.adaptive(
           content: Row(
@@ -193,10 +193,10 @@ class FeedbackService {
 
   /// Show a bottom sheet.
   Future<T?> showBottomSheet<T>({
-    required final Widget Function(BuildContext context) builder,
-    final bool isDismissible = true,
-    final bool enableDrag = true,
-    final bool showDragHandle = true,
+    required Widget Function(BuildContext context) builder,
+    bool isDismissible = true,
+    bool enableDrag = true,
+    bool showDragHandle = true,
   }) async {
     final navigator = _navigator;
     if (navigator == null) return null;
@@ -210,7 +210,7 @@ class FeedbackService {
     );
   }
 
-  Color _getBackgroundColor(final SnackbarType type) => switch (type) {
+  Color _getBackgroundColor(SnackbarType type) => switch (type) {
     SnackbarType.success => Colors.green.shade700,
     SnackbarType.error => Colors.red.shade700,
     SnackbarType.warning => Colors.orange.shade700,
@@ -219,6 +219,6 @@ class FeedbackService {
 }
 
 /// Provider for [FeedbackService].
-final feedbackServiceProvider = Provider<FeedbackService>((final ref) {
+final feedbackServiceProvider = Provider<FeedbackService>((ref) {
   return FeedbackService();
 });

@@ -10,13 +10,13 @@ part 'api_client.g.dart';
 
 /// Provider for the default error converter.
 @Riverpod(keepAlive: true)
-ErrorConverter errorConverter(final Ref ref) {
+ErrorConverter errorConverter(Ref ref) {
   return const DefaultErrorConverter();
 }
 
 /// Provider for the API client.
 @Riverpod(keepAlive: true)
-ApiClient apiClient(final Ref ref) {
+ApiClient apiClient(Ref ref) {
   return ApiClient(
     ref.watch(dioProvider),
     errorConverter: ref.watch(errorConverterProvider),
@@ -63,7 +63,7 @@ ApiClient apiClient(final Ref ref) {
 /// - `List<dynamic>` (raw JSON array)
 class ApiClient {
   /// Creates an [ApiClient] instance.
-  ApiClient(this._dio, {final ErrorConverter? errorConverter})
+  new(this._dio, {ErrorConverter? errorConverter})
     : _errorConverter = errorConverter ?? const DefaultErrorConverter();
 
   final Dio _dio;
@@ -71,9 +71,9 @@ class ApiClient {
 
   /// Perform a GET request.
   Future<Result<T>> get<T>(
-    final String path, {
-    final Map<String, dynamic>? queryParameters,
-    final T Function(dynamic json)? fromJson,
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    T Function(dynamic json)? fromJson,
   }) async {
     return _executeRequest(
       () => _dio.get<dynamic>(path, queryParameters: queryParameters),
@@ -83,10 +83,10 @@ class ApiClient {
 
   /// Perform a POST request.
   Future<Result<T>> post<T>(
-    final String path, {
-    final Object? data,
-    final Map<String, dynamic>? queryParameters,
-    final T Function(dynamic json)? fromJson,
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    T Function(dynamic json)? fromJson,
   }) async {
     return _executeRequest(
       () => _dio.post<dynamic>(
@@ -100,10 +100,10 @@ class ApiClient {
 
   /// Perform a PUT request.
   Future<Result<T>> put<T>(
-    final String path, {
-    final Object? data,
-    final Map<String, dynamic>? queryParameters,
-    final T Function(dynamic json)? fromJson,
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    T Function(dynamic json)? fromJson,
   }) async {
     return _executeRequest(
       () =>
@@ -114,10 +114,10 @@ class ApiClient {
 
   /// Perform a PATCH request.
   Future<Result<T>> patch<T>(
-    final String path, {
-    final Object? data,
-    final Map<String, dynamic>? queryParameters,
-    final T Function(dynamic json)? fromJson,
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    T Function(dynamic json)? fromJson,
   }) async {
     return _executeRequest(
       () => _dio.patch<dynamic>(
@@ -131,10 +131,10 @@ class ApiClient {
 
   /// Perform a DELETE request.
   Future<Result<T>> delete<T>(
-    final String path, {
-    final Object? data,
-    final Map<String, dynamic>? queryParameters,
-    final T Function(dynamic json)? fromJson,
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    T Function(dynamic json)? fromJson,
   }) async {
     return _executeRequest(
       () => _dio.delete<dynamic>(
@@ -155,8 +155,8 @@ class ApiClient {
   /// - For `void` responses (DELETE, POST with no body), use `T = void`
   /// - For complex types like `List<User>`, always provide [fromJson]
   Future<Result<T>> _executeRequest<T>(
-    final Future<Response<dynamic>> Function() request, {
-    final T Function(dynamic json)? fromJson,
+    Future<Response<dynamic>> Function() request, {
+    T Function(dynamic json)? fromJson,
   }) async {
     try {
       final response = await request();

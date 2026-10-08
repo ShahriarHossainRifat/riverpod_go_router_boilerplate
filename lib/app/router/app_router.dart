@@ -1,13 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:riverpod_go_router_boilerplate/app/app_config.dart';
-import 'package:riverpod_go_router_boilerplate/app/router/auth_routes.dart';
 import 'package:riverpod_go_router_boilerplate/app/presentation/pages/error_page.dart';
+import 'package:riverpod_go_router_boilerplate/app/router/auth_routes.dart';
 import 'package:riverpod_go_router_boilerplate/app/router/protected_routes.dart';
 import 'package:riverpod_go_router_boilerplate/app/router/splash_route.dart';
 import 'package:riverpod_go_router_boilerplate/app/startup/app_lifecycle_notifier.dart';
 import 'package:riverpod_go_router_boilerplate/app/startup/app_lifecycle_state.dart';
+import 'package:riverpod_go_router_boilerplate/app/startup/startup_state_machine.dart';
 import 'package:riverpod_go_router_boilerplate/core/core.dart';
 
 part 'app_router.g.dart';
@@ -62,14 +64,14 @@ enum AppRoute {
   profile('/profile', requiresAuth: true),
 
   /// Settings screen for user preferences.
-  settings('/settings', requiresAuth: true),
+  settings('/settings', requiresAuth: true)
   // Example dynamic routes (uncomment and customize as needed):
   // productDetail('/product/:id', requiresAuth: true),
   // userProfile('/user/:userId', requiresAuth: true),
   // orderDetail('/order/:orderId', requiresAuth: true),
   ;
 
-  const AppRoute(this.path, {required this.requiresAuth});
+  new(this.path, {required this.requiresAuth});
 
   /// The URL path pattern for this route.
   /// May contain path parameters prefixed with ':' (e.g., '/product/:id').
@@ -92,7 +94,7 @@ enum AppRoute {
   /// ```
   ///
   /// Throws [ArgumentError] if a required parameter is missing.
-  String pathWith(final Map<String, String> params) {
+  String pathWith(Map<String, String> params) {
     var result = path;
     final paramPattern = RegExp(r':(\w+)');
     final matches = paramPattern.allMatches(path);
@@ -123,14 +125,14 @@ enum AppRoute {
   /// ```
   List<String> get pathParamNames {
     final paramPattern = RegExp(r':(\w+)');
-    return paramPattern.allMatches(path).map((final m) => m.group(1)!).toList();
+    return paramPattern.allMatches(path).map((m) => m.group(1)!).toList();
   }
 
   /// Get a route by its path pattern, or null if not found.
   ///
   /// Note: For dynamic routes, pass the pattern (e.g., '/product/:id'),
   /// not the resolved path (e.g., '/product/123').
-  static AppRoute? fromPath(final String path) {
+  static AppRoute? fromPath(String path) {
     for (final route in values) {
       if (route.path == path) return route;
     }
@@ -144,7 +146,7 @@ enum AppRoute {
   /// AppRoute.matchPath('/product/123'); // Returns AppRoute.productDetail
   /// AppRoute.matchPath('/settings');    // Returns AppRoute.settings
   /// ```
-  static AppRoute? matchPath(final String resolvedPath) {
+  static AppRoute? matchPath(String resolvedPath) {
     for (final route in values) {
       if (_matchesPattern(route.path, resolvedPath)) {
         return route;
@@ -154,28 +156,28 @@ enum AppRoute {
   }
 
   /// Check if a resolved path matches a route pattern.
-  static bool _matchesPattern(final String pattern, final String path) {
+  static bool _matchesPattern(String pattern, String path) {
     // Convert pattern to regex: '/product/:id' -> '^/product/([^/]+)$'
     final regexPattern = pattern.replaceAllMapped(
       RegExp(r':(\w+)'),
-      (final _) => r'([^/]+)',
+      (_) => '([^/]+)',
     );
     return RegExp('^$regexPattern\$').hasMatch(path);
   }
 
   /// All routes that require authentication.
   static List<AppRoute> get protectedRoutes =>
-      values.where((final r) => r.requiresAuth).toList();
+      values.where((r) => r.requiresAuth).toList();
 
   /// All public routes (no auth required).
   static List<AppRoute> get publicRoutes =>
-      values.where((final r) => !r.requiresAuth).toList();
+      values.where((r) => !r.requiresAuth).toList();
 }
 
 /// Extension for convenient navigation with [AppRoute] enum.
 extension AppRouteNavigation on BuildContext {
   /// Navigate to a route using [GoRouter.go].
-  void goRoute(final AppRoute route) => go(route.path);
+  void goRoute(AppRoute route) => go(route.path);
 
   /// Navigate to a route with parameters using [GoRouter.go].
   ///
@@ -183,25 +185,22 @@ extension AppRouteNavigation on BuildContext {
   /// ```dart
   /// context.goRouteWith(AppRoute.productDetail, {'id': '123'});
   /// ```
-  void goRouteWith(final AppRoute route, final Map<String, String> params) =>
+  void goRouteWith(AppRoute route, Map<String, String> params) =>
       go(route.pathWith(params));
 
   /// Navigate to a route using [GoRouter.push].
-  void pushRoute(final AppRoute route) => push(route.path);
+  void pushRoute(AppRoute route) => push(route.path);
 
   /// Navigate to a route with parameters using [GoRouter.push].
-  void pushRouteWith(final AppRoute route, final Map<String, String> params) =>
+  void pushRouteWith(AppRoute route, Map<String, String> params) =>
       push(route.pathWith(params));
 
   /// Replace current route using [GoRouter.pushReplacement].
-  void pushReplacementRoute(final AppRoute route) =>
-      pushReplacement(route.path);
+  void pushReplacementRoute(AppRoute route) => pushReplacement(route.path);
 
   /// Replace current route with parameters using [GoRouter.pushReplacement].
-  void pushReplacementRouteWith(
-    final AppRoute route,
-    final Map<String, String> params,
-  ) => pushReplacement(route.pathWith(params));
+  void pushReplacementRouteWith(AppRoute route, Map<String, String> params) =>
+      pushReplacement(route.pathWith(params));
 }
 
 /// Global navigator key for accessing navigation outside of widget context.
@@ -213,7 +212,7 @@ final rootNavigatorKey = GlobalKey<NavigatorState>();
 /// Also watches [sessionStateProvider] for immediate redirection on auth changes.
 /// This enables reactive routing based on session state, maintenance mode, etc.
 @Riverpod(keepAlive: true)
-GoRouter appRouter(final Ref ref) {
+GoRouter appRouter(Ref ref) {
   // Watch lifecycle state for initialization/maintenance transitions
   final lifecycleListenable = ref.watch(appLifecycleListenableProvider);
 
@@ -227,18 +226,16 @@ GoRouter appRouter(final Ref ref) {
   return GoRouter(
     navigatorKey: rootNavigatorKey,
     initialLocation: AppRoute.splash.path,
-    debugLogDiagnostics: true,
+    debugLogDiagnostics: kDebugMode,
     refreshListenable: lifecycleListenable,
     routes: [splashRoute, ...authRoutes, ...protectedRoutes],
-    redirect: (final context, final state) =>
-        _handleRedirect(ref, state.uri.path),
-    errorBuilder: (final context, final state) =>
-        ErrorPage(path: state.uri.path),
+    redirect: (context, state) => _handleRedirect(ref, state.uri.path),
+    errorBuilder: (context, state) => ErrorPage(path: state.uri.path),
     observers: [
       // Performance monitoring for screen traces
       PerformanceRouteObserver(ref),
       // Analytics for screen view tracking
-      if (analyticsObserver != null) analyticsObserver,
+      ?analyticsObserver,
     ],
   );
 }
@@ -248,24 +245,27 @@ GoRouter appRouter(final Ref ref) {
 // ============================================================================
 
 /// Main redirect handler - delegates to specific guards.
-String? _handleRedirect(final Ref ref, final String path) {
+String? _handleRedirect(Ref ref, String path) {
   final lifecycleState = ref.read(appLifecycleNotifierProvider);
   final sessionState = ref.read(sessionStateProvider);
+  final startupState = ref.read(currentStartupStateProvider);
   // Use matchPath to handle dynamic routes (e.g., '/product/123')
   final route = AppRoute.matchPath(path);
 
   // Apply guards in order of priority
   return _guardLoading(route, sessionState) ??
       _guardInitialization(route, lifecycleState) ??
-      _guardMaintenance(route) ??
+      _guardMaintenance(route, startupState) ??
+      _guardForceUpdate(route, startupState) ??
       _guardSplash(route) ??
       _guardAuth(route, sessionState);
 }
 
-/// Guard: Don't redirect while session is loading (except from splash).
-String? _guardLoading(final AppRoute? route, final SessionState sessionState) {
-  if (sessionState.isLoading && route != .splash) {
-    return null; // Allow current navigation to proceed
+/// Guard: Hold all navigation on splash while session is loading.
+/// Prevents flash of unauthenticated content on deep links before session restore.
+String? _guardLoading(AppRoute? route, SessionState sessionState) {
+  if (sessionState.isLoading && route != AppRoute.splash) {
+    return AppRoute.splash.path;
   }
   return null;
 }
@@ -274,11 +274,11 @@ String? _guardLoading(final AppRoute? route, final SessionState sessionState) {
 /// Prevents "flash of unauthenticated content" when deep links arrive
 /// before session state is restored from storage.
 String? _guardInitialization(
-  final AppRoute? route,
-  final AppLifecycleState lifecycleState,
+  AppRoute? route,
+  AppLifecycleState lifecycleState,
 ) {
   if (!lifecycleState.isInitialized) {
-    if (route != .splash) {
+    if (route != AppRoute.splash) {
       return AppRoute.splash.path; // Force back to splash
     }
     return null; // Stay on splash
@@ -286,24 +286,46 @@ String? _guardInitialization(
   return null;
 }
 
-/// Guard: Always allow access to maintenance page.
-String? _guardMaintenance(final AppRoute? route) {
-  if (route == .maintenance) {
-    return null; // Allow access
+/// Guard: Redirect to maintenance page when app is in maintenance mode.
+/// Allows access only to the maintenance page itself during downtime.
+String? _guardMaintenance(AppRoute? route, StartupState startupState) {
+  if (startupState is MaintenanceState) {
+    if (route != AppRoute.maintenance) {
+      return AppRoute.maintenance.path;
+    }
+    return null;
+  }
+  // Not in maintenance - don't allow direct navigation to maintenance page
+  if (route == AppRoute.maintenance) {
+    return AppRoute.home.path;
+  }
+  return null;
+}
+
+/// Guard: Redirect to force update page when app requires an update.
+String? _guardForceUpdate(AppRoute? route, StartupState startupState) {
+  if (startupState is ForceUpdateState) {
+    if (route != AppRoute.forceUpdate) {
+      return AppRoute.forceUpdate.path;
+    }
+    return null;
+  }
+  if (route == AppRoute.forceUpdate) {
+    return AppRoute.home.path;
   }
   return null;
 }
 
 /// Guard: Allow splash to handle its own routing.
-String? _guardSplash(final AppRoute? route) {
-  if (route == .splash) {
+String? _guardSplash(AppRoute? route) {
+  if (route == AppRoute.splash) {
     return null; // Splash handles navigation after init
   }
   return null;
 }
 
 /// Guard: Handle authentication-based redirects.
-String? _guardAuth(final AppRoute? route, final SessionState sessionState) {
+String? _guardAuth(AppRoute? route, SessionState sessionState) {
   if (!AppConfig.authEnabled || route == null) {
     return null; // Auth disabled or unknown route, allow
   }
@@ -316,7 +338,7 @@ String? _guardAuth(final AppRoute? route, final SessionState sessionState) {
   }
 
   // Redirect authenticated users away from login
-  if (isLoggedIn && route == .login) {
+  if (isLoggedIn && route == AppRoute.login) {
     return AppRoute.home.path;
   }
 

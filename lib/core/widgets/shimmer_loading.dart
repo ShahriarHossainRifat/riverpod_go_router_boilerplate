@@ -8,7 +8,7 @@ import 'package:shimmer/shimmer.dart';
 /// Automatically adapts colors based on theme brightness.
 class ShimmerLoading extends StatelessWidget {
   /// Creates a [ShimmerLoading] widget.
-  const ShimmerLoading({
+  const new({
     required this.child,
     super.key,
     this.baseColor,
@@ -29,7 +29,7 @@ class ShimmerLoading extends StatelessWidget {
   final bool enabled;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     if (!enabled) return child;
 
     final isDark = context.theme.brightness == .dark;
@@ -46,7 +46,7 @@ class ShimmerLoading extends StatelessWidget {
 /// A shimmer loading placeholder representing a single line of text.
 class ShimmerLine extends StatelessWidget {
   /// Creates a [ShimmerLine].
-  const ShimmerLine({
+  const new({
     super.key,
     this.width,
     this.height = AppConstants.shimmerLineHeight,
@@ -63,7 +63,7 @@ class ShimmerLine extends StatelessWidget {
   final double borderRadius;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return ShimmerLoading(
       child: Container(
         width: width ?? .infinity,
@@ -80,21 +80,18 @@ class ShimmerLine extends StatelessWidget {
 /// A shimmer loading placeholder representing a circular avatar.
 class ShimmerCircle extends StatelessWidget {
   /// Creates a [ShimmerCircle].
-  const ShimmerCircle({super.key, this.size = AppConstants.shimmerCircleSize});
+  const new({super.key, this.size = AppConstants.shimmerCircleSize});
 
   /// Diameter of the circle.
   final double size;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return ShimmerLoading(
       child: Container(
         width: size,
         height: size,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          shape: .circle,
-        ),
+        decoration: const BoxDecoration(color: Colors.white, shape: .circle),
       ),
     );
   }
@@ -103,7 +100,7 @@ class ShimmerCircle extends StatelessWidget {
 /// A shimmer loading placeholder for rectangular content.
 class ShimmerBox extends StatelessWidget {
   /// Creates a [ShimmerBox].
-  const ShimmerBox({
+  const new({
     super.key,
     this.width,
     this.height,
@@ -120,7 +117,7 @@ class ShimmerBox extends StatelessWidget {
   final double borderRadius;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return ShimmerLoading(
       child: Container(
         width: width,
@@ -137,7 +134,7 @@ class ShimmerBox extends StatelessWidget {
 /// A shimmer loading placeholder resembling a list tile.
 class ShimmerListTile extends StatelessWidget {
   /// Creates a [ShimmerListTile].
-  const ShimmerListTile({
+  const new({
     super.key,
     this.hasLeading = true,
     this.hasTrailing = false,
@@ -154,10 +151,9 @@ class ShimmerListTile extends StatelessWidget {
   final int lines;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return ResponsivePadding(
       vertical: AppSpacing.sm,
-      horizontal: AppSpacing.md,
       child: Row(
         children: [
           if (hasLeading) ...[
@@ -199,11 +195,7 @@ class ShimmerListTile extends StatelessWidget {
 /// A shimmer loading placeholder for a card layout.
 class ShimmerCard extends StatelessWidget {
   /// Creates a [ShimmerCard].
-  const ShimmerCard({
-    super.key,
-    this.width,
-    this.imageHeight = 120,
-  });
+  const new({super.key, this.width, this.imageHeight = 120});
 
   /// Optional width of the card.
   final double? width;
@@ -212,7 +204,7 @@ class ShimmerCard extends StatelessWidget {
   final double imageHeight;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
@@ -224,11 +216,7 @@ class ShimmerCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: .start,
         children: [
-          ShimmerBox(
-            width: .infinity,
-            height: imageHeight,
-            borderRadius: 12,
-          ),
+          ShimmerBox(width: .infinity, height: imageHeight, borderRadius: 12),
           ResponsivePadding(
             child: Column(
               crossAxisAlignment: .start,
@@ -253,7 +241,7 @@ class ShimmerCard extends StatelessWidget {
 /// A non-scrollable list of shimmer loading placeholders.
 class ShimmerList extends StatelessWidget {
   /// Creates a [ShimmerList].
-  const ShimmerList({
+  const new({
     super.key,
     this.itemCount = 5,
     this.hasLeading = true,
@@ -274,12 +262,12 @@ class ShimmerList extends StatelessWidget {
   final int lines;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: itemCount,
-      itemBuilder: (final context, final index) => ShimmerListTile(
+      itemBuilder: (context, index) => ShimmerListTile(
         hasLeading: hasLeading,
         hasTrailing: hasTrailing,
         lines: lines,

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 /// throughout the app.
 abstract class AppColors {
   /// Private constructor to prevent instantiation.
-  const AppColors._();
+  const new _();
 
   /// Primary brand color.
   static const Color primary = Color(0xFF6750A4);

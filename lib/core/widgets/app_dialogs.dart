@@ -10,16 +10,16 @@ abstract class AppDialogs {
   ///
   /// Returns `true` if confirmed, `false` if cancelled, `null` if dismissed.
   static Future<bool?> confirm(
-    final BuildContext context, {
-    required final String title,
-    required final String message,
-    final String confirmText = 'Confirm',
-    final String cancelText = 'Cancel',
-    final bool isDangerous = false,
+    BuildContext context, {
+    required String title,
+    required String message,
+    String confirmText = 'Confirm',
+    String cancelText = 'Cancel',
+    bool isDangerous = false,
   }) {
     return showDialog<bool>(
       context: context,
-      builder: (final context) => AlertDialog(
+      builder: (context) => AlertDialog(
         title: Text(title),
         content: Text(message),
         actions: [
@@ -44,17 +44,17 @@ abstract class AppDialogs {
 
   /// Shows an alert dialog with a single action.
   static Future<void> alert(
-    final BuildContext context, {
-    required final String title,
-    required final String message,
-    final String buttonText = 'OK',
-    final IconData? icon,
+    BuildContext context, {
+    required String title,
+    required String message,
+    String buttonText = 'OK',
+    IconData? icon,
   }) {
     final theme = context.theme;
 
     return showDialog<void>(
       context: context,
-      builder: (final context) => AlertDialog(
+      builder: (context) => AlertDialog(
         icon: icon != null
             ? Icon(
                 icon,
@@ -66,7 +66,6 @@ abstract class AppDialogs {
         content: Text(message),
         actions: [
           AppButton(
-            variant: AppButtonVariant.primary,
             isExpanded: false,
             onPressed: () => Navigator.of(context).pop(),
             label: buttonText,
@@ -78,16 +77,16 @@ abstract class AppDialogs {
 
   /// Shows an error dialog.
   static Future<void> error(
-    final BuildContext context, {
-    final String title = 'Error',
-    required final String message,
-    final String buttonText = 'OK',
+    BuildContext context, {
+    required String message,
+    String title = 'Error',
+    String buttonText = 'OK',
   }) {
     final theme = context.theme;
 
     return showDialog<void>(
       context: context,
-      builder: (final context) => AlertDialog(
+      builder: (context) => AlertDialog(
         icon: Icon(
           Icons.error_outline,
           size: AppConstants.dialogIconSize,
@@ -97,7 +96,6 @@ abstract class AppDialogs {
         content: Text(message),
         actions: [
           AppButton(
-            variant: AppButtonVariant.primary,
             isExpanded: false,
             onPressed: () => Navigator.of(context).pop(),
             label: buttonText,
@@ -109,16 +107,16 @@ abstract class AppDialogs {
 
   /// Shows a success dialog.
   static Future<void> success(
-    final BuildContext context, {
-    final String title = 'Success',
-    required final String message,
-    final String buttonText = 'OK',
+    BuildContext context, {
+    required String message,
+    String title = 'Success',
+    String buttonText = 'OK',
   }) {
     final theme = context.theme;
 
     return showDialog<void>(
       context: context,
-      builder: (final context) => AlertDialog(
+      builder: (context) => AlertDialog(
         icon: Icon(
           Icons.check_circle_outline,
           size: AppConstants.dialogIconSize,
@@ -128,7 +126,6 @@ abstract class AppDialogs {
         content: Text(message),
         actions: [
           AppButton(
-            variant: AppButtonVariant.primary,
             isExpanded: false,
             onPressed: () => Navigator.of(context).pop(),
             label: buttonText,
@@ -142,22 +139,22 @@ abstract class AppDialogs {
   ///
   /// Returns the entered text or null if cancelled.
   static Future<String?> input(
-    final BuildContext context, {
-    required final String title,
-    final String? message,
-    final String? initialValue,
-    final String? hint,
-    final String confirmText = 'Submit',
-    final String cancelText = 'Cancel',
-    final int maxLines = 1,
-    final String? Function(String?)? validator,
+    BuildContext context, {
+    required String title,
+    String? message,
+    String? initialValue,
+    String? hint,
+    String confirmText = 'Submit',
+    String cancelText = 'Cancel',
+    int maxLines = 1,
+    String? Function(String?)? validator,
   }) async {
     final controller = TextEditingController(text: initialValue);
     final formKey = GlobalKey<FormState>();
 
     final result = await showDialog<String>(
       context: context,
-      builder: (final context) => AlertDialog(
+      builder: (context) => AlertDialog(
         title: Text(title),
         content: Form(
           key: formKey,
@@ -165,10 +162,7 @@ abstract class AppDialogs {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (message != null) ...[
-                Text(message),
-                const VerticalSpace.md(),
-              ],
+              if (message != null) ...[Text(message), const VerticalSpace.md()],
               TextFormField(
                 controller: controller,
                 maxLines: maxLines,
@@ -187,7 +181,6 @@ abstract class AppDialogs {
             label: cancelText,
           ),
           AppButton(
-            variant: AppButtonVariant.primary,
             isExpanded: false,
             onPressed: () {
               if (formKey.currentState?.validate() ?? false) {
@@ -208,16 +201,16 @@ abstract class AppDialogs {
   ///
   /// Returns the selected option or null if cancelled.
   static Future<T?> select<T>(
-    final BuildContext context, {
-    required final String title,
-    required final List<SelectOption<T>> options,
-    final T? selectedValue,
+    BuildContext context, {
+    required String title,
+    required List<SelectOption<T>> options,
+    T? selectedValue,
   }) {
     return showDialog<T>(
       context: context,
-      builder: (final context) => SimpleDialog(
+      builder: (context) => SimpleDialog(
         title: Text(title),
-        children: options.map((final option) {
+        children: options.map((option) {
           final isSelected = option.value == selectedValue;
           return SimpleDialogOption(
             onPressed: () => Navigator.of(context).pop(option.value),
@@ -244,10 +237,7 @@ abstract class AppDialogs {
                   ),
                 ),
                 if (isSelected)
-                  Icon(
-                    Icons.check,
-                    color: context.theme.colorScheme.primary,
-                  ),
+                  Icon(Icons.check, color: context.theme.colorScheme.primary),
               ],
             ),
           );
@@ -259,23 +249,18 @@ abstract class AppDialogs {
   /// Shows a loading dialog.
   ///
   /// Returns a function to dismiss the dialog.
-  static VoidCallback loading(
-    final BuildContext context, {
-    final String? message,
-  }) {
+  static VoidCallback loading(BuildContext context, {String? message}) {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (final context) => PopScope(
+      builder: (context) => PopScope(
         canPop: false,
         child: AlertDialog(
           content: Row(
             children: [
               const CircularProgressIndicator(),
               const HorizontalSpace.lg(),
-              Expanded(
-                child: Text(message ?? 'Please wait...'),
-              ),
+              Expanded(child: Text(message ?? 'Please wait...')),
             ],
           ),
         ),
@@ -293,7 +278,7 @@ abstract class AppDialogs {
 /// An option for selection dialogs.
 class SelectOption<T> {
   /// Creates a [SelectOption].
-  const SelectOption({
+  const new({
     required this.value,
     required this.label,
     this.icon,

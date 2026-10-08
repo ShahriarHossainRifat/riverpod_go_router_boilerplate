@@ -134,7 +134,7 @@ final class BadgeCountProvider extends $AsyncNotifierProvider<BadgeCount, int> {
   BadgeCount create() => BadgeCount();
 }
 
-String _$badgeCountHash() => r'78e80560c9ea2d6e849e367aae7ef10169a22a58';
+String _$badgeCountHash() => r'baaedd29a4e2c0db30802d6024943e1dc490c3fc';
 
 /// Manages the in-app badge count state.
 ///
@@ -175,7 +175,7 @@ abstract class _$BadgeCount extends $AsyncNotifier<int> {
   FutureOr<int> build();
   @$mustCallSuper
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<int>, int>;
     final element =
         ref.element
@@ -185,6 +185,6 @@ abstract class _$BadgeCount extends $AsyncNotifier<int> {
               Object?,
               Object?
             >;
-    element.handleCreate(ref, build);
+    return element.handleCreate(ref, build);
   }
 }

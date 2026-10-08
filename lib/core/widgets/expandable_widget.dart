@@ -14,7 +14,7 @@ import 'package:riverpod_go_router_boilerplate/core/constants/app_constants.dart
 /// ```
 class ExpandableWidget extends StatefulWidget {
   /// Creates an [ExpandableWidget].
-  const ExpandableWidget({
+  const new({
     required this.header,
     required this.child,
     super.key,
@@ -118,7 +118,7 @@ class _ExpandableWidgetState extends State<ExpandableWidget>
   }
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final hasIcon = widget.expandIcon != null || widget.collapseIcon != null;
 
     return Column(
@@ -150,7 +150,7 @@ class _ExpandableWidgetState extends State<ExpandableWidget>
         ClipRect(
           child: AnimatedBuilder(
             animation: _controller,
-            builder: (final context, final child) {
+            builder: (context, child) {
               return Align(
                 alignment: Alignment.topCenter,
                 heightFactor: _heightFactor.value,
@@ -169,7 +169,7 @@ class _ExpandableWidgetState extends State<ExpandableWidget>
 class ExpandableController {
   _ExpandableWidgetState? _state;
 
-  void _attach(final _ExpandableWidgetState state) {
+  void _attach(_ExpandableWidgetState state) {
     _state = state;
   }
 

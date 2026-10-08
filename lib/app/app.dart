@@ -8,10 +8,10 @@ import 'package:riverpod_go_router_boilerplate/l10n/generated/app_localizations.
 /// The root application widget.
 class App extends ConsumerWidget {
   /// Creates the root [App] widget.
-  const App({super.key});
+  const new({super.key});
 
   @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
     final themeMode = ref.watch(themeNotifierProvider);
     final locale = ref.watch(localeNotifierProvider);
@@ -44,11 +44,8 @@ class App extends ConsumerWidget {
       ),
 
       // Connectivity wrapper - shows offline banner
-      builder: (final context, final child) => ConnectivityWrapper(
-        bannerPosition: .top,
-        showBanner: true,
-        child: child ?? const SizedBox.shrink(),
-      ),
+      builder: (context, child) =>
+          ConnectivityWrapper(child: child ?? const SizedBox.shrink()),
     );
   }
 }

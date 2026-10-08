@@ -5,7 +5,7 @@ import 'package:riverpod_go_router_boilerplate/core/hooks/basic_hooks.dart';
 /// State for pagination with infinite scroll.
 class InfiniteScrollState<T> {
   /// Creates a [InfiniteScrollState] instance.
-  const InfiniteScrollState({
+  const new({
     required this.items,
     required this.isLoading,
     required this.hasMore,
@@ -63,9 +63,9 @@ class InfiniteScrollState<T> {
 /// }
 /// ```
 InfiniteScrollState<T> usePagination<T>({
-  required final Future<List<T>> Function(int page) fetcher,
-  final int limit = 20,
-  final int initialPage = 1,
+  required Future<List<T>> Function(int page) fetcher,
+  int limit = 20,
+  int initialPage = 1,
 }) {
   final context = useContext();
   final items = useState<List<T>>([]);

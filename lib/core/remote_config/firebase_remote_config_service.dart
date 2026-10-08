@@ -41,14 +41,14 @@ part 'firebase_remote_config_service.g.dart';
 /// - Implement graceful fallbacks when fetch fails
 /// - Don't fetch too frequently (has quotas)
 @Riverpod(keepAlive: true)
-FirebaseRemoteConfigService firebaseRemoteConfigService(final Ref ref) {
+FirebaseRemoteConfigService firebaseRemoteConfigService(Ref ref) {
   return FirebaseRemoteConfigService(ref);
 }
 
 /// Firebase Remote Config wrapper service.
 class FirebaseRemoteConfigService {
   /// Creates a [FirebaseRemoteConfigService] instance.
-  FirebaseRemoteConfigService(this._ref);
+  new(this._ref);
 
   final Ref _ref;
   FirebaseRemoteConfig? _remoteConfig;
@@ -65,8 +65,8 @@ class FirebaseRemoteConfigService {
   /// [minimumFetchInterval] controls how often new values can be fetched.
   /// Default is 1 hour in production, 0 in debug.
   Future<void> initialize({
-    final Duration? minimumFetchInterval,
-    final Duration? fetchTimeout,
+    Duration? minimumFetchInterval,
+    Duration? fetchTimeout,
   }) async {
     try {
       _remoteConfig = FirebaseRemoteConfig.instance;
@@ -150,7 +150,7 @@ class FirebaseRemoteConfigService {
   // ─────────────────────────────────────────────────────────────────────────────
 
   /// Get a boolean value.
-  bool getBool(final String key) {
+  bool getBool(String key) {
     if (!isEnabled) {
       return _defaultValues[key] as bool? ?? false;
     }
@@ -158,7 +158,7 @@ class FirebaseRemoteConfigService {
   }
 
   /// Get a string value.
-  String getString(final String key) {
+  String getString(String key) {
     if (!isEnabled) {
       return _defaultValues[key] as String? ?? '';
     }
@@ -166,7 +166,7 @@ class FirebaseRemoteConfigService {
   }
 
   /// Get an integer value.
-  int getInt(final String key) {
+  int getInt(String key) {
     if (!isEnabled) {
       return _defaultValues[key] as int? ?? 0;
     }
@@ -174,7 +174,7 @@ class FirebaseRemoteConfigService {
   }
 
   /// Get a double value.
-  double getDouble(final String key) {
+  double getDouble(String key) {
     if (!isEnabled) {
       return _defaultValues[key] as double? ?? 0.0;
     }
@@ -182,7 +182,7 @@ class FirebaseRemoteConfigService {
   }
 
   /// Get a value as a RemoteConfigValue.
-  RemoteConfigValue? getValue(final String key) {
+  RemoteConfigValue? getValue(String key) {
     if (!isEnabled) return null;
     return _remoteConfig!.getValue(key);
   }
@@ -272,12 +272,10 @@ class FirebaseRemoteConfigService {
   ///   }
   /// });
   /// ```
-  void listenForUpdates(
-    final void Function(Set<String> updatedKeys) onUpdate,
-  ) {
+  void listenForUpdates(void Function(Set<String> updatedKeys) onUpdate) {
     if (!isEnabled) return;
 
-    _remoteConfig!.onConfigUpdated.listen((final event) async {
+    _remoteConfig!.onConfigUpdated.listen((event) async {
       await _remoteConfig!.activate();
       onUpdate(event.updatedKeys);
     });
@@ -298,5 +296,5 @@ class FirebaseRemoteConfigService {
   String get minAppVersion => getString(RemoteConfigKeys.minAppVersion);
 
   /// Check if a feature is enabled.
-  bool isFeatureEnabled(final String featureKey) => getBool(featureKey);
+  bool isFeatureEnabled(String featureKey) => getBool(featureKey);
 }

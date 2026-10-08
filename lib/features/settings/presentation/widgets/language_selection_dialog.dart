@@ -5,15 +5,15 @@ import 'package:riverpod_go_router_boilerplate/l10n/generated/app_localizations.
 
 /// Shows a dialog for selecting the app language.
 void showLanguageSelectionDialog(
-  final BuildContext context,
-  final WidgetRef ref,
-  final AppLocalizations l10n,
+  BuildContext context,
+  WidgetRef ref,
+  AppLocalizations l10n,
 ) {
   final currentLocale = ref.read(localeNotifierProvider) ?? const Locale('en');
 
   showDialog<void>(
     context: context,
-    builder: (final dialogContext) => SimpleDialog(
+    builder: (dialogContext) => SimpleDialog(
       title: Text(l10n.chooseLanguage),
       children: [
         _buildLanguageOption(
@@ -46,11 +46,11 @@ void showLanguageSelectionDialog(
 }
 
 SimpleDialogOption _buildLanguageOption(
-  final BuildContext context,
-  final String languageCode,
-  final String languageName,
-  final bool isSelected,
-  final VoidCallback onTap,
+  BuildContext context,
+  String languageCode,
+  String languageName,
+  bool isSelected,
+  VoidCallback onTap,
 ) {
   return SimpleDialogOption(
     onPressed: onTap,

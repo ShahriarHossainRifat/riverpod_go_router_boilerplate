@@ -18,7 +18,7 @@ import 'package:riverpod_go_router_boilerplate/core/constants/app_constants.dart
 /// ```
 class FlipCard extends StatefulWidget {
   /// Creates a [FlipCard] widget.
-  const FlipCard({
+  const new({
     required this.front,
     required this.back,
     super.key,
@@ -97,12 +97,12 @@ class _FlipCardState extends State<FlipCard>
   }
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: widget.flipOnTap ? flip : null,
       child: AnimatedBuilder(
         animation: _animation,
-        builder: (final context, final child) {
+        builder: (context, child) {
           final angle = _animation.value * math.pi;
           final transform = Matrix4.identity()
             ..setEntry(3, 2, AppConstants.flipPerspective);
@@ -136,7 +136,7 @@ class _FlipCardState extends State<FlipCard>
 class FlipCardController {
   _FlipCardState? _state;
 
-  void _attach(final _FlipCardState state) {
+  void _attach(_FlipCardState state) {
     _state = state;
   }
 

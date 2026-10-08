@@ -13,33 +13,33 @@ part 'permission_service.g.dart';
 /// - Automatic "Open Settings" prompts for permanently denied permissions
 class PermissionService {
   /// Creates a [PermissionService] instance.
-  PermissionService(this._ref);
+  new(this._ref);
 
   final Ref _ref;
 
   FeedbackService get _feedback => _ref.read(feedbackServiceProvider);
 
   /// Check the current status of a permission.
-  Future<PermissionResult> check(final Permission permission) async {
+  Future<PermissionResult> check(Permission permission) async {
     final status = await permission.status;
     return status.toResult();
   }
 
   /// Check if a permission is granted.
-  Future<bool> isGranted(final Permission permission) async {
+  Future<bool> isGranted(Permission permission) async {
     return permission.isGranted;
   }
 
   /// Request a single permission.
-  Future<bool> request(final Permission permission) async {
+  Future<bool> request(Permission permission) async {
     final status = await permission.request();
     return status.isGranted;
   }
 
   /// Request a permission with a rationale dialog shown first.
   Future<bool> requestWithRationale(
-    final Permission permission, {
-    required final PermissionDialogConfig config,
+    Permission permission, {
+    required PermissionDialogConfig config,
   }) async {
     final currentStatus = await permission.status;
 
@@ -65,17 +65,16 @@ class PermissionService {
 
   /// Request multiple permissions at once.
   Future<Map<Permission, PermissionResult>> requestMultiple(
-    final List<Permission> permissions,
+    List<Permission> permissions,
   ) async {
     final statuses = await permissions.request();
     return statuses.map(
-      (final permission, final status) =>
-          MapEntry(permission, status.toResult()),
+      (permission, status) => MapEntry(permission, status.toResult()),
     );
   }
 
   /// Check if all specified permissions are granted.
-  Future<bool> areAllGranted(final List<Permission> permissions) async {
+  Future<bool> areAllGranted(List<Permission> permissions) async {
     for (final permission in permissions) {
       if (!await permission.isGranted) return false;
     }
@@ -85,9 +84,7 @@ class PermissionService {
   /// Open the app settings page.
   Future<bool> openSettings() => openAppSettings();
 
-  Future<bool> _handlePermanentlyDenied(
-    final PermissionDialogConfig config,
-  ) async {
+  Future<bool> _handlePermanentlyDenied(PermissionDialogConfig config) async {
     final shouldOpenSettings = await _feedback.showConfirmDialog(
       title: config.title,
       message:
@@ -102,9 +99,7 @@ class PermissionService {
     return false;
   }
 
-  Future<bool> _showRationaleDialog(
-    final PermissionDialogConfig config,
-  ) async {
+  Future<bool> _showRationaleDialog(PermissionDialogConfig config) async {
     return _feedback.showConfirmDialog(
       title: config.title,
       message: config.message,
@@ -116,6 +111,6 @@ class PermissionService {
 
 /// Provider for [PermissionService].
 @Riverpod(keepAlive: true)
-PermissionService permissionService(final Ref ref) {
+PermissionService permissionService(Ref ref) {
   return PermissionService(ref);
 }

@@ -10,7 +10,7 @@ import 'package:riverpod_go_router_boilerplate/features/onboarding/presentation/
 import 'package:riverpod_go_router_boilerplate/l10n/generated/app_localizations.dart';
 
 /// Onboarding pages - customize these for your app
-List<OnboardingPageData> _buildPages(final AppLocalizations l10n) => [
+List<OnboardingPageData> _buildPages(AppLocalizations l10n) => [
   OnboardingPageData(
     title: l10n.onboardingWelcomeTitle,
     description: l10n.onboardingWelcomeDescription,
@@ -34,10 +34,10 @@ List<OnboardingPageData> _buildPages(final AppLocalizations l10n) => [
 /// page transitions.
 class OnboardingPage extends HookConsumerWidget {
   /// Creates an [OnboardingPage] instance.
-  const OnboardingPage({super.key});
+  const new({super.key});
 
   @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final pageController = usePageController();
     final currentPage = useState(0);
     final theme = context.theme;
@@ -72,8 +72,8 @@ class OnboardingPage extends HookConsumerWidget {
               child: PageView.builder(
                 controller: pageController,
                 itemCount: pages.length,
-                onPageChanged: (final index) => currentPage.value = index,
-                itemBuilder: (final context, final index) {
+                onPageChanged: (index) => currentPage.value = index,
+                itemBuilder: (context, index) {
                   final page = pages[index];
                   return OnboardingPageContent(page: page);
                 },
@@ -88,7 +88,7 @@ class OnboardingPage extends HookConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(
                     pages.length,
-                    (final index) => PageIndicator(
+                    (index) => PageIndicator(
                       isActive: index == currentPage.value,
                       color: theme.colorScheme.primary,
                     ),
@@ -99,7 +99,6 @@ class OnboardingPage extends HookConsumerWidget {
 
             // Navigation buttons with slide animation
             SlideIn(
-              direction: .fromBottom,
               delay: AppConstants.staggerDelay * 6,
               child: ResponsivePadding(
                 child: AnimatedSize(
@@ -110,7 +109,7 @@ class OnboardingPage extends HookConsumerWidget {
                       // Back button with animated width transition
                       AnimatedSwitcher(
                         duration: AppConstants.animationNormal,
-                        transitionBuilder: (final child, final animation) {
+                        transitionBuilder: (child, animation) {
                           return SizeTransition(
                             sizeFactor: animation,
                             axis: Axis.horizontal,
@@ -179,10 +178,7 @@ class OnboardingPage extends HookConsumerWidget {
     );
   }
 
-  Future<void> _completeOnboarding(
-    final BuildContext context,
-    final WidgetRef ref,
-  ) async {
+  Future<void> _completeOnboarding(BuildContext context, WidgetRef ref) async {
     // Mark onboarding as completed
     final onboardingService = ref.read(onboardingServiceProvider);
     await onboardingService.complete();

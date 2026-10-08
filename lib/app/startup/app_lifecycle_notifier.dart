@@ -39,11 +39,11 @@ class AppLifecycleNotifier extends Notifier<AppLifecycleState>
   }
 
   /// Process a startup event and potentially transition to a new state.
-  Future<void> processEvent(final StartupEvent event) async {
+  Future<void> processEvent(StartupEvent event) async {
     final signals = await _collectSignals(event);
     final newState = StartupStateResolver.resolve(signals);
 
-    if (newState.runtimeType != state.currentState.runtimeType) {
+    if (!_isSameStateType(newState, state.currentState)) {
       _transitionTo(newState, event);
     } else {
       state = state.copyWith(lastEvent: event);
@@ -55,12 +55,12 @@ class AppLifecycleNotifier extends Notifier<AppLifecycleState>
     final signals = await _collectCurrentSignals();
     final newState = StartupStateResolver.resolve(signals);
 
-    if (newState.runtimeType != state.currentState.runtimeType) {
+    if (!_isSameStateType(newState, state.currentState)) {
       _transitionTo(newState, null);
     }
   }
 
-  Future<StartupSignals> _collectSignals(final StartupEvent event) async {
+  Future<StartupSignals> _collectSignals(StartupEvent event) async {
     return switch (event) {
       AppLaunched() => _collectCurrentSignals(),
       UserAuthenticated() => StartupSignals(
@@ -131,7 +131,7 @@ class AppLifecycleNotifier extends Notifier<AppLifecycleState>
     return sessionState.isAuthenticated;
   }
 
-  void _transitionTo(final StartupState newState, final StartupEvent? event) {
+  void _transitionTo(StartupState newState, StartupEvent? event) {
     state = AppLifecycleState(
       currentState: newState,
       lastEvent: event,
@@ -141,16 +141,30 @@ class AppLifecycleNotifier extends Notifier<AppLifecycleState>
     notifyListeners();
   }
 
+  /// Type-safe comparison using sealed class pattern matching.
+  /// Avoids fragile runtimeType checks that break with obfuscation.
+  bool _isSameStateType(StartupState a, StartupState b) {
+    return switch ((a, b)) {
+      (AuthenticatedState(), AuthenticatedState()) => true,
+      (UnauthenticatedState(), UnauthenticatedState()) => true,
+      (OnboardingState(), OnboardingState()) => true,
+      (MaintenanceState(), MaintenanceState()) => true,
+      (ForceUpdateState(), ForceUpdateState()) => true,
+      (PublicState(), PublicState()) => true,
+      _ => false,
+    };
+  }
+
   // --- Convenience methods ---
   /// Called when a user successfully logs in.
-  Future<void> onUserLoggedIn(final String userId) async =>
+  Future<void> onUserLoggedIn(String userId) async =>
       processEvent(UserAuthenticated(userId: userId));
 
   /// Called when a user logs out.
   Future<void> onUserLoggedOut() async => processEvent(const UserLoggedOut());
 
   /// Called when a user session expires.
-  Future<void> onSessionExpired({final String? reason}) async =>
+  Future<void> onSessionExpired({String? reason}) async =>
       processEvent(SessionExpiredEvent(reason: reason));
 
   /// Called when onboarding is completed.
@@ -158,11 +172,10 @@ class AppLifecycleNotifier extends Notifier<AppLifecycleState>
       processEvent(const OnboardingCompleted());
 
   /// Called when maintenance mode is enabled or disabled.
-  Future<void> onMaintenanceModeChanged({
-    required final bool isEnabled,
-  }) async => processEvent(
-    isEnabled ? const MaintenanceEnabled() : const MaintenanceDisabled(),
-  );
+  Future<void> onMaintenanceModeChanged({required bool isEnabled}) async =>
+      processEvent(
+        isEnabled ? const MaintenanceEnabled() : const MaintenanceDisabled(),
+      );
 
   /// Handle app lifecycle state changes (foreground/background).
   ///
@@ -205,16 +218,16 @@ final appLifecycleNotifierProvider =
     );
 
 /// Listenable for GoRouter refresh.
-final appLifecycleListenableProvider = Provider<Listenable>((final ref) {
+final appLifecycleListenableProvider = Provider<Listenable>((ref) {
   return ref.watch(appLifecycleNotifierProvider.notifier);
 });
 
 /// Current startup state for convenience.
-final currentStartupStateProvider = Provider<StartupState>((final ref) {
+final currentStartupStateProvider = Provider<StartupState>((ref) {
   return ref.watch(appLifecycleNotifierProvider).currentState;
 });
 
 /// Whether app lifecycle is initialized.
-final isLifecycleInitializedProvider = Provider<bool>((final ref) {
+final isLifecycleInitializedProvider = Provider<bool>((ref) {
   return ref.watch(appLifecycleNotifierProvider).isInitialized;
 });

@@ -20,6 +20,12 @@ analyzer:
     - "**/*.freezed.dart"
     - "**/generated_plugin_registrant.dart"
     - "build/**"
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 
 linter:
   rules:
@@ -30,7 +36,7 @@ linter:
     lines_longer_than_80_chars: false
     # Allow some flexibility in sorting
     sort_pub_dependencies: false
-    # Immutability best practice - prevents accidental parameter reassignment
-    # Must disable avoid_final_parameters to enable prefer_final_parameters
-    avoid_final_parameters: false
-    prefer_final_parameters: true
+    # Modern Dart (3.13+) does not allow final on formal parameters
+    avoid_final_parameters: true
+    discarded_futures: false
+    use_setters_to_change_properties: false

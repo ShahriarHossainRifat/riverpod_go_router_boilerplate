@@ -89,7 +89,7 @@ final class LocaleNotifierProvider
   }
 }
 
-String _$localeNotifierHash() => r'edfb973ad6f4c45c2afbc92a536c6e8064bf9a39';
+String _$localeNotifierHash() => r'2cb148f7a410c86a502b62ada61c996d407a852c';
 
 /// Provider for managing the app's locale.
 ///
@@ -112,7 +112,7 @@ abstract class _$LocaleNotifier extends $Notifier<Locale?> {
   Locale? build();
   @$mustCallSuper
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Locale?, Locale?>;
     final element =
         ref.element
@@ -122,61 +122,6 @@ abstract class _$LocaleNotifier extends $Notifier<Locale?> {
               Object?,
               Object?
             >;
-    element.handleCreate(ref, build);
+    return element.handleCreate(ref, build);
   }
 }
-
-/// Provider for SharedPreferences.
-/// This should be overridden in main.dart with the initialized instance.
-
-@ProviderFor(sharedPreferences)
-final sharedPreferencesProvider = SharedPreferencesProvider._();
-
-/// Provider for SharedPreferences.
-/// This should be overridden in main.dart with the initialized instance.
-
-final class SharedPreferencesProvider
-    extends
-        $FunctionalProvider<
-          SharedPreferences,
-          SharedPreferences,
-          SharedPreferences
-        >
-    with $Provider<SharedPreferences> {
-  /// Provider for SharedPreferences.
-  /// This should be overridden in main.dart with the initialized instance.
-  SharedPreferencesProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'sharedPreferencesProvider',
-        isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$sharedPreferencesHash();
-
-  @$internal
-  @override
-  $ProviderElement<SharedPreferences> $createElement(
-    $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
-
-  @override
-  SharedPreferences create(Ref ref) {
-    return sharedPreferences(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(SharedPreferences value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<SharedPreferences>(value),
-    );
-  }
-}
-
-String _$sharedPreferencesHash() => r'1bd093e8bf456de8637c2eab230f6bf63716eb48';

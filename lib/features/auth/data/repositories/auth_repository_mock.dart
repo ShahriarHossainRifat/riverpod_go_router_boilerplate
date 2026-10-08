@@ -1,6 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:riverpod_go_router_boilerplate/core/constants/storage_keys.dart';
 import 'package:riverpod_go_router_boilerplate/core/constants/app_constants.dart';
+import 'package:riverpod_go_router_boilerplate/core/constants/storage_keys.dart';
 import 'package:riverpod_go_router_boilerplate/core/result/result.dart';
 import 'package:riverpod_go_router_boilerplate/features/auth/domain/entities/user.dart';
 import 'package:riverpod_go_router_boilerplate/features/auth/domain/repositories/auth_repository.dart';
@@ -22,13 +22,13 @@ import 'package:riverpod_go_router_boilerplate/features/auth/domain/repositories
 /// - Any other email - Successful login
 class AuthRepositoryMock implements AuthRepository {
   /// Creates a [AuthRepositoryMock] instance.
-  AuthRepositoryMock({required this.secureStorage});
+  new({required this.secureStorage});
 
   /// Secure storage for storing mock tokens.
   final FlutterSecureStorage secureStorage;
 
   @override
-  Future<Result<User>> login(final String email, final String password) async {
+  Future<Result<User>> login(String email, String password) async {
     // Simulate slow network for testing
     final delay = email == 'slow@test.com'
         ? AppConstants.mockSlowNetworkDelay
@@ -105,13 +105,13 @@ class AuthRepositoryMock implements AuthRepository {
   }
 
   /// Extract a display name from email address
-  String _extractNameFromEmail(final String email) {
+  String _extractNameFromEmail(String email) {
     final localPart = email.split('@').first;
     return localPart
         .replaceAll(RegExp('[._-]'), ' ')
         .split(' ')
         .map(
-          (final word) => word.isNotEmpty
+          (word) => word.isNotEmpty
               ? '${word[0].toUpperCase()}${word.substring(1)}'
               : '',
         )

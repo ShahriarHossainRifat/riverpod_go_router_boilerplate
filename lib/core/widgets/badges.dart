@@ -4,7 +4,7 @@ import 'package:riverpod_go_router_boilerplate/core/extensions/context_extension
 /// A badge widget for displaying counts or status.
 class AppBadge extends StatelessWidget {
   /// Creates an [AppBadge].
-  const AppBadge({
+  const new({
     super.key,
     this.count,
     this.label,
@@ -45,7 +45,7 @@ class AppBadge extends StatelessWidget {
   final AppBadgePosition position;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final theme = context.theme;
     final badgeColor = color ?? theme.colorScheme.error;
     final badgeTextColor = textColor ?? theme.colorScheme.onError;

@@ -5,7 +5,7 @@ import 'package:riverpod_go_router_boilerplate/core/hooks/basic_hooks.dart';
 /// State for async operations with loading/error states.
 class AsyncState<T> {
   /// Creates an [AsyncState] instance.
-  const AsyncState({
+  const new({
     required this.data,
     required this.isLoading,
     required this.error,
@@ -42,7 +42,7 @@ AsyncState<T> useAsyncState<T>() {
   final isLoading = useState(false);
   final error = useState<Object?>(null);
 
-  Future<void> execute(final Future<T> Function() operation) async {
+  Future<void> execute(Future<T> Function() operation) async {
     isLoading.value = true;
     error.value = null;
     try {
@@ -72,7 +72,7 @@ AsyncState<T> useAsyncState<T>() {
 /// State for countdown timer.
 class CountdownState {
   /// Creates a [CountdownState] instance.
-  const CountdownState({
+  const new({
     required this.remaining,
     required this.isRunning,
     required this.start,
@@ -105,7 +105,7 @@ class CountdownState {
 /// countdown.start();
 /// print(countdown.remaining);
 /// ```
-CountdownState useCountdown(final int initialSeconds) {
+CountdownState useCountdown(int initialSeconds) {
   final context = useContext();
   final remaining = useState(initialSeconds);
   final isRunning = useState(false);
@@ -130,7 +130,7 @@ CountdownState useCountdown(final int initialSeconds) {
     isRunning: isRunning.value,
     start: () => isRunning.value = true,
     pause: () => isRunning.value = false,
-    reset: ([final int? newValue]) {
+    reset: ([newValue]) {
       remaining.value = newValue ?? initialSeconds;
       isRunning.value = false;
     },

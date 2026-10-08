@@ -20,7 +20,7 @@ class NotificationsEnabled extends _$NotificationsEnabled {
   }
 
   /// Set notifications enabled state.
-  void setEnabled({required final bool enabled}) {
+  void setEnabled({required bool enabled}) {
     state = enabled;
   }
 }
@@ -33,10 +33,10 @@ class NotificationsEnabled extends _$NotificationsEnabled {
 /// - Using context extensions for theme access
 class NotificationSettings extends ConsumerWidget {
   /// Creates a [NotificationSettings] instance.
-  const NotificationSettings({super.key});
+  const new({super.key});
 
   @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isEnabled = ref.watch(notificationsEnabledProvider);
     final theme = context.theme;
     final l10n = AppLocalizations.of(context);
@@ -58,7 +58,7 @@ class NotificationSettings extends ConsumerWidget {
             ),
           ),
           value: isEnabled,
-          onChanged: (final value) {
+          onChanged: (value) {
             ref
                 .read(notificationsEnabledProvider.notifier)
                 .setEnabled(enabled: value);

@@ -9,16 +9,16 @@ final authRoutes = [
   GoRoute(
     path: AppRoute.login.path,
     name: AppRoute.login.name,
-    builder: (final context, final state) => const LoginPage(),
+    builder: (context, state) => const LoginPage(),
   ),
   GoRoute(
     path: AppRoute.maintenance.path,
     name: AppRoute.maintenance.name,
-    builder: (final context, final state) => const MaintenancePage(),
+    builder: (context, state) => const MaintenancePage(),
   ),
   GoRoute(
     path: AppRoute.forceUpdate.path,
     name: AppRoute.forceUpdate.name,
-    builder: (final context, final state) => const ForceUpdatePage(),
+    builder: (context, state) => const ForceUpdatePage(),
   ),
 ];

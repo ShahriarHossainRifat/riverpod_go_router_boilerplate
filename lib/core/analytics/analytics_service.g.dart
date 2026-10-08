@@ -165,7 +165,7 @@ final class AnalyticsServiceProvider
   }
 }
 
-String _$analyticsServiceHash() => r'5902ca77e4527cf033e3560211fe34729ec28bc3';
+String _$analyticsServiceHash() => r'20332d0f7e201d5ec00bf6d6b39de54d761c020a';
 
 /// Provides the FirebaseAnalyticsObserver for GoRouter.
 
@@ -217,4 +217,4 @@ final class AnalyticsObserverProvider
   }
 }
 
-String _$analyticsObserverHash() => r'40e1ff81a9b71578455baa70a1843f3f839ca52e';
+String _$analyticsObserverHash() => r'88aef89370f95d5445aa06c54b7e84c54167dc8a';

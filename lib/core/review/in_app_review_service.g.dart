@@ -59,4 +59,4 @@ final class InAppReviewServiceProvider
 }
 
 String _$inAppReviewServiceHash() =>
-    r'c6a8a041c9c1cac18b337219a2fa801696039edb';
+    r'35129c332f71bdfeb37461fc5d2434d87d0345c1';

@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Service for managing onboarding state.
 class OnboardingService {
   /// Creates an [OnboardingService] instance.
-  OnboardingService(this._prefs);
+  new(this._prefs);
 
   final SharedPreferences _prefs;
   static const _completedKey = 'onboarding_completed';
@@ -25,12 +25,12 @@ class OnboardingService {
 }
 
 /// Provider for onboarding service
-final onboardingServiceProvider = Provider<OnboardingService>((final ref) {
+final onboardingServiceProvider = Provider<OnboardingService>((ref) {
   final prefs = ref.watch(sharedPreferencesProvider);
   return OnboardingService(prefs);
 });
 
 /// Provider for checking if onboarding is completed
-final isOnboardingCompletedProvider = Provider<bool>((final ref) {
+final isOnboardingCompletedProvider = Provider<bool>((ref) {
   return ref.watch(onboardingServiceProvider).isCompleted;
 });

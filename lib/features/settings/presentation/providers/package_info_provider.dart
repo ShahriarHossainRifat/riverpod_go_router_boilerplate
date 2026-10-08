@@ -5,6 +5,6 @@ part 'package_info_provider.g.dart';
 
 /// Provider for package info.
 @Riverpod(keepAlive: true)
-Future<PackageInfo> packageInfo(final Ref ref) async {
+Future<PackageInfo> packageInfo(Ref ref) async {
   return PackageInfo.fromPlatform();
 }

@@ -30,20 +30,20 @@ abstract class AppAnimations {
 
   /// Fade page transition.
   static Widget fadeTransition(
-    final BuildContext context,
-    final Animation<double> animation,
-    final Animation<double> secondaryAnimation,
-    final Widget child,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
   ) {
     return FadeTransition(opacity: animation, child: child);
   }
 
   /// Slide up page transition.
   static Widget slideUpTransition(
-    final BuildContext context,
-    final Animation<double> animation,
-    final Animation<double> secondaryAnimation,
-    final Widget child,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
   ) {
     final tween = Tween(
       begin: const Offset(0, 1),
@@ -55,10 +55,10 @@ abstract class AppAnimations {
 
   /// Slide from right page transition.
   static Widget slideRightTransition(
-    final BuildContext context,
-    final Animation<double> animation,
-    final Animation<double> secondaryAnimation,
-    final Widget child,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
   ) {
     final tween = Tween(
       begin: const Offset(1, 0),
@@ -70,14 +70,15 @@ abstract class AppAnimations {
 
   /// Scale page transition.
   static Widget scaleTransition(
-    final BuildContext context,
-    final Animation<double> animation,
-    final Animation<double> secondaryAnimation,
-    final Widget child,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
   ) {
-    final tween = Tween(begin: 0.9, end: 1.0).chain(
-      CurveTween(curve: standard),
-    );
+    final tween = Tween<double>(
+      begin: 0.9,
+      end: 1.0,
+    ).chain(CurveTween(curve: standard));
 
     return ScaleTransition(
       scale: animation.drive(tween),

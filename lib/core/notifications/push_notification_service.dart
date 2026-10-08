@@ -9,12 +9,7 @@ part 'push_notification_service.g.dart';
 /// Represents a push notification message.
 class PushMessage {
   /// Creates a [PushMessage] instance.
-  const PushMessage({
-    this.title,
-    this.body,
-    this.data,
-    this.imageUrl,
-  });
+  const new({this.title, this.body, this.data, this.imageUrl});
 
   /// Notification title.
   final String? title;
@@ -67,7 +62,7 @@ class PushMessage {
 /// ```
 class PushNotificationService {
   /// Creates a [PushNotificationService] instance.
-  PushNotificationService(this._ref);
+  new(this._ref);
 
   final Ref _ref;
 
@@ -204,7 +199,7 @@ class PushNotificationService {
   }
 
   /// Subscribe to a topic.
-  Future<void> subscribeToTopic(final String topic) async {
+  Future<void> subscribeToTopic(String topic) async {
     if (!isEnabled) return;
 
     _logger.i('Subscribed to topic: $topic');
@@ -213,7 +208,7 @@ class PushNotificationService {
   }
 
   /// Unsubscribe from a topic.
-  Future<void> unsubscribeFromTopic(final String topic) async {
+  Future<void> unsubscribeFromTopic(String topic) async {
     if (!isEnabled) return;
 
     _logger.i('Unsubscribed from topic: $topic');
@@ -240,7 +235,7 @@ class PushNotificationService {
 
 /// Provider for [PushNotificationService].
 @Riverpod(keepAlive: true)
-PushNotificationService pushNotificationService(final Ref ref) {
+PushNotificationService pushNotificationService(Ref ref) {
   final service = PushNotificationService(ref);
   ref.onDispose(service.dispose);
   return service;

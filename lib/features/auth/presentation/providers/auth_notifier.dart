@@ -40,14 +40,14 @@ class AuthNotifier extends _$AuthNotifier {
   }
 
   /// Attempt to login with credentials.
-  Future<void> login(final String email, final String password) async {
+  Future<void> login(String email, String password) async {
     state = const AsyncLoading();
 
     final result = await _repo.login(email, password);
 
     state = result.fold(
       onSuccess: AsyncData.new,
-      onFailure: (final error) => AsyncError(error, StackTrace.current),
+      onFailure: (error) => AsyncError(error, StackTrace.current),
     );
 
     // Track login event (success or failure)
@@ -65,7 +65,7 @@ class AuthNotifier extends _$AuthNotifier {
         state = const AsyncData(null);
         ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.logout);
       },
-      onFailure: (final error) {
+      onFailure: (error) {
         // Still clear local state even if server logout fails
         state = const AsyncData(null);
         ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.logout);
@@ -83,20 +83,23 @@ class AuthNotifier extends _$AuthNotifier {
   User? get currentUser => state.value;
 }
 
-/// Convenience provider for checking if user is authenticated.
+/// Convenience provider for checking authentication status from auth state.
 ///
-/// Usage: `ref.watch(isAuthenticatedProvider)`
+/// Prefer [isAuthenticatedProvider] from session_service.dart for most uses.
+/// This provider reads directly from the auth AsyncValue.
+///
+/// Usage: `ref.watch(authIsAuthenticatedProvider)`
 @riverpod
-bool isAuthenticated(final Ref ref) {
+bool authIsAuthenticated(Ref ref) {
   final authState = ref.watch(authProvider);
   return authState.value != null;
 }
 
-/// Convenience provider for getting the current user.
+/// Convenience provider for getting the current authenticated user.
 ///
 /// Returns null if not authenticated or loading.
-/// Usage: `ref.watch(currentUserProvider)`
+/// Usage: `ref.watch(currentAuthUserProvider)`
 @riverpod
-User? currentUser(final Ref ref) {
+User? currentAuthUser(Ref ref) {
   return ref.watch(authProvider).value;
 }

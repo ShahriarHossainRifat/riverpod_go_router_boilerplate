@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_go_router_boilerplate/app/router/app_router.dart';
-import 'package:riverpod_go_router_boilerplate/features/auth/auth.dart';
+import 'package:riverpod_go_router_boilerplate/core/session/session.dart';
 
 /// BuildContext extension methods for common operations.
 extension BuildContextExtensions on BuildContext {
@@ -64,11 +64,7 @@ extension BuildContextExtensions on BuildContext {
   bool get isDesktop => screenWidth >= 1024;
 
   /// Get responsive value based on screen size
-  T responsive<T>({
-    required final T mobile,
-    final T? tablet,
-    final T? desktop,
-  }) {
+  T responsive<T>({required T mobile, T? tablet, T? desktop}) {
     if (isDesktop) return desktop ?? tablet ?? mobile;
     if (isTablet) return tablet ?? mobile;
     return mobile;
@@ -79,7 +75,7 @@ extension BuildContextExtensions on BuildContext {
   // ─────────────────────────────────────────────────────────────────────────────
 
   /// Pop the current route
-  void pop<T>([final T? result]) => Navigator.of(this).pop(result);
+  void pop<T>([T? result]) => Navigator.of(this).pop(result);
 
   /// Check if can pop
   bool get canPop => Navigator.of(this).canPop();
@@ -92,8 +88,7 @@ extension BuildContextExtensions on BuildContext {
   void unfocus() => FocusScope.of(this).unfocus();
 
   /// Request focus on a specific node
-  void requestFocus(final FocusNode node) =>
-      FocusScope.of(this).requestFocus(node);
+  void requestFocus(FocusNode node) => FocusScope.of(this).requestFocus(node);
 
   // ─────────────────────────────────────────────────────────────────────────────
   // SNACKBAR
@@ -101,9 +96,9 @@ extension BuildContextExtensions on BuildContext {
 
   /// Show a snackbar with the given message
   void showSnackBar(
-    final String message, {
-    final Duration? duration,
-    final SnackBarAction? action,
+    String message, {
+    Duration? duration,
+    SnackBarAction? action,
   }) {
     ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
@@ -115,19 +110,15 @@ extension BuildContextExtensions on BuildContext {
   }
 
   /// Show an error snackbar
-  void showErrorSnackBar(final String message) {
-    ScaffoldMessenger.of(
-      this,
-    ).showSnackBar(
+  void showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(content: Text(message), backgroundColor: colorScheme.error),
     );
   }
 
   /// Show a success snackbar
-  void showSuccessSnackBar(final String message) {
-    ScaffoldMessenger.of(
-      this,
-    ).showSnackBar(
+  void showSuccessSnackBar(String message) {
+    ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(content: Text(message), backgroundColor: Colors.green),
     );
   }
@@ -152,9 +143,9 @@ extension BuildContextExtensions on BuildContext {
   /// );
   /// ```
   void pushRouteIfAuthenticatedElse({
-    required final WidgetRef widgetRef,
-    required final AppRoute authenticatedRoute,
-    required final AppRoute unauthenticatedRoute,
+    required WidgetRef widgetRef,
+    required AppRoute authenticatedRoute,
+    required AppRoute unauthenticatedRoute,
   }) {
     final isAuthenticated = widgetRef.read(isAuthenticatedProvider);
 
@@ -179,9 +170,9 @@ extension BuildContextExtensions on BuildContext {
   /// );
   /// ```
   void goRouteIfAuthenticatedElse({
-    required final WidgetRef widgetRef,
-    required final AppRoute authenticatedRoute,
-    required final AppRoute unauthenticatedRoute,
+    required WidgetRef widgetRef,
+    required AppRoute authenticatedRoute,
+    required AppRoute unauthenticatedRoute,
   }) {
     final isAuthenticated = widgetRef.read(isAuthenticatedProvider);
 
@@ -208,9 +199,9 @@ extension BuildContextExtensions on BuildContext {
   /// );
   /// ```
   void executeIfAuthenticatedElse({
-    required final WidgetRef widgetRef,
-    required final VoidCallback action,
-    required final AppRoute unauthenticatedRoute,
+    required WidgetRef widgetRef,
+    required VoidCallback action,
+    required AppRoute unauthenticatedRoute,
   }) {
     final isAuthenticated = widgetRef.read(isAuthenticatedProvider);
 

@@ -16,7 +16,7 @@ import 'package:riverpod_go_router_boilerplate/core/widgets/spacing.dart';
 /// - Routes to appropriate page based on startup state
 class SplashPage extends ConsumerStatefulWidget {
   /// Creates the [SplashPage] widget.
-  const SplashPage({super.key});
+  const new({super.key});
 
   @override
   ConsumerState<SplashPage> createState() => _SplashPageState();
@@ -64,7 +64,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   }
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Column(
@@ -82,7 +82,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   }
 
   /// Builds the app logo container.
-  Widget _buildLogoContainer(final BuildContext context) {
+  Widget _buildLogoContainer(BuildContext context) {
     final colorScheme = context.colorScheme;
 
     return Container(
@@ -92,33 +92,27 @@ class _SplashPageState extends ConsumerState<SplashPage> {
         color: colorScheme.primaryContainer,
         borderRadius: .circular(AppConstants.borderRadiusMedium),
       ),
-      child: Icon(
-        Icons.flutter_dash,
-        size: 64,
-        color: colorScheme.primary,
-      ),
+      child: Icon(Icons.flutter_dash, size: 64, color: colorScheme.primary),
     );
   }
 
   /// Builds the app name text.
-  Widget _buildAppName(final BuildContext context) {
+  Widget _buildAppName(BuildContext context) {
     final textTheme = context.textTheme;
 
     return Text(
       'Flutter Boilerplate',
-      style: textTheme.headlineSmall?.copyWith(
-        fontWeight: .bold,
-      ),
+      style: textTheme.headlineSmall?.copyWith(fontWeight: .bold),
     );
   }
 }
 
 /// Loading indicator shown during app initialization.
 class _LoadingIndicator extends StatelessWidget {
-  const _LoadingIndicator();
+  const new();
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return const LoadingWidget();
   }
 }

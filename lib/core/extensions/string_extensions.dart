@@ -24,14 +24,14 @@ extension StringExtensions on String {
   /// Capitalize each word
   String get titleCase {
     if (isEmpty) return this;
-    return split(' ').map((final word) => word.capitalized).join(' ');
+    return split(' ').map((word) => word.capitalized).join(' ');
   }
 
   /// Remove all whitespace
   String get removeWhitespace => replaceAll(RegExp(r'\s+'), '');
 
   /// Truncate with ellipsis
-  String truncate(final int maxLength, {final String suffix = '...'}) {
+  String truncate(int maxLength, {String suffix = '...'}) {
     if (length <= maxLength) return this;
     return '${substring(0, maxLength - suffix.length)}$suffix';
   }
@@ -65,7 +65,7 @@ extension NullableStringExtensions on String? {
   String get orEmpty => this ?? '';
 
   /// Returns the string or default value if null/empty
-  String orDefault(final String defaultValue) {
+  String orDefault(String defaultValue) {
     return isNullOrEmpty ? defaultValue : this!;
   }
 }

@@ -59,4 +59,4 @@ final class LocalNotificationServiceProvider
 }
 
 String _$localNotificationServiceHash() =>
-    r'd18b903785ea8bab76cff1963ffc086269d05edb';
+    r'8ee43da67e58995f0a95d0b0d69d3f4db6b269ba';

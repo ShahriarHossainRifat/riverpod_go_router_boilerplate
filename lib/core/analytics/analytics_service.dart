@@ -45,13 +45,13 @@ part 'analytics_service.g.dart';
 /// - Don't log PII (personally identifiable information)
 /// - Use user properties for segmentation
 @Riverpod(keepAlive: true)
-AnalyticsService analyticsService(final Ref ref) {
+AnalyticsService analyticsService(Ref ref) {
   return AnalyticsService(ref);
 }
 
 /// Provides the FirebaseAnalyticsObserver for GoRouter.
 @Riverpod(keepAlive: true)
-FirebaseAnalyticsObserver? analyticsObserver(final Ref ref) {
+FirebaseAnalyticsObserver? analyticsObserver(Ref ref) {
   final analytics = ref.watch(analyticsServiceProvider);
   return analytics.observer;
 }
@@ -59,7 +59,7 @@ FirebaseAnalyticsObserver? analyticsObserver(final Ref ref) {
 /// Firebase Analytics wrapper service.
 class AnalyticsService {
   /// Creates an [AnalyticsService] instance.
-  AnalyticsService(this._ref);
+  new(this._ref);
 
   final Ref _ref;
   FirebaseAnalytics? _analytics;
@@ -78,7 +78,7 @@ class AnalyticsService {
   /// Initialize Firebase Analytics.
   ///
   /// Call this after Firebase.initializeApp().
-  Future<void> initialize({final bool enableInDebug = false}) async {
+  Future<void> initialize({bool enableInDebug = false}) async {
     try {
       _analytics = FirebaseAnalytics.instance;
 
@@ -105,7 +105,7 @@ class AnalyticsService {
   // ─────────────────────────────────────────────────────────────────────────────
 
   /// Log user login event.
-  Future<void> logLogin({final String? method}) async {
+  Future<void> logLogin({String? method}) async {
     if (method != null) {
       await _logEvent(AnalyticsEvents.login, parameters: {'method': method});
     } else {
@@ -114,7 +114,7 @@ class AnalyticsService {
   }
 
   /// Log user signup event.
-  Future<void> logSignUp({final String? method}) async {
+  Future<void> logSignUp({String? method}) async {
     if (method != null) {
       await _logEvent(AnalyticsEvents.signUp, parameters: {'method': method});
     } else {
@@ -124,8 +124,8 @@ class AnalyticsService {
 
   /// Log screen view event.
   Future<void> logScreenView({
-    required final String screenName,
-    final String? screenClass,
+    required String screenName,
+    String? screenClass,
   }) async {
     if (!isEnabled) return;
 
@@ -140,7 +140,7 @@ class AnalyticsService {
   }
 
   /// Log search event.
-  Future<void> logSearch({required final String searchTerm}) async {
+  Future<void> logSearch({required String searchTerm}) async {
     await _logEvent(
       AnalyticsEvents.search,
       parameters: {'search_term': searchTerm},
@@ -149,26 +149,26 @@ class AnalyticsService {
 
   /// Log share event.
   Future<void> logShare({
-    required final String contentType,
-    required final String itemId,
-    final String? method,
+    required String contentType,
+    required String itemId,
+    String? method,
   }) async {
     await _logEvent(
       AnalyticsEvents.share,
       parameters: {
         'content_type': contentType,
         'item_id': itemId,
-        if (method != null) 'method': method,
+        'method': ?method,
       },
     );
   }
 
   /// Log purchase event.
   Future<void> logPurchase({
-    required final String transactionId,
-    required final double value,
-    required final String currency,
-    final List<AnalyticsEventItem>? items,
+    required String transactionId,
+    required double value,
+    required String currency,
+    List<AnalyticsEventItem>? items,
   }) async {
     if (!isEnabled) return;
 
@@ -196,15 +196,12 @@ class AnalyticsService {
 
   /// Log button click event.
   Future<void> logButtonClick({
-    required final String buttonName,
-    final String? screenName,
+    required String buttonName,
+    String? screenName,
   }) async {
     await _logEvent(
       AnalyticsEvents.buttonClick,
-      parameters: {
-        'button_name': buttonName,
-        if (screenName != null) 'screen_name': screenName,
-      },
+      parameters: {'button_name': buttonName, 'screen_name': ?screenName},
     );
   }
 
@@ -215,17 +212,11 @@ class AnalyticsService {
   /// Log a custom event.
   ///
   /// Use constants from [AnalyticsEvents] for consistency.
-  Future<void> logEvent(
-    final String name, {
-    final Map<String, Object>? parameters,
-  }) async {
+  Future<void> logEvent(String name, {Map<String, Object>? parameters}) async {
     await _logEvent(name, parameters: parameters);
   }
 
-  Future<void> _logEvent(
-    final String name, {
-    final Map<String, Object>? parameters,
-  }) async {
+  Future<void> _logEvent(String name, {Map<String, Object>? parameters}) async {
     if (!isEnabled) {
       _logger.d('Analytics disabled, skipping event: $name');
       return;
@@ -245,7 +236,7 @@ class AnalyticsService {
   /// Set the user ID for analytics.
   ///
   /// Use a hashed/anonymized identifier for privacy.
-  Future<void> setUserId(final String? userId) async {
+  Future<void> setUserId(String? userId) async {
     if (!isEnabled) return;
 
     try {
@@ -259,10 +250,7 @@ class AnalyticsService {
   ///
   /// User properties help segment your users for analysis.
   /// Examples: subscription_tier, preferred_language, account_type
-  Future<void> setUserProperty(
-    final String name,
-    final String? value,
-  ) async {
+  Future<void> setUserProperty(String name, String? value) async {
     if (!isEnabled) return;
 
     try {
@@ -284,7 +272,7 @@ class AnalyticsService {
   }
 
   /// Set whether analytics collection is enabled.
-  Future<void> setEnabled(final bool enabled) async {
+  Future<void> setEnabled(bool enabled) async {
     if (_analytics == null) return;
 
     try {
@@ -296,9 +284,7 @@ class AnalyticsService {
   }
 
   /// Set default event parameters (appear on all events).
-  Future<void> setDefaultParameters(
-    final Map<String, Object?>? parameters,
-  ) async {
+  Future<void> setDefaultParameters(Map<String, Object?>? parameters) async {
     if (!isEnabled) return;
 
     try {

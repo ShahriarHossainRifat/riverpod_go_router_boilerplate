@@ -170,4 +170,4 @@ final class CrashlyticsServiceProvider
 }
 
 String _$crashlyticsServiceHash() =>
-    r'8ae56a915e2581b0baccf10c8b990cc4674772b4';
+    r'4c7c67566736b6b465835b9cbf8321941eedf632';

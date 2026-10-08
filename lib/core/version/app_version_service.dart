@@ -20,7 +20,7 @@ enum VersionCheckResult {
 /// Information about the current app version and update status.
 class VersionInfo {
   /// Creates a [VersionInfo] instance.
-  const VersionInfo({
+  const new({
     required this.currentVersion,
     required this.currentBuildNumber,
     this.minimumVersion,
@@ -73,7 +73,7 @@ class VersionInfo {
 /// ```
 class AppVersionService {
   /// Creates an [AppVersionService] instance.
-  AppVersionService(this._ref);
+  new(this._ref);
 
   final Ref _ref;
 
@@ -138,7 +138,7 @@ class AppVersionService {
 
   /// Compare two semantic versions.
   /// Returns true if [version] is lower than [minimumVersion].
-  bool _isVersionLower(final String version, final String minimumVersion) {
+  bool _isVersionLower(String version, String minimumVersion) {
     final current = _parseVersion(version);
     final minimum = _parseVersion(minimumVersion);
 
@@ -150,8 +150,8 @@ class AppVersionService {
   }
 
   /// Parse a version string into [major, minor, patch] integers.
-  List<int> _parseVersion(final String version) {
-    final parts = version.split('.').map((final p) {
+  List<int> _parseVersion(String version) {
+    final parts = version.split('.').map((p) {
       // Handle versions like "1.0.0+1" by stripping build metadata
       final numPart = p.split('+').first.split('-').first;
       return int.tryParse(numPart) ?? 0;
@@ -167,7 +167,7 @@ class AppVersionService {
 
 /// Provider for [AppVersionService].
 @Riverpod(keepAlive: true)
-AppVersionService appVersionService(final Ref ref) {
+AppVersionService appVersionService(Ref ref) {
   return AppVersionService(ref);
 }
 
@@ -175,13 +175,13 @@ AppVersionService appVersionService(final Ref ref) {
 ///
 /// Watch this to reactively respond to version check results.
 @riverpod
-Future<VersionInfo> versionInfo(final Ref ref) async {
+Future<VersionInfo> versionInfo(Ref ref) async {
   final service = ref.watch(appVersionServiceProvider);
   final result = await service.checkVersion();
 
   return result.fold(
-    onSuccess: (final info) => info,
-    onFailure: (final error) async {
+    onSuccess: (info) => info,
+    onFailure: (error) async {
       // Return default info on error
       final packageInfo = await service.getPackageInfo();
       return VersionInfo(
@@ -194,7 +194,7 @@ Future<VersionInfo> versionInfo(final Ref ref) async {
 
 /// Provider that indicates if a force update is required.
 @riverpod
-bool requiresForceUpdate(final Ref ref) {
+bool requiresForceUpdate(Ref ref) {
   final versionAsync = ref.watch(versionInfoProvider);
   return switch (versionAsync) {
     AsyncData(:final value) => value.requiresForceUpdate,

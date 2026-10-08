@@ -1,3 +1,10 @@
+import 'package:riverpod_go_router_boilerplate/config/env_config.dart'
+    show EnvConfig;
+import 'package:riverpod_go_router_boilerplate/core/constants/app_constants.dart'
+    show AppConstants;
+import 'package:riverpod_go_router_boilerplate/core/core.dart'
+    show AppConstants;
+
 /// Static feature flags and configuration for the app.
 ///
 /// These are compile-time constants that define the app's behavior.
@@ -12,7 +19,7 @@
 /// }
 /// ```
 class AppConfig {
-  AppConfig._();
+  new _();
 
   /// Whether authentication is enabled for this app.
   ///

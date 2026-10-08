@@ -195,14 +195,14 @@ void main() {
 
     group('match', () {
       test('returns null when values match', () {
-        final getValue = () => 'password123';
+        String getValue() => 'password123';
         final validator = Validators.match(getValue);
 
         expect(validator('password123'), isNull);
       });
 
       test('returns error when values do not match', () {
-        final getValue = () => 'password123';
+        String getValue() => 'password123';
         final validator = Validators.match(getValue, 'Passwords must match');
 
         expect(validator('different'), equals('Passwords must match'));

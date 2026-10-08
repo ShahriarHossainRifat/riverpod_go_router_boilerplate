@@ -16,7 +16,7 @@ class AppLifecycleState {
   /// the lifecycle state machine. [isInitialized] indicates whether the
   /// lifecycle has completed its initial evaluation. [previousState] is
   /// optional and contains the prior state when available.
-  const AppLifecycleState({
+  const new({
     required this.currentState,
     required this.lastEvent,
     required this.isInitialized,
@@ -27,7 +27,7 @@ class AppLifecycleState {
   ///
   /// By default the app is in `PublicState`, no event has been processed,
   /// there is no previous state, and `isInitialized` is false.
-  const AppLifecycleState.initial()
+  const new initial()
     : currentState = const PublicState(),
       lastEvent = null,
       previousState = null,
@@ -54,19 +54,25 @@ class AppLifecycleState {
   /// the final startup state to display.
   final bool isInitialized;
 
+  static const Object _sentinel = Object();
+
   /// Returns a copy of this state with the provided fields replaced.
   ///
   /// Use this to update a single field while keeping other values intact.
   AppLifecycleState copyWith({
-    final StartupState? currentState,
-    final StartupEvent? lastEvent,
-    final StartupState? previousState,
-    final bool? isInitialized,
+    StartupState? currentState,
+    Object? lastEvent = _sentinel,
+    Object? previousState = _sentinel,
+    bool? isInitialized,
   }) {
     return AppLifecycleState(
       currentState: currentState ?? this.currentState,
-      lastEvent: lastEvent ?? this.lastEvent,
-      previousState: previousState ?? this.previousState,
+      lastEvent: identical(lastEvent, _sentinel)
+          ? this.lastEvent
+          : lastEvent as StartupEvent?,
+      previousState: identical(previousState, _sentinel)
+          ? this.previousState
+          : previousState as StartupState?,
       isInitialized: isInitialized ?? this.isInitialized,
     );
   }

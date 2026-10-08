@@ -5,11 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:riverpod_go_router_boilerplate/app/router/app_router.dart';
-import 'package:riverpod_go_router_boilerplate/core/utils/logger.dart';
 import 'package:riverpod_go_router_boilerplate/core/notifications/notification_channels.dart';
 import 'package:riverpod_go_router_boilerplate/core/notifications/notification_config.dart';
-import 'package:timezone/timezone.dart' as tz;
+import 'package:riverpod_go_router_boilerplate/core/utils/logger.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 part 'local_notification_service.g.dart';
 
@@ -18,7 +18,7 @@ part 'local_notification_service.g.dart';
 /// Provides a clean API for showing, scheduling, and managing notifications.
 class LocalNotificationService {
   /// Creates a [LocalNotificationService] instance.
-  LocalNotificationService(this._ref);
+  new(this._ref);
 
   final Ref _ref;
   final FlutterLocalNotificationsPlugin _plugin =
@@ -37,7 +37,7 @@ class LocalNotificationService {
       _notificationTapController.stream;
 
   /// Initialize the notification service.
-  Future<bool> initialize({final NotificationTapCallback? onTap}) async {
+  Future<bool> initialize({NotificationTapCallback? onTap}) async {
     if (_isInitialized) return true;
 
     try {
@@ -60,7 +60,7 @@ class LocalNotificationService {
 
       final initialized = await _plugin.initialize(
         settings: initSettings,
-        onDidReceiveNotificationResponse: (final response) {
+        onDidReceiveNotificationResponse: (response) {
           _notificationTapController.add(response);
           onTap?.call(response);
 
@@ -115,7 +115,7 @@ class LocalNotificationService {
   }
 
   /// Show a notification immediately.
-  Future<void> show(final LocalNotificationConfig config) async {
+  Future<void> show(LocalNotificationConfig config) async {
     await _ensureInitialized();
 
     final androidDetails = AndroidNotificationDetails(
@@ -148,8 +148,8 @@ class LocalNotificationService {
 
   /// Schedule a notification for a specific date/time.
   Future<void> schedule(
-    final LocalNotificationConfig config, {
-    required final DateTime scheduledDate,
+    LocalNotificationConfig config, {
+    required DateTime scheduledDate,
   }) async {
     await _ensureInitialized();
 
@@ -172,7 +172,7 @@ class LocalNotificationService {
   }
 
   /// Cancel a notification by ID.
-  Future<void> cancel(final int id) => _plugin.cancel(id: id);
+  Future<void> cancel(int id) => _plugin.cancel(id: id);
 
   /// Cancel all notifications.
   Future<void> cancelAll() => _plugin.cancelAll();
@@ -238,7 +238,7 @@ class LocalNotificationService {
     }
   }
 
-  void _triggerDeepLinkRouting(final String path) {
+  void _triggerDeepLinkRouting(String path) {
     try {
       _logger.i('Deep link routing: $path');
       Future.delayed(const Duration(milliseconds: 100), () {
@@ -257,7 +257,7 @@ class LocalNotificationService {
 
 /// Provider for [LocalNotificationService].
 @Riverpod(keepAlive: true)
-LocalNotificationService localNotificationService(final Ref ref) {
+LocalNotificationService localNotificationService(Ref ref) {
   final service = LocalNotificationService(ref);
   ref.onDispose(service.dispose);
   return service;

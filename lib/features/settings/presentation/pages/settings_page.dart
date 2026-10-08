@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_go_router_boilerplate/core/core.dart';
-import 'package:riverpod_go_router_boilerplate/features/settings/presentation/widgets/language_selection_dialog.dart';
-import 'package:riverpod_go_router_boilerplate/features/settings/presentation/widgets/theme_selection_dialog.dart';
 import 'package:riverpod_go_router_boilerplate/features/settings/presentation/providers/package_info_provider.dart';
+import 'package:riverpod_go_router_boilerplate/features/settings/presentation/widgets/language_selection_dialog.dart';
 import 'package:riverpod_go_router_boilerplate/features/settings/presentation/widgets/notification_badge_settings.dart';
 import 'package:riverpod_go_router_boilerplate/features/settings/presentation/widgets/settings_section_header.dart';
+import 'package:riverpod_go_router_boilerplate/features/settings/presentation/widgets/theme_selection_dialog.dart';
 import 'package:riverpod_go_router_boilerplate/l10n/generated/app_localizations.dart';
 
 /// Settings page demonstrating theme switching and app info.
@@ -14,10 +14,10 @@ import 'package:riverpod_go_router_boilerplate/l10n/generated/app_localizations.
 /// `StaggeredList` for a polished user experience.
 class SettingsPage extends HookConsumerWidget {
   /// Creates a [SettingsPage] instance.
-  const SettingsPage({super.key});
+  const new({super.key});
 
   @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeNotifierProvider);
     final currentLocale = ref.watch(localeNotifierProvider);
     final packageInfo = ref.watch(packageInfoProvider);
@@ -33,9 +33,7 @@ class SettingsPage extends HookConsumerWidget {
       body: ListView(
         children: [
           // Appearance section with staggered animations
-          FadeIn(
-            child: SettingsSectionHeader(title: l10n.appearance),
-          ),
+          FadeIn(child: SettingsSectionHeader(title: l10n.appearance)),
           SlideIn(
             direction: .fromLeft,
             delay: AppConstants.staggerDelay,
@@ -61,10 +59,7 @@ class SettingsPage extends HookConsumerWidget {
             ),
           ),
 
-          FadeIn(
-            delay: AppConstants.staggerDelay * 3,
-            child: const Divider(),
-          ),
+          FadeIn(delay: AppConstants.staggerDelay * 3, child: const Divider()),
 
           // Notifications section
           FadeIn(
@@ -77,10 +72,7 @@ class SettingsPage extends HookConsumerWidget {
             child: const NotificationSettings(),
           ),
 
-          FadeIn(
-            delay: AppConstants.staggerDelay * 5,
-            child: const Divider(),
-          ),
+          FadeIn(delay: AppConstants.staggerDelay * 5, child: const Divider()),
 
           // About section
           FadeIn(
@@ -91,7 +83,7 @@ class SettingsPage extends HookConsumerWidget {
             direction: .fromLeft,
             delay: AppConstants.staggerDelay * 6,
             child: packageInfo.when(
-              data: (final info) => Column(
+              data: (info) => Column(
                 children: [
                   ListTile(
                     leading: const Icon(Icons.info_outline),
@@ -118,10 +110,7 @@ class SettingsPage extends HookConsumerWidget {
             ),
           ),
 
-          FadeIn(
-            delay: AppConstants.staggerDelay * 7,
-            child: const Divider(),
-          ),
+          FadeIn(delay: AppConstants.staggerDelay * 7, child: const Divider()),
 
           // Legal section
           FadeIn(
@@ -139,7 +128,7 @@ class SettingsPage extends HookConsumerWidget {
                 size: AppConstants.iconSizeMD,
               ),
               onTap: () {
-                // TODO: Open terms of service
+                // TODO(settings): Open terms of service URL.
               },
             ),
           ),
@@ -154,7 +143,7 @@ class SettingsPage extends HookConsumerWidget {
                 size: AppConstants.iconSizeMD,
               ),
               onTap: () {
-                // TODO: Open privacy policy
+                // TODO(settings): Open privacy policy URL.
               },
             ),
           ),
@@ -176,17 +165,13 @@ class SettingsPage extends HookConsumerWidget {
     );
   }
 
-  String _themeModeLabel(
-    final ThemeMode mode,
-    final AppLocalizations l10n,
-  ) => switch (mode) {
-    ThemeMode.light => l10n.lightMode,
-    ThemeMode.dark => l10n.darkModeOption,
-    ThemeMode.system => l10n.systemDefault,
-  };
+  String _themeModeLabel(ThemeMode mode, AppLocalizations l10n) =>
+      switch (mode) {
+        ThemeMode.light => l10n.lightMode,
+        ThemeMode.dark => l10n.darkModeOption,
+        ThemeMode.system => l10n.systemDefault,
+      };
 
-  String _languageLabel(
-    final Locale locale,
-    final AppLocalizations l10n,
-  ) => locale.languageCode == 'bn' ? l10n.bengali : l10n.english;
+  String _languageLabel(Locale locale, AppLocalizations l10n) =>
+      locale.languageCode == 'bn' ? l10n.bengali : l10n.english;
 }

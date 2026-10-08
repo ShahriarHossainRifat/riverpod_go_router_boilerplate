@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// LaunchDarkly, or your preferred remote config solution.
 class RemoteConfig {
   /// Creates a [RemoteConfig] instance.
-  const RemoteConfig({
+  const new({
     this.isMaintenanceMode = false,
     this.maintenanceMessage,
     this.minimumVersion,
@@ -32,17 +32,17 @@ class RemoteConfig {
   final Map<String, bool> featureFlags;
 
   /// Get the value of a feature flag by key.
-  bool getFlag(final String key, {final bool defaultValue = false}) {
+  bool getFlag(String key, {bool defaultValue = false}) {
     return featureFlags[key] ?? defaultValue;
   }
 
   /// Returns a copy of this config with the given fields replaced.
   RemoteConfig copyWith({
-    final bool? isMaintenanceMode,
-    final String? maintenanceMessage,
-    final String? minimumVersion,
-    final bool? forceUpdate,
-    final Map<String, bool>? featureFlags,
+    bool? isMaintenanceMode,
+    String? maintenanceMessage,
+    String? minimumVersion,
+    bool? forceUpdate,
+    Map<String, bool>? featureFlags,
   }) {
     return RemoteConfig(
       isMaintenanceMode: isMaintenanceMode ?? this.isMaintenanceMode,
@@ -59,7 +59,7 @@ class RemoteConfig {
 /// Stub implementation - replace internals with your remote config provider.
 class RemoteConfigService {
   /// Creates a [RemoteConfigService] instance.
-  RemoteConfigService();
+  new();
 
   RemoteConfig _currentConfig = const RemoteConfig();
   final _configController = StreamController<RemoteConfig>.broadcast();
@@ -95,13 +95,13 @@ class RemoteConfigService {
   }
 
   /// Manually update config (useful for testing or local overrides).
-  void updateConfig(final RemoteConfig config) {
+  void updateConfig(RemoteConfig config) {
     _currentConfig = config;
     _configController.add(_currentConfig);
   }
 
   /// Enable maintenance mode (useful for testing).
-  void enableMaintenance({final String? message}) {
+  void enableMaintenance({String? message}) {
     updateConfig(
       _currentConfig.copyWith(
         isMaintenanceMode: true,
@@ -116,7 +116,7 @@ class RemoteConfigService {
   }
 
   /// Set a feature flag.
-  void setFeatureFlag(final String key, final bool value) {
+  void setFeatureFlag(String key, bool value) {
     final newFlags = Map<String, bool>.from(_currentConfig.featureFlags);
     newFlags[key] = value;
     updateConfig(_currentConfig.copyWith(featureFlags: newFlags));
@@ -129,26 +129,26 @@ class RemoteConfigService {
 }
 
 /// Provider for the RemoteConfigService singleton.
-final remoteConfigServiceProvider = Provider<RemoteConfigService>((final ref) {
+final remoteConfigServiceProvider = Provider<RemoteConfigService>((ref) {
   final service = RemoteConfigService();
   ref.onDispose(service.dispose);
   return service;
 });
 
 /// Provider for the current remote config.
-final remoteConfigProvider = StreamProvider<RemoteConfig>((final ref) {
+final remoteConfigProvider = StreamProvider<RemoteConfig>((ref) {
   final service = ref.watch(remoteConfigServiceProvider);
   return service.configStream;
 });
 
 /// Provider for checking if app is in maintenance mode.
-final isMaintenanceModeProvider = Provider<bool>((final ref) {
+final isMaintenanceModeProvider = Provider<bool>((ref) {
   final config = ref.watch(remoteConfigProvider);
   return config.value?.isMaintenanceMode ?? false;
 });
 
 /// Provider for the maintenance message.
-final maintenanceMessageProvider = Provider<String?>((final ref) {
+final maintenanceMessageProvider = Provider<String?>((ref) {
   final config = ref.watch(remoteConfigProvider);
   return config.value?.maintenanceMessage;
 });

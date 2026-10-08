@@ -4,10 +4,11 @@
 
 ### A Production-Ready, Opinionated Flutter Starter Template
 
-![Flutter](https://img.shields.io/badge/Flutter-3.10+-02569B?style=for-the-badge&logo=flutter&logoColor=white)
-![Dart](https://img.shields.io/badge/Dart-3.x-0175C2?style=for-the-badge&logo=dart&logoColor=white)
-![Riverpod](https://img.shields.io/badge/Riverpod-3.x-0553B1?style=for-the-badge)
-![GoRouter](https://img.shields.io/badge/GoRouter-17.x-4CAF50?style=for-the-badge)
+![Flutter](https://img.shields.io/badge/Flutter-3.47+-02569B?style=for-the-badge&logo=flutter&logoColor=white)
+![Dart](https://img.shields.io/badge/Dart-3.13+-0175C2?style=for-the-badge&logo=dart&logoColor=white)
+![Riverpod](https://img.shields.io/badge/Riverpod-2.6+-0553B1?style=for-the-badge)
+![GoRouter](https://img.shields.io/badge/GoRouter-14.x-4CAF50?style=for-the-badge)
+![Gradle](https://img.shields.io/badge/Gradle-9.1-02303A?style=for-the-badge&logo=gradle&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-9C27B0?style=for-the-badge)
 
 **Clone → Build → Ship.** No architecture debates. No rewrites at scale.
@@ -33,7 +34,7 @@
 - [Firebase Setup](#-firebase-setup)
 - [Testing](#-testing)
 - [CI/CD Pipeline](#-cicd-pipeline)
-- [Changelog](#-changelog)
+- [AI Agents & LLM Development](#-ai-agents--llm-development)
 - [Troubleshooting](#-troubleshooting)
 - [Contributing](#-contributing)
 - [License](#-license)
@@ -233,8 +234,9 @@ This boilerplate is built on **2026 best practices** for maximum productivity:
 
 ### Prerequisites
 
-- Flutter SDK **3.10+** ([Install Flutter](https://docs.flutter.dev/get-started/install))
-- Dart SDK **3.x** (included with Flutter)
+- Flutter SDK **3.47+** ([Install Flutter](https://docs.flutter.dev/get-started/install))
+- Dart SDK **3.13+** (included with Flutter)
+- Java 17 or Java 21 (for Android builds with Gradle 9.1 / AGP 9.0)
 - Git ([Download](https://git-scm.com/downloads))
 - A code editor (VS Code recommended with Flutter extension)
 - Xcode (for iOS development on macOS)
@@ -1185,6 +1187,23 @@ The boilerplate includes `FreshInstallHandler` that automatically clears stale K
    - Flutter version (`flutter --version`)
    - Error message/logs
    - Steps to reproduce
+
+---
+
+## 🤖 AI Agents & LLM Development
+
+This boilerplate includes pre-configured, battle-tested rules and architecture guidelines for autonomous AI coding agents (such as Google DeepMind Antigravity, Gemini, Claude, Cursor, and GitHub Copilot).
+
+- **Global Specifications**:
+  - [`AGENTS.md`](AGENTS.md): Full architectural invariants, Riverpod rules, GoRouter guards, and commands for all AI agents.
+  - [`CLAUDE.md`](CLAUDE.md): Quick reference and context for Claude / Claude Code.
+  - [`.github/copilot-instructions.md`](.github/copilot-instructions.md): Context and rules for GitHub Copilot.
+- **Modular Rule Files** (`.agents/rules/`):
+  - [`architecture.md`](.agents/rules/architecture.md): Feature-first Clean Architecture, layer boundaries, dependency rules.
+  - [`riverpod.md`](.agents/rules/riverpod.md): Riverpod 2.6+ code generation, Notifier vs AsyncNotifier, hook integration, session invalidation.
+  - [`routing.md`](.agents/rules/routing.md): `AppRoute` enum, typed paths, centralized redirect guards.
+  - [`coding_standards.md`](.agents/rules/coding_standards.md): Modern Dart 3.13+ (`avoid_final_parameters`), pattern matching, `Result<T>` error handling.
+  - [`testing.md`](.agents/rules/testing.md): Unit and widget testing standards with `mocktail` and `ProviderContainer`.
 
 ---
 

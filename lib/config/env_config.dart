@@ -30,7 +30,7 @@ enum Environment {
 /// **Priority:** Compile-time values (`--dart-define`) take precedence over runtime values.
 class EnvConfig {
   /// Private constructor to prevent instantiation.
-  EnvConfig._();
+  new _();
 
   // Compile-time constants sourced from `--dart-define`.
   static const String _dartDefineEnv = String.fromEnvironment('ENV');
@@ -75,10 +75,7 @@ class EnvConfig {
   ///   runApp(MyApp());
   /// }
   /// ```
-  static void initialize({
-    required final Environment environment,
-    final bool? useMocks,
-  }) {
+  static void initialize({required Environment environment, bool? useMocks}) {
     if (_isInitialized) return;
 
     // Use compile-time environment if provided, otherwise use runtime parameter
@@ -118,7 +115,7 @@ class EnvConfig {
   }
 
   /// Parse a string into an [Environment]. Accepts common aliases.
-  static Environment _parseEnvironment(final String env) {
+  static Environment _parseEnvironment(String env) {
     return switch (env.toLowerCase()) {
       'prod' || 'production' => Environment.prod,
       'staging' || 'stage' => Environment.staging,
@@ -127,7 +124,7 @@ class EnvConfig {
   }
 
   /// Resolve the default base URL for a given [Environment].
-  static String _getBaseUrl(final Environment env) {
+  static String _getBaseUrl(Environment env) {
     return switch (env) {
       Environment.dev => 'https://dev-api.example.com',
       Environment.staging => 'https://staging-api.example.com',

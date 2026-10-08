@@ -39,9 +39,13 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
-# Android Studio will place build artifacts here
+# Android build artifacts
+.gradle/
+**/android/.gradle/
+**/android/build/
+/android/build/
 /android/app/debug
 /android/app/profile
 /android/app/release
-.github/copilot-instructions.md
-.agent/rules/antigravity-instructions.md
+/android/local.properties
+/android/**/GeneratedPluginRegistrant.java

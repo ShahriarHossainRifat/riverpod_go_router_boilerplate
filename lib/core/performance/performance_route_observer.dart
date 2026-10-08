@@ -30,7 +30,7 @@ import 'package:riverpod_go_router_boilerplate/core/performance/performance_serv
 /// - Avoid generic names like 'page' or 'screen'
 class PerformanceRouteObserver extends NavigatorObserver {
   /// Creates a [PerformanceRouteObserver] instance.
-  PerformanceRouteObserver(this._ref);
+  new(this._ref);
 
   final Ref _ref;
 
@@ -41,25 +41,19 @@ class PerformanceRouteObserver extends NavigatorObserver {
       _ref.read(performanceServiceProvider);
 
   @override
-  void didPush(
-    final Route<dynamic> route,
-    final Route<dynamic>? previousRoute,
-  ) {
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPush(route, previousRoute);
     _startScreenTrace(route);
   }
 
   @override
-  void didPop(final Route<dynamic> route, final Route<dynamic>? previousRoute) {
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPop(route, previousRoute);
     _stopScreenTrace(route);
   }
 
   @override
-  void didReplace({
-    final Route<dynamic>? newRoute,
-    final Route<dynamic>? oldRoute,
-  }) {
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
     if (oldRoute != null) {
       _stopScreenTrace(oldRoute);
@@ -70,15 +64,12 @@ class PerformanceRouteObserver extends NavigatorObserver {
   }
 
   @override
-  void didRemove(
-    final Route<dynamic> route,
-    final Route<dynamic>? previousRoute,
-  ) {
+  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didRemove(route, previousRoute);
     _stopScreenTrace(route);
   }
 
-  Future<void> _startScreenTrace(final Route<dynamic> route) async {
+  Future<void> _startScreenTrace(Route<dynamic> route) async {
     if (!_performanceService.isEnabled) return;
 
     final screenName = _getScreenName(route);
@@ -91,7 +82,7 @@ class PerformanceRouteObserver extends NavigatorObserver {
     }
   }
 
-  Future<void> _stopScreenTrace(final Route<dynamic> route) async {
+  Future<void> _stopScreenTrace(Route<dynamic> route) async {
     final screenName = _getScreenName(route);
     if (screenName == null) return;
 
@@ -99,7 +90,7 @@ class PerformanceRouteObserver extends NavigatorObserver {
     await trace?.stop();
   }
 
-  String? _getScreenName(final Route<dynamic> route) {
+  String? _getScreenName(Route<dynamic> route) {
     // Try to get a meaningful name from the route
     final settings = route.settings;
     final name = settings.name;
@@ -113,6 +104,6 @@ class PerformanceRouteObserver extends NavigatorObserver {
     return name
         .replaceFirst(RegExp('^/'), '')
         .replaceAll('/', '_')
-        .replaceAll(RegExp(r'[^a-zA-Z0-9_]'), '');
+        .replaceAll(RegExp('[^a-zA-Z0-9_]'), '');
   }
 }

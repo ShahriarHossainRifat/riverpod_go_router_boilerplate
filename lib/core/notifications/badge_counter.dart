@@ -64,7 +64,7 @@ class BadgeCount extends _$BadgeCount {
   }
 
   /// Set the badge count to a specific value.
-  Future<void> updateCount(final int count) async {
+  Future<void> updateCount(int count) async {
     state = AsyncValue.data(count);
     _logBadgeChange(count);
   }
@@ -88,7 +88,7 @@ class BadgeCount extends _$BadgeCount {
   /// Add multiple notifications at once.
   ///
   /// Useful if you're processing a batch of notifications.
-  Future<void> addNotifications(final int count) async {
+  Future<void> addNotifications(int count) async {
     final currentCount = state.value ?? 0;
     final newCount = currentCount + count;
     state = AsyncValue.data(newCount);
@@ -102,7 +102,7 @@ class BadgeCount extends _$BadgeCount {
     state = const AsyncValue.data(0);
   }
 
-  void _logBadgeChange(final int count) {
+  void _logBadgeChange(int count) {
     try {
       final logger = ref.read(loggerProvider);
       logger.d('Badge count updated to: $count');

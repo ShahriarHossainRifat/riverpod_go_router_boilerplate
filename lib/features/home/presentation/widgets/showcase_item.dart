@@ -7,7 +7,7 @@ import 'package:riverpod_go_router_boilerplate/core/core.dart';
 /// within the FeatureShowcase widget.
 class ShowcaseItem extends StatelessWidget {
   /// Creates a [ShowcaseItem] instance.
-  const ShowcaseItem({
+  const new({
     required this.title,
     required this.description,
     required this.child,
@@ -24,7 +24,7 @@ class ShowcaseItem extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final theme = context.theme;
 
     return Column(

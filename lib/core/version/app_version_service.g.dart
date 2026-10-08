@@ -58,7 +58,7 @@ final class AppVersionServiceProvider
   }
 }
 
-String _$appVersionServiceHash() => r'bbb621c35ce8174fd7fdc45515b74ac22169d6fa';
+String _$appVersionServiceHash() => r'a535545b88ffcfc3c6c86ba3686da568bb4cb451';
 
 /// Provider for the current [VersionInfo].
 ///
@@ -108,7 +108,7 @@ final class VersionInfoProvider
   }
 }
 
-String _$versionInfoHash() => r'749c290f05a776da0c04fbb3dad892d9a22790f0';
+String _$versionInfoHash() => r'4c282cec117c7be9857b10c161044dc4f5e69533';
 
 /// Provider that indicates if a force update is required.
 
@@ -155,4 +155,4 @@ final class RequiresForceUpdateProvider
 }
 
 String _$requiresForceUpdateHash() =>
-    r'3e39234c8a3327cc2568b337a7bcf98292753456';
+    r'55d3e5989f63900fe3d2d5e42703f604d71ad21c';

@@ -51,7 +51,7 @@ final class NotificationsEnabledProvider
 }
 
 String _$notificationsEnabledHash() =>
-    r'25bfd8b4f41411b049a5f8169d18b00d36d5d1e8';
+    r'db4c58210629d22e9d43c32a84cbe043c73082b8';
 
 /// Notifier for managing notification enabled state.
 ///
@@ -61,7 +61,7 @@ abstract class _$NotificationsEnabled extends $Notifier<bool> {
   bool build();
   @$mustCallSuper
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<bool, bool>;
     final element =
         ref.element
@@ -71,6 +71,6 @@ abstract class _$NotificationsEnabled extends $Notifier<bool> {
               Object?,
               Object?
             >;
-    element.handleCreate(ref, build);
+    return element.handleCreate(ref, build);
   }
 }

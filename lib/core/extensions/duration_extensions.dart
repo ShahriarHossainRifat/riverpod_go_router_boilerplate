@@ -25,7 +25,7 @@ extension DurationExtensions on Duration {
     final parts = <String>[];
 
     if (inDays > 0) {
-      parts.add('${inDays} ${inDays == 1 ? 'day' : 'days'}');
+      parts.add('$inDays ${inDays == 1 ? 'day' : 'days'}');
     }
     if (inHours.remainder(24) > 0) {
       final hours = inHours.remainder(24);
@@ -71,12 +71,12 @@ extension DurationExtensions on Duration {
   Duration get abs => isNegative ? -this : this;
 
   /// Multiplies duration by a factor.
-  Duration operator *(final num factor) {
+  Duration operator *(num factor) {
     return Duration(microseconds: (inMicroseconds * factor).round());
   }
 
   /// Divides duration by a factor.
-  Duration operator /(final num divisor) {
+  Duration operator /(num divisor) {
     return Duration(microseconds: (inMicroseconds / divisor).round());
   }
 

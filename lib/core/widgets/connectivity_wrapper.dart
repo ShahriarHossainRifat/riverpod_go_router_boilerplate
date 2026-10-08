@@ -23,7 +23,7 @@ import 'package:riverpod_go_router_boilerplate/core/core.dart';
 /// ```
 class ConnectivityWrapper extends ConsumerWidget {
   /// Creates a [ConnectivityWrapper] widget.
-  const ConnectivityWrapper({
+  const new({
     required this.child,
     this.bannerPosition = BannerPosition.top,
     this.showBanner = true,
@@ -40,7 +40,7 @@ class ConnectivityWrapper extends ConsumerWidget {
   final bool showBanner;
 
   @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isOnline = ref.watch(isOnlineProvider);
 
     if (!showBanner) return child;
@@ -74,10 +74,10 @@ enum BannerPosition {
 }
 
 class _OfflineBanner extends StatelessWidget {
-  const _OfflineBanner();
+  const new();
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final topPadding = MediaQuery.of(context).viewPadding.top;
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -131,7 +131,7 @@ class _OfflineBanner extends StatelessWidget {
 /// Useful for showing in app bars or status sections.
 class ConnectivityIndicator extends ConsumerWidget {
   /// Creates a [ConnectivityIndicator] widget.
-  const ConnectivityIndicator({
+  const new({
     this.onlineIcon = Icons.wifi,
     this.offlineIcon = Icons.wifi_off,
     this.size = 20,
@@ -156,7 +156,7 @@ class ConnectivityIndicator extends ConsumerWidget {
   final Color? offlineColor;
 
   @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isOnline = ref.watch(isOnlineProvider);
     final colorScheme = context.theme.colorScheme;
 
@@ -175,7 +175,7 @@ class ConnectivityIndicator extends ConsumerWidget {
 /// Useful for showing offline-specific UI or blocking functionality.
 class OfflineAwareWidget extends ConsumerWidget {
   /// Creates an [OfflineAwareWidget].
-  const OfflineAwareWidget({
+  const new({
     required this.child,
     this.offlineChild,
     this.showChildWhenOffline = true,
@@ -192,18 +192,13 @@ class OfflineAwareWidget extends ConsumerWidget {
   final bool showChildWhenOffline;
 
   @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isOnline = ref.watch(isOnlineProvider);
 
     if (isOnline) return child;
 
     if (showChildWhenOffline && offlineChild != null) {
-      return Stack(
-        children: [
-          child,
-          offlineChild!,
-        ],
-      );
+      return Stack(children: [child, offlineChild!]);
     }
 
     return offlineChild ?? child;

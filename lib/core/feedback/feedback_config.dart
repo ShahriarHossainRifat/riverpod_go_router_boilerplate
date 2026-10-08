@@ -18,7 +18,7 @@ enum SnackbarType {
 /// Configuration for a snackbar message.
 class SnackbarConfig {
   /// Creates a [SnackbarConfig] instance.
-  const SnackbarConfig({
+  const new({
     required this.message,
     this.type = SnackbarType.info,
     this.duration = const Duration(seconds: 3),
@@ -49,7 +49,7 @@ class SnackbarConfig {
 /// Configuration for a dialog.
 class DialogConfig {
   /// Creates a [DialogConfig] instance.
-  const DialogConfig({
+  const new({
     required this.title,
     this.message,
     this.content,

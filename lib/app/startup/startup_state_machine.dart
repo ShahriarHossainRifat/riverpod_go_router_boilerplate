@@ -1,3 +1,10 @@
+import 'package:riverpod_go_router_boilerplate/app/app_exports.dart'
+    show StartupStateResolver;
+import 'package:riverpod_go_router_boilerplate/app/startup/startup.dart'
+    show StartupStateResolver;
+import 'package:riverpod_go_router_boilerplate/app/startup/startup_state_resolver.dart'
+    show StartupStateResolver;
+
 /// Represents the valid startup states of the app.
 ///
 /// These states are mutually exclusive and exhaustive.
@@ -13,14 +20,14 @@
 ///
 /// See [StartupStateResolver] for the logic that determines the current state.
 sealed class StartupState {
-  const StartupState();
+  const new();
 }
 
 /// App is under maintenance – nothing else is accessible.
 /// This state always takes priority over all other states.
 final class MaintenanceState extends StartupState {
   /// Creates a [MaintenanceState] instance.
-  const MaintenanceState({this.message});
+  const new({this.message});
 
   /// Optional maintenance message to display.
   final String? message;
@@ -33,11 +40,7 @@ final class MaintenanceState extends StartupState {
 /// User must update to continue using the app.
 final class ForceUpdateState extends StartupState {
   /// Creates a [ForceUpdateState] instance.
-  const ForceUpdateState({
-    this.currentVersion,
-    this.minimumVersion,
-    this.storeUrl,
-  });
+  const new({this.currentVersion, this.minimumVersion, this.storeUrl});
 
   /// Current app version.
   final String? currentVersion;
@@ -57,7 +60,7 @@ final class ForceUpdateState extends StartupState {
 /// Takes priority over authentication states.
 final class OnboardingState extends StartupState {
   /// Creates an [OnboardingState] instance.
-  const OnboardingState();
+  const new();
 
   @override
   String toString() => 'OnboardingState';
@@ -66,7 +69,7 @@ final class OnboardingState extends StartupState {
 /// User must authenticate before accessing protected features.
 final class UnauthenticatedState extends StartupState {
   /// Creates an [UnauthenticatedState] instance.
-  const UnauthenticatedState();
+  const new();
 
   @override
   String toString() => 'UnauthenticatedState';
@@ -75,7 +78,7 @@ final class UnauthenticatedState extends StartupState {
 /// User is authenticated and can access protected features.
 final class AuthenticatedState extends StartupState {
   /// Creates an [AuthenticatedState] instance.
-  const AuthenticatedState();
+  const new();
 
   @override
   String toString() => 'AuthenticatedState';
@@ -85,7 +88,7 @@ final class AuthenticatedState extends StartupState {
 /// For apps that are fully public.
 final class PublicState extends StartupState {
   /// Creates a [PublicState] instance.
-  const PublicState();
+  const new();
 
   @override
   String toString() => 'PublicState';

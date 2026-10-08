@@ -35,7 +35,7 @@ extension PermissionStatusX on PermissionStatus {
 /// Configuration for a permission request dialog.
 class PermissionDialogConfig {
   /// Creates a [PermissionDialogConfig] instance.
-  const PermissionDialogConfig({
+  const new({
     required this.title,
     required this.message,
     this.icon,

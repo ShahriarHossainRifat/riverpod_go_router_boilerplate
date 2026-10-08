@@ -27,7 +27,7 @@ import 'package:riverpod_go_router_boilerplate/core/performance/performance_serv
 /// - Content type
 class PerformanceHttpInterceptor extends Interceptor {
   /// Creates a [PerformanceHttpInterceptor] instance.
-  PerformanceHttpInterceptor(this._ref);
+  new(this._ref);
 
   final Ref _ref;
 
@@ -38,10 +38,7 @@ class PerformanceHttpInterceptor extends Interceptor {
       _ref.read(performanceServiceProvider);
 
   @override
-  void onRequest(
-    final RequestOptions options,
-    final RequestInterceptorHandler handler,
-  ) {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     if (_performanceService.isEnabled) {
       final method = _mapMethod(options.method);
       final url = _sanitizeUrl(options.uri);
@@ -60,8 +57,8 @@ class PerformanceHttpInterceptor extends Interceptor {
 
   @override
   void onResponse(
-    final Response<dynamic> response,
-    final ResponseInterceptorHandler handler,
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
   ) {
     _finishMetric(
       response.requestOptions,
@@ -74,7 +71,7 @@ class PerformanceHttpInterceptor extends Interceptor {
   }
 
   @override
-  void onError(final DioException err, final ErrorInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) {
     _finishMetric(
       err.requestOptions,
       statusCode: err.response?.statusCode,
@@ -88,10 +85,10 @@ class PerformanceHttpInterceptor extends Interceptor {
   }
 
   void _finishMetric(
-    final RequestOptions options, {
-    final int? statusCode,
-    final String? contentType,
-    final int? responsePayloadSize,
+    RequestOptions options, {
+    int? statusCode,
+    String? contentType,
+    int? responsePayloadSize,
   }) {
     final metric = options.extra[_metricKey] as HttpMetric?;
     if (metric == null) return;
@@ -125,7 +122,7 @@ class PerformanceHttpInterceptor extends Interceptor {
     }
   }
 
-  int? _getResponseSize(final Response<dynamic> response) {
+  int? _getResponseSize(Response<dynamic> response) {
     try {
       final data = response.data;
       if (data == null) return null;
@@ -135,7 +132,7 @@ class PerformanceHttpInterceptor extends Interceptor {
     }
   }
 
-  int _calculateSize(final dynamic data) {
+  int _calculateSize(dynamic data) {
     if (data is String) {
       return data.length;
     } else if (data is List<int>) {
@@ -147,13 +144,13 @@ class PerformanceHttpInterceptor extends Interceptor {
     return 0;
   }
 
-  String _sanitizeUrl(final Uri uri) {
+  String _sanitizeUrl(Uri uri) {
     // Remove query parameters for privacy
     // Only keep scheme, host, and path
     return '${uri.scheme}://${uri.host}${uri.path}';
   }
 
-  HttpMethod _mapMethod(final String method) {
+  HttpMethod _mapMethod(String method) {
     switch (method.toUpperCase()) {
       case 'GET':
         return HttpMethod.Get;

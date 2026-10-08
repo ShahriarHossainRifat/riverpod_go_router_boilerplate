@@ -168,7 +168,7 @@ final class DeepLinkServiceProvider
   DeepLinkService create() => DeepLinkService();
 }
 
-String _$deepLinkServiceHash() => r'a329d6bb4ad320d9b44ea86308cc25157d89faf3';
+String _$deepLinkServiceHash() => r'f1b672ba37fbcd167ff3e1e59f4af0d908f83df1';
 
 /// Service for handling deep links and universal links.
 ///
@@ -220,7 +220,7 @@ abstract class _$DeepLinkService extends $AsyncNotifier<Uri?> {
   FutureOr<Uri?> build();
   @$mustCallSuper
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<Uri?>, Uri?>;
     final element =
         ref.element
@@ -230,7 +230,7 @@ abstract class _$DeepLinkService extends $AsyncNotifier<Uri?> {
               Object?,
               Object?
             >;
-    element.handleCreate(ref, build);
+    return element.handleCreate(ref, build);
   }
 }
 
@@ -279,4 +279,4 @@ final class WasLaunchedFromDeepLinkProvider
 }
 
 String _$wasLaunchedFromDeepLinkHash() =>
-    r'2ee1469ccbdd938a0f38877861487303a4b8f067';
+    r'853bb4942d07ab5fd16f2504fa041c81a44b76d0';

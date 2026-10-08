@@ -12,10 +12,10 @@ import 'package:riverpod_go_router_boilerplate/core/widgets/spacing.dart';
 /// - A retry button to check if maintenance is over
 class MaintenancePage extends ConsumerWidget {
   /// Creates a [MaintenancePage] widget.
-  const MaintenancePage({super.key});
+  const new({super.key});
 
   @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final maintenanceMessage = ref.watch(maintenanceMessageProvider);
 
     return Scaffold(
@@ -43,7 +43,7 @@ class MaintenancePage extends ConsumerWidget {
   }
 
   /// Builds the maintenance icon container.
-  Widget _buildMaintenanceIcon(final BuildContext context) {
+  Widget _buildMaintenanceIcon(BuildContext context) {
     final colorScheme = context.colorScheme;
 
     return Container(
@@ -61,39 +61,32 @@ class MaintenancePage extends ConsumerWidget {
   }
 
   /// Builds the title text.
-  Widget _buildTitle(final BuildContext context) {
+  Widget _buildTitle(BuildContext context) {
     final textTheme = context.textTheme;
 
     return Text(
       'Under Maintenance',
-      style: textTheme.headlineMedium?.copyWith(
-        fontWeight: .bold,
-      ),
+      style: textTheme.headlineMedium?.copyWith(fontWeight: .bold),
       textAlign: .center,
     );
   }
 
   /// Builds the description text with optional custom message.
-  Widget _buildDescription(
-    final BuildContext context,
-    final String? maintenanceMessage,
-  ) {
+  Widget _buildDescription(BuildContext context, String? maintenanceMessage) {
     final colorScheme = context.colorScheme;
     final textTheme = context.textTheme;
 
     return Text(
       maintenanceMessage ??
-          'We\'re currently performing scheduled maintenance. '
+          "We're currently performing scheduled maintenance. "
               'Please check back shortly.',
-      style: textTheme.bodyLarge?.copyWith(
-        color: colorScheme.onSurfaceVariant,
-      ),
+      style: textTheme.bodyLarge?.copyWith(color: colorScheme.onSurfaceVariant),
       textAlign: .center,
     );
   }
 
   /// Builds the retry button.
-  Widget _buildRetryButton(final WidgetRef ref) {
+  Widget _buildRetryButton(WidgetRef ref) {
     return SizedBox(
       width: .infinity,
       child: OutlinedButton.icon(
@@ -101,16 +94,14 @@ class MaintenancePage extends ConsumerWidget {
         icon: const Icon(Icons.refresh),
         label: const Text('Try Again'),
         style: OutlinedButton.styleFrom(
-          padding: const .symmetric(
-            vertical: AppSpacing.md,
-          ),
+          padding: const .symmetric(vertical: AppSpacing.md),
         ),
       ),
     );
   }
 
   /// Handles the retry action.
-  Future<void> _handleRetry(final WidgetRef ref) async {
+  Future<void> _handleRetry(WidgetRef ref) async {
     // Refresh remote config to check if maintenance is over
     final remoteConfigService = ref.read(remoteConfigServiceProvider);
     await remoteConfigService.fetch();

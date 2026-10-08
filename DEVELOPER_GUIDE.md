@@ -57,6 +57,13 @@ make lint      # Check for issues
 make test      # Run tests
 ```
 
+### 5. Developing with AI Assistants & Coding Agents
+
+This repository includes specialized instructions for AI coding agents (Antigravity, Gemini, Claude, Cursor, GitHub Copilot):
+- **[`AGENTS.md`](AGENTS.md)**: Architectural invariants, provider rules, GoRouter guards, and commands.
+- **[`.agents/rules/`](.agents/rules/)**: Deep dive rules for Clean Architecture, Riverpod 2.6+, GoRouter, modern Dart 3.13+, and testing.
+- **[`CLAUDE.md`](CLAUDE.md)** and **[`.github/copilot-instructions.md`](.github/copilot-instructions.md)**: Tool-specific agent configurations.
+
 ---
 
 ## Table of Contents

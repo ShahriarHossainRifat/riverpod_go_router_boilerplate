@@ -229,7 +229,7 @@ abstract class AppConstants {
   static const double slideOffsetDefault = 0.3;
 
   /// Default scale start value for scale-in animations.
-  static const double scaleInStart = 0.0;
+  static const double scaleInStart = 0;
 
   /// Bounce scale minimum (0.95).
   static const double bounceScaleMin = 0.95;
@@ -244,7 +244,7 @@ abstract class AppConstants {
   static const double pulseScaleMin = 0.95;
 
   /// Pulse scale maximum (1.0).
-  static const double pulseScaleMax = 1.0;
+  static const double pulseScaleMax = 1;
 
   // ─────────────────────────────────────────────────────────────────────────────
   // UI DIMENSIONS - SHIMMER DEFAULTS

@@ -9,7 +9,7 @@ import 'package:riverpod_go_router_boilerplate/core/widgets/spacing.dart';
 /// Use this for all text inputs to ensure consistent appearance.
 class AppTextField extends StatelessWidget {
   /// Creates an [AppTextField].
-  const AppTextField({
+  const new({
     super.key,
     this.controller,
     this.focusNode,
@@ -118,7 +118,7 @@ class AppTextField extends StatelessWidget {
   final AutovalidateMode? autovalidateMode;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       focusNode: focusNode,
@@ -155,7 +155,7 @@ class AppTextField extends StatelessWidget {
 /// A search text field with built-in styling.
 class AppSearchField extends StatelessWidget {
   /// Creates an [AppSearchField].
-  const AppSearchField({
+  const new({
     super.key,
     this.controller,
     this.focusNode,
@@ -192,7 +192,7 @@ class AppSearchField extends StatelessWidget {
   final bool autofocus;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final theme = context.theme;
 
     return TextField(
@@ -209,7 +209,7 @@ class AppSearchField extends StatelessWidget {
         suffixIcon: controller != null
             ? ListenableBuilder(
                 listenable: controller!,
-                builder: (final context, _) {
+                builder: (context, _) {
                   if (controller!.text.isEmpty) {
                     return const SizedBox.shrink();
                   }

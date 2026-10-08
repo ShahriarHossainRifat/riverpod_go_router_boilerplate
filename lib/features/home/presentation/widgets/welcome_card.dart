@@ -9,13 +9,13 @@ import 'package:riverpod_go_router_boilerplate/l10n/generated/app_localizations.
 /// animation widgets.
 class WelcomeCard extends StatelessWidget {
   /// Creates a [WelcomeCard] instance.
-  const WelcomeCard({required this.theme, super.key});
+  const new({required this.theme, super.key});
 
   /// The theme data for styling.
   final ThemeData theme;
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
     return FadeIn(
@@ -41,7 +41,6 @@ class WelcomeCard extends StatelessWidget {
               const VerticalSpace.md(),
               SlideIn(
                 delay: AppConstants.staggerDelay * 4,
-                direction: .fromBottom,
                 child: Text(
                   l10n.youAreAllSet,
                   style: theme.textTheme.titleLarge,

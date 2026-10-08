@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 /// Based on the Material 3 typography scale.
 abstract class AppTypography {
   /// Private constructor to prevent instantiation.
-  const AppTypography._();
+  const new _();
 
   /// Default font family used across the app.
   static const String fontFamily = 'Roboto';

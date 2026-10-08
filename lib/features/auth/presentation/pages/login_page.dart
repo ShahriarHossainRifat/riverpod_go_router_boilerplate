@@ -1,72 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_go_router_boilerplate/app/router/app_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_go_router_boilerplate/core/core.dart';
 import 'package:riverpod_go_router_boilerplate/features/auth/presentation/providers/auth_notifier.dart';
 import 'package:riverpod_go_router_boilerplate/l10n/generated/app_localizations.dart';
 
 /// Login page for user authentication.
-class LoginPage extends ConsumerStatefulWidget {
+///
+/// Uses [HookConsumerWidget] to manage local form state via hooks,
+/// avoiding the boilerplate of `ConsumerStatefulWidget` + `dispose`.
+///
+/// Navigation after login is handled automatically by the GoRouter redirect
+/// guard in `appRouterProvider` — no explicit `context.go` call is needed.
+class LoginPage extends HookConsumerWidget {
   /// Creates a [LoginPage] instance.
-  const LoginPage({super.key});
+  const new({super.key});
 
   @override
-  ConsumerState<LoginPage> createState() => _LoginPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final formKey = useMemoized(GlobalKey<FormState>.new);
+    final emailController = useTextEditingController();
+    final passwordController = useTextEditingController();
+    final obscurePassword = useState(true);
 
-class _LoginPageState extends ConsumerState<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  bool _obscurePassword = true;
-
-  @override
-  void initState() {
-    super.initState();
-    // Track screen view once on mount
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(analyticsServiceProvider).logScreenView(screenName: 'login');
-    });
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _handleLogin() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    final authNotifier = ref.read(authProvider.notifier);
-    await authNotifier.login(
-      _emailController.text.trim(),
-      _passwordController.text,
-    );
-
-    if (!mounted) return;
-
-    ref
-        .read(authProvider)
-        .whenOrNull(
-          error: (final error, _) {
-            context.showErrorSnackBar(error.toString());
-          },
-          data: (final user) {
-            if (user != null) {
-              context.goRoute(AppRoute.home);
-            }
-          },
-        );
-  }
-
-  @override
-  Widget build(final BuildContext context) {
     final theme = context.theme;
+    final l10n = AppLocalizations.of(context);
     final authState = ref.watch(authProvider);
     final isLoading = authState.isLoading;
-    final l10n = AppLocalizations.of(context);
+
+    // Track screen view once on mount
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(analyticsServiceProvider).logScreenView(screenName: 'login');
+      });
+      return null;
+    }, const []);
+
+    // Show error snackbar when auth fails.
+    // Navigation on success is handled by the GoRouter redirect guard —
+    // watching authProvider causes the router to re-evaluate and redirect.
+    ref.listen(authProvider, (previous, next) {
+      next.whenOrNull(
+        error: (error, _) {
+          if (context.mounted) {
+            context.showErrorSnackBar(error.toString());
+          }
+        },
+      );
+    });
+
+    Future<void> handleLogin() async {
+      if (!(formKey.currentState?.validate() ?? false)) return;
+      await ref
+          .read(authProvider.notifier)
+          .login(emailController.text.trim(), passwordController.text);
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -76,7 +63,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 400),
               child: Form(
-                key: _formKey,
+                key: formKey,
                 autovalidateMode: AutovalidateMode.onUnfocus,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -120,10 +107,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
                     // Email field
                     TextFormField(
-                      controller: _emailController,
+                      controller: emailController,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
                       enabled: !isLoading,
+                      autofillHints: const [AutofillHints.email],
                       decoration: InputDecoration(
                         labelText: l10n.email,
                         prefixIcon: const Icon(Icons.email_outlined),
@@ -137,24 +125,26 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
                     // Password field
                     TextFormField(
-                      controller: _passwordController,
-                      obscureText: _obscurePassword,
+                      controller: passwordController,
+                      obscureText: obscurePassword.value,
                       textInputAction: TextInputAction.done,
                       enabled: !isLoading,
-                      onFieldSubmitted: (_) => _handleLogin(),
+                      autofillHints: const [AutofillHints.password],
+                      onFieldSubmitted: (_) => handleLogin(),
                       decoration: InputDecoration(
                         labelText: l10n.password,
                         prefixIcon: const Icon(Icons.lock_outlined),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscurePassword
+                            obscurePassword.value
                                 ? Icons.visibility_outlined
                                 : Icons.visibility_off_outlined,
                           ),
+                          tooltip: obscurePassword.value
+                              ? 'Show password'
+                              : 'Hide password',
                           onPressed: () {
-                            setState(() {
-                              _obscurePassword = !_obscurePassword;
-                            });
+                            obscurePassword.value = !obscurePassword.value;
                           },
                         ),
                       ),
@@ -167,11 +157,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
                     // Login button
                     AppButton(
-                      variant: AppButtonVariant.primary,
                       size: AppButtonSize.large,
-                      isExpanded: true,
                       isLoading: isLoading,
-                      onPressed: isLoading ? null : _handleLogin,
+                      onPressed: isLoading ? null : handleLogin,
                       label: l10n.login,
                     ),
                     const VerticalSpace.md(),
@@ -179,12 +167,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     // Forgot password
                     AppButton(
                       variant: AppButtonVariant.text,
-                      size: AppButtonSize.medium,
-                      isExpanded: true,
                       onPressed: isLoading
                           ? null
                           : () {
-                              // TODO: Navigate to forgot password
+                              // TODO(auth): Navigate to forgot password screen.
                             },
                       label: l10n.forgotPassword,
                     ),

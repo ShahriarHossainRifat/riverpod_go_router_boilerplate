@@ -40,7 +40,7 @@ import 'package:riverpod_go_router_boilerplate/core/utils/logger.dart';
 /// ```
 class CacheInterceptor extends Interceptor {
   /// Creates a [CacheInterceptor] instance.
-  CacheInterceptor({
+  new({
     required this.cacheService,
     required this.connectivityService,
     this.logger,
@@ -77,8 +77,8 @@ class CacheInterceptor extends Interceptor {
 
   @override
   Future<void> onRequest(
-    final RequestOptions options,
-    final RequestInterceptorHandler handler,
+    RequestOptions options,
+    RequestInterceptorHandler handler,
   ) async {
     // Only cache GET requests
     if (options.method != 'GET') {
@@ -139,8 +139,8 @@ class CacheInterceptor extends Interceptor {
 
   @override
   Future<void> onResponse(
-    final Response<dynamic> response,
-    final ResponseInterceptorHandler handler,
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
   ) async {
     // Only cache GET requests
     if (response.requestOptions.method != 'GET') {
@@ -173,10 +173,7 @@ class CacheInterceptor extends Interceptor {
           boxName: cacheBoxName,
         );
         return handler.resolve(
-          _buildCachedResponse(
-            response.requestOptions,
-            cachedEntry,
-          ),
+          _buildCachedResponse(response.requestOptions, cachedEntry),
         );
       }
     }
@@ -206,8 +203,8 @@ class CacheInterceptor extends Interceptor {
 
   @override
   Future<void> onError(
-    final DioException err,
-    final ErrorInterceptorHandler handler,
+    DioException err,
+    ErrorInterceptorHandler handler,
   ) async {
     // Only try cache fallback for GET requests
     if (err.requestOptions.method != 'GET') {
@@ -243,7 +240,7 @@ class CacheInterceptor extends Interceptor {
   }
 
   /// Generate a unique cache key from the request options.
-  String _generateCacheKey(final RequestOptions options) {
+  String _generateCacheKey(RequestOptions options) {
     final buffer = StringBuffer()
       ..write(options.method)
       ..write(':')
@@ -254,7 +251,7 @@ class CacheInterceptor extends Interceptor {
     if (options.queryParameters.isNotEmpty) {
       final sortedParams = Map.fromEntries(
         options.queryParameters.entries.toList()
-          ..sort((final a, final b) => a.key.compareTo(b.key)),
+          ..sort((a, b) => a.key.compareTo(b.key)),
       );
       buffer.write('?${Uri(queryParameters: sortedParams).query}');
     }
@@ -263,7 +260,7 @@ class CacheInterceptor extends Interceptor {
   }
 
   /// Get cache duration from request options or use default.
-  Duration _getCacheDuration(final RequestOptions options) {
+  Duration _getCacheDuration(RequestOptions options) {
     final customDuration = options.extra[cacheDurationKey];
     if (customDuration is Duration) {
       return customDuration;
@@ -273,9 +270,9 @@ class CacheInterceptor extends Interceptor {
 
   /// Build a response from cached data.
   Response<dynamic> _buildCachedResponse(
-    final RequestOptions options,
-    final CacheEntry entry, {
-    final bool isStale = false,
+    RequestOptions options,
+    CacheEntry entry, {
+    bool isStale = false,
   }) {
     return Response<dynamic>(
       requestOptions: options,
@@ -283,7 +280,7 @@ class CacheInterceptor extends Interceptor {
       statusCode: 200,
       statusMessage: 'OK (from cache${isStale ? ' - stale' : ''})',
       headers: Headers.fromMap({
-        'x-cache': [isStale ? 'STALE' : 'HIT'],
+        'x-cache': [if (isStale) 'STALE' else 'HIT'],
         'x-cache-date': [entry.timestamp.toIso8601String()],
         if (entry.etag != null) 'etag': [entry.etag!],
       }),
@@ -291,7 +288,7 @@ class CacheInterceptor extends Interceptor {
   }
 
   /// Check if the error is a network-related error.
-  bool _isNetworkError(final DioException err) {
+  bool _isNetworkError(DioException err) {
     return err.type == DioExceptionType.connectionTimeout ||
         err.type == DioExceptionType.sendTimeout ||
         err.type == DioExceptionType.receiveTimeout ||
